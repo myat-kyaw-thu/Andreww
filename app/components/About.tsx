@@ -7,7 +7,7 @@ export default function AboutSection() {
 
   return (
     <motion.section
-      className="w-full max-w-2xl space-y-8 mt-10"
+      className="w-full max-w-4xl space-y-8 mt-10"
     >
       <motion.div className="space-y-2">
         <SparklesText text="About Me"/>

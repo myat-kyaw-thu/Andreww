@@ -21,7 +21,7 @@ const Hero = () => {
   ]
 
   return (
-    <section className="w-full max-w-2xl space-y-8 flex flex-between">
+    <section className="w-full max-w-3xl space-y-8 flex flex-between">
       <motion.div className="size-32">
         <Image src="/profile.jpg" alt="Andrew" width={120} height={160} className="rounded-full" />
       </motion.div>
