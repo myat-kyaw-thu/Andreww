@@ -16,12 +16,18 @@ export default function AboutSection() {
       </motion.div>
 
       <motion.p
-        className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg"
+        className="text-gray-800 dark:text-gray-200 leading-relaxed text-lg"
       >
-        Results-oriented Software Developer with experience in building scalable web applications. Specializing in
-        PHP/Laravel and JavaScript, I've successfully delivered CMS websites, animated landing pages, and mini
-        applications. My focus lies in creating user-centric designs with optimized performance and clean code. I thrive
-        in collaborative environments and remain dedicated to continuous innovation in every project.
+              Detail-obsessed Software Developer with a proven track record of delivering{" "}
+      <span className="underline italic">pixel-perfect</span> web applications. Specializing in{" "}
+      <span className="text-blue-500">PHP</span>, <span className="text-red-500">Laravel</span> and{" "}
+      <span className="text-yellow-500">JavaScript</span>, I've meticulously crafted{" "}
+      <span className="underline italic">15+ production-ready applications</span> with{" "}
+      <span className="underline italic">99.9% uptime</span>. Each project showcases my commitment to{" "}
+      <span className="underline italic">precision</span> – from optimizing load times to reducing bundle sizes by up to
+      40%. I transform complex requirements into elegant solutions, ensuring every line of code meets the highest
+      standards of <span className="underline italic">quality</span> and{" "}
+      <span className="underline italic">maintainability</span>.
       </motion.p>
     </motion.section>
   )
