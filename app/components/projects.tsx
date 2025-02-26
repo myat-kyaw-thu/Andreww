@@ -13,6 +13,7 @@ const projects = [
     project_link: "https://example-cms.com",
     github_link: "https://github.com/username/cms-platform",
     project_status: "Completed" as const,
+    personal: false,
   },
   {
     project_id: "kbz-mini-app",
@@ -22,6 +23,8 @@ const projects = [
     project_tech_stacks: ["React", "Node.js", "TypeScript", "MongoDB", "Express", "Next.js"],
     project_link: "https://kbz-mini-app.com",
     project_status: "In Progress" as const,
+    personal: true,
+
   },
 ]
 

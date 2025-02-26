@@ -13,9 +13,9 @@ export default function Home() {
       <BlurFade delay={0.45} inView direction="up">
         <AboutSection />
       </BlurFade>
-      {/* <BlurFade delay={0.65} inView direction="up"> */}
-        {/* <ProjectsSection /> */}
-      {/* </BlurFade> */}
+      <BlurFade delay={0.65} inView direction="up">
+        <ProjectsSection />
+      </BlurFade>
 
       </main>
   );

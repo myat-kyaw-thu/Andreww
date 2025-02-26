@@ -40,6 +40,7 @@ interface ProjectCardProps {
     project_link?: string
     github_link?: string
     project_status: "Completed" | "In Progress"
+    personal: boolean; // Added personal field
   }
 }
 
@@ -67,43 +68,58 @@ const techStackIcons: { [key: string]: { icon: React.ElementType; color: string 
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <motion.div
+ <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-row bg-white dark:bg-gray-950 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 w-full md:w-[380px]"
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col bg-white dark:bg-gray-950 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 w-[280px] border border-gray-100 dark:border-gray-800"
     >
-      {/* Project Image */}
-      <div className="w-[120px] h-[140px] relative">
+      {/* Project Image with subtle zoom effect on hover */}
+      <div className="w-full h-[160px] relative group">
         <Image
           src={project.project_cover_img || "/placeholder.svg"}
           alt={project.project_title}
           fill
-          className="object-cover"
-          sizes="120px"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          sizes="280px"
           priority={false}
         />
+        <div className="absolute top-2 left-2">
+          <Badge
+            variant={project.personal ? "outline" : "secondary"}
+            className="bg-white/80 dark:bg-gray-900/80 text-[10px] font-medium backdrop-blur-sm"
+          >
+            {project.personal ? "Personal" : "Work"}
+          </Badge>
+        </div>
       </div>
 
       {/* Project Details */}
-      <div className="flex-1 p-4 flex flex-col justify-between">
+      <div className="p-3.5 flex flex-col justify-between flex-1">
         <div className="space-y-2">
           {/* Title and Status Badge */}
           <div className="flex items-start justify-between">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">
               {project.project_title}
             </h3>
-            <Badge variant={project.project_status === "Completed" ? "default" : "secondary"} className="ml-2 scale-90">
+            <Badge
+              variant={project.project_status === "Completed" ? "default" : "secondary"}
+              className="ml-1 scale-75 opacity-80"
+            >
               {project.project_status}
             </Badge>
           </div>
 
           {/* Subtitle */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{project.project_subtitle}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+            {project.project_subtitle}
+          </p>
 
           {/* Tech Stack Icons */}
-          <TooltipProvider>
-            <div className="flex flex-wrap gap-2 pt-1">
-              {project.project_tech_stacks.slice(0, 8).map((tech) => {
+          <TooltipProvider delayDuration={300}>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {project.project_tech_stacks.slice(0, 6).map((tech) => {
                 const techStack = techStackIcons[tech]
                 if (!techStack) return null
 
@@ -111,12 +127,16 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 return (
                   <Tooltip key={tech}>
                     <TooltipTrigger asChild>
-                      <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
-                        <Icon className="w-5 h-5 transition-colors duration-200" style={{ color: techStack.color }} />
+                      <motion.div
+                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.2 }}
+                        className="rounded-full p-1 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      >
+                        <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: techStack.color }} />
                       </motion.div>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs">{tech}</p>
+                    <TooltipContent side="top" className="text-xs px-2 py-1">
+                      <p>{tech}</p>
                     </TooltipContent>
                   </Tooltip>
                 )
@@ -127,7 +147,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Links and Detail Button */}
         <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 dark:border-gray-800">
-          <div className="flex gap-3 text-xs text-gray-600 dark:text-gray-400">
+          <div className="flex gap-2 text-xs text-gray-600 dark:text-gray-400">
             {project.project_link && (
               <Link
                 href={project.project_link}
@@ -135,7 +155,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 target="_blank"
               >
                 <LinkIcon className="w-3 h-3" />
-                <span>Demo</span>
+                <span className="text-[10px] font-medium">Demo</span>
               </Link>
             )}
             {project.github_link && (
@@ -145,17 +165,18 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 target="_blank"
               >
                 <Github className="w-3 h-3" />
-                <span>Source</span>
+                <span className="text-[10px] font-medium">Source</span>
               </Link>
             )}
           </div>
 
           <motion.button
-            whileHover={{ x: 10 }}
+            whileHover={{ x: 5 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+            className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 p-1 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
           >
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </motion.button>
         </div>
       </div>
