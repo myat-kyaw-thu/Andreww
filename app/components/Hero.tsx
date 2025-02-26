@@ -21,20 +21,20 @@ const Hero = () => {
   ]
 
   return (
-    <section className="w-full max-w-3xl space-y-8 flex flex-between">
-      <motion.div className="size-32">
-        <Image src="/profile.jpg" alt="Andrew" width={120} height={160} className="rounded-full" />
+    <section className="w-full max-w-2xl space-y-6 flex flex-between">
+      <motion.div className="size-24">
+        <Image src="/profile.jpg" alt="Andrew" width={90} height={120} className="rounded-full" />
       </motion.div>
 
       <motion.div className="flex flex-col flex-1">
-        <h1 className="ms-10 text-xl leading-none tracking-tighter sm:text-2xl md:text-6xl">
+        <h1 className="ms-8 text-lg leading-none tracking-tighter sm:text-xl md:text-4xl">
           Hey, I am
-          <LineShadowText className="italic ms-3 font-bold text-3xl md:text-7xl" shadowColor={shadowColor}>
+          <LineShadowText className="italic ms-2 font-bold text-4xl md:text-6xl" shadowColor={shadowColor}>
             Andrew
           </LineShadowText>
         </h1>
 
-        <p className="text-lg sm:text-xl text-neutral-900 dark:text-neutral-200 mt-7">
+        <p className="text-base sm:text-lg text-neutral-900 dark:text-neutral-200 mt-5">
           Full Stack Developer | Based in{" "}
           <Link
             href="https://en.wikipedia.org/wiki/Yangon"
@@ -63,14 +63,14 @@ const Hero = () => {
           .
         </p>
 
-        <div className="flex space-x-4 mt-6">
+        <div className="flex space-x-3 mt-4">
           <Link
             href="https://github.com/primebeyonder"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-900 dark:text-neutral-200 hover:text-[#6e5494] transition-colors duration-300"
           >
-            <Github size={28} />
+            <Github size={22} />
           </Link>
           <Link
             href="https://leetcode.com/u/MyatKyawThu/"
@@ -78,7 +78,7 @@ const Hero = () => {
             rel="noopener noreferrer"
             className="text-neutral-900 dark:text-neutral-200 hover:text-[#FFA116] transition-colors duration-300"
           >
-            <Code2 size={28} />
+            <Code2 size={22} />
           </Link>
           <Link
             href="https://linkedin.com/in/myat-kyaw-thu-0b8177334"
@@ -86,20 +86,20 @@ const Hero = () => {
             rel="noopener noreferrer"
             className="text-neutral-900 dark:text-neutral-200 hover:text-[#0077B5] transition-colors duration-300"
           >
-            <Linkedin size={28} />
+            <Linkedin size={22} />
           </Link>
           <Link
             href="mailto:myatkyawthu4002@gmail.com"
             className="text-neutral-900 dark:text-neutral-200 hover:text-[#D44638] transition-colors duration-300"
           >
-            <Mail size={28} />
+            <Mail size={22} />
           </Link>
           <Link
             href="/myatkyawthu.pdf"
             download
             className="text-neutral-900 dark:text-neutral-200 hover:text-[#4285F4] transition-colors duration-300"
           >
-            <FileText size={28} />
+            <FileText size={22} />
           </Link>
         </div>
       </motion.div>
