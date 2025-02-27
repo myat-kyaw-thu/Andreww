@@ -2,6 +2,7 @@ import AboutSection from "./components/About";
 import { BlurFade } from "./components/BlurFade";
 import Hero from "./components/Hero";
 import ProjectsSection from "./components/projects";
+import SkillsSection from "./components/Skills";
 
 export default function Home() {
   return (
@@ -15,6 +16,9 @@ export default function Home() {
       </BlurFade>
       <BlurFade delay={0.65} inView direction="up">
         <ProjectsSection />
+      </BlurFade>
+      <BlurFade delay={0.80} inView direction="up">
+        <SkillsSection />
       </BlurFade>
 
       </main>
