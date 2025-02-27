@@ -68,15 +68,17 @@ const techStackIcons: { [key: string]: { icon: React.ElementType; color: string 
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
- <motion.div
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3 }}
-      className="flex flex-col bg-white dark:bg-gray-950 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 w-[280px] border border-gray-100 dark:border-gray-800"
+      whileHover={{
+        y: -2,
+      }}
+      transition={{ duration: 0.1 }}
+      className="flex flex-col bg-white dark:bg-gray-950 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 w-full border border-gray-100 dark:border-gray-800"
     >
-      {/* Project Image with subtle zoom effect on hover */}
-      <div className="w-full h-[160px] relative group">
+      {/* Project Image with subtle zoom effect and gradient overlay */}
+      <div className="w-full h-[160px] relative group overflow-hidden">
         <Image
           src={project.project_cover_img || "/placeholder.svg"}
           alt={project.project_title}
@@ -85,14 +87,21 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           sizes="280px"
           priority={false}
         />
-        <div className="absolute top-2 left-2">
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        <motion.div
+          initial={{ opacity: 0.8 }}
+          whileHover={{ opacity: 1, scale: 1.05 }}
+          className="absolute top-2 left-2"
+        >
           <Badge
             variant={project.personal ? "outline" : "secondary"}
-            className="bg-white/80 dark:bg-gray-900/80 text-[10px] font-medium backdrop-blur-sm"
+            className="bg-white/80 dark:bg-gray-900/80 text-[10px] font-medium backdrop-blur-sm border-opacity-50 shadow-sm"
           >
             {project.personal ? "Personal" : "Work"}
           </Badge>
-        </div>
+        </motion.div>
       </div>
 
       {/* Project Details */}
@@ -103,12 +112,19 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 line-clamp-1">
               {project.project_title}
             </h3>
-            <Badge
-              variant={project.project_status === "Completed" ? "default" : "secondary"}
-              className="ml-1 scale-75 opacity-80"
+            <motion.div
             >
-              {project.project_status}
-            </Badge>
+              <Badge
+                variant={project.project_status === "Completed" ? "default" : "secondary"}
+                className={`ml-1 scale-75 opacity-80 ${
+                  project.project_status === "Completed"
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                    : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+                }`}
+              >
+                {project.project_status}
+              </Badge>
+            </motion.div>
           </div>
 
           {/* Subtitle */}
@@ -116,7 +132,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             {project.project_subtitle}
           </p>
 
-          {/* Tech Stack Icons */}
+          {/* Tech Stack Icons with improved hover effects */}
           <TooltipProvider delayDuration={300}>
             <div className="flex flex-wrap gap-1.5 pt-1">
               {project.project_tech_stacks.slice(0, 6).map((tech) => {
@@ -128,14 +144,14 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   <Tooltip key={tech}>
                     <TooltipTrigger asChild>
                       <motion.div
-                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.9 }}
                         transition={{ duration: 0.2 }}
                         className="rounded-full p-1 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: techStack.color }} />
                       </motion.div>
                     </TooltipTrigger>
-                    <TooltipContent side="top" className="text-xs px-2 py-1">
+                    <TooltipContent side="top" className="text-xs px-2 py-1 shadow-md" sideOffset={5}>
                       <p>{tech}</p>
                     </TooltipContent>
                   </Tooltip>
@@ -145,36 +161,41 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </TooltipProvider>
         </div>
 
-        {/* Links and Detail Button */}
+        {/* Links and Detail Button with improved hover states */}
         <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100 dark:border-gray-800">
           <div className="flex gap-2 text-xs text-gray-600 dark:text-gray-400">
             {project.project_link && (
-              <Link
-                href={project.project_link}
-                className="flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-200 hover:underline transition-all"
-                target="_blank"
-              >
-                <LinkIcon className="w-3 h-3" />
-                <span className="text-[10px] font-medium">Demo</span>
-              </Link>
+              <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href={project.project_link}
+                  className="flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-200 transition-all group"
+                  target="_blank"
+                >
+                  <LinkIcon className="w-3 h-3 group-hover:rotate-12 transition-transform" />
+                  <span className="text-[10px] font-medium group-hover:underline">Demo</span>
+                </Link>
+              </motion.div>
             )}
             {project.github_link && (
-              <Link
-                href={project.github_link}
-                className="flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-200 hover:underline transition-all"
-                target="_blank"
-              >
-                <Github className="w-3 h-3" />
-                <span className="text-[10px] font-medium">Source</span>
-              </Link>
+              <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href={project.github_link}
+                  className="flex items-center gap-1 hover:text-gray-900 dark:hover:text-gray-200 transition-all group"
+                  target="_blank"
+                >
+                  <Github className="w-3 h-3 group-hover:rotate-12 transition-transform" />
+                  <span className="text-[10px] font-medium group-hover:underline">Source</span>
+                </Link>
+              </motion.div>
             )}
           </div>
 
           <motion.button
-            whileHover={{ x: 5 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            whileHover={{ x: 2 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
             className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 p-1 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
+            aria-label="View details"
           >
             <ArrowRight className="w-3.5 h-3.5" />
           </motion.button>
