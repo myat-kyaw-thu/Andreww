@@ -29,7 +29,7 @@ const Hero = () => {
       <motion.div className="flex flex-col flex-1">
         <h1 className="ms-8 text-lg leading-none tracking-tighter sm:text-xl md:text-4xl">
           Hey, I am
-          <LineShadowText className="italic ms-2 font-bold text-4xl md:text-6xl" shadowColor={shadowColor}>
+          <LineShadowText className="italic mx-7 font-bold text-4xl md:text-6xl" shadowColor={shadowColor}>
             Andrew
           </LineShadowText>
         </h1>
