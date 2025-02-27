@@ -6,7 +6,7 @@ import { SparklesText } from "./SparkleText"
 export default function AboutSection() {
 
   return (
-       <motion.section className="w-full max-w-2xl space-y-8 mt-10">
+       <motion.section className="w-full max-w-2xl space-y-8 my-10">
       <motion.div className="space-y-2">
         <SparklesText text="About Me" />
         <motion.div />
