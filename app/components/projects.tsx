@@ -3,6 +3,27 @@
 import { motion } from "framer-motion"
 import ProjectCard from "./project-card"
 
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const titleVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+}
 const projects = [
   {
     project_id: "cms-platform",
@@ -29,21 +50,47 @@ const projects = [
 ]
 
 export default function ProjectsSection() {
+  const workProjects = projects.filter((project) => !project.personal)
+  const personalProjects = projects.filter((project) => project.personal)
   return (
-    <section className="w-full mx-auto">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6"
-      >
-        Projects
-      </motion.h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-        {projects.map((project) => (
-          <ProjectCard key={project.project_id} project={project} />
-        ))}
+       <motion.section variants={containerVariants} initial="hidden" animate="show" className="w-full mx-auto space-y-16">
+      {/* Work Experiences Section */}
+      <div>
+        <motion.div variants={titleVariants} className="flex flex-col gap-2 mb-8">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Professional Work</span>
+          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
+            Work Experiences
+          </h2>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+          {workProjects.map((project) => (
+            <ProjectCard key={project.project_id} project={project} />
+          ))}
+        </div>
       </div>
-    </section>
+
+      {/* Personal Projects Section */}
+      <div>
+        <motion.div variants={titleVariants} className="flex flex-col gap-2 mb-8">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Personal Projects</span>
+          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
+            Own Portfolio
+          </h2>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+          {personalProjects.map((project) => (
+            <ProjectCard key={project.project_id} project={project} />
+          ))}
+        </div>
+      </div>
+
+      {/* Empty State */}
+      {projects.length === 0 && (
+        <motion.div variants={titleVariants} className="text-center py-20 text-gray-500 dark:text-gray-400">
+          No projects to display yet.
+        </motion.div>
+      )}
+    </motion.section>
   )
 }
 
