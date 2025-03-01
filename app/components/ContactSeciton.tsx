@@ -68,20 +68,30 @@ export default function ContactSection() {
 
     async function onSubmit(data: FormValues) {
         setIsSubmitting(true)
-
         try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-
-            console.log(data)
-            toast.success("Message sent successfully!", {
-                icon: <CheckCircle2 className="w-4 h-4" />,
+            const response = await fetch('/api/mail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             })
-            form.reset()
+
+            const result = await response.json()
+
+            if (result.success) {
+                toast.success("Message sent successfully!", {
+                    icon: <CheckCircle2 className="w-4 h-4" />,
+                })
+                form.reset()
+            } else {
+                throw new Error(result.error || 'Failed to send message')
+            }
         } catch (error) {
             toast.error("Failed to send message. Please try again.", {
                 icon: <XCircle className="w-4 h-4" />,
             })
+            console.error('Error sending message:', error)
         } finally {
             setIsSubmitting(false)
         }
