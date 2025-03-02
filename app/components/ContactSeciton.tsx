@@ -106,23 +106,18 @@ export default function ContactSection() {
                 className="max-w-3xl mx-auto space-y-8 my-10"
             >
                 {/* Section Header */}
-                <motion.div variants={itemVariants} className="space-y-2 text-center mb-8">
+                <motion.div variants={itemVariants} className="space-y-2 text-start mb-8">
                     <h2 className="text-3xl font-bold relative inline-block">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
                             Get in Touch
                         </span>
-                        <motion.span
-                            className="absolute -bottom-1 left-0 h-0.5 bg-gray-200 dark:bg-gray-800 rounded-full"
-                            initial={{ width: 0 }}
-                            animate={{ width: "100%" }}
-                            transition={{ delay: 0.3, duration: 0.6, ease: "easeInOut" }}
-                        />
+                  
                     </h2>
-                    <p className="text-gray-500 dark:text-gray-400 max-w-lg mx-auto text-sm">
+                    <p className="text-gray-500 dark:text-gray-400 max-w-lg text-sm">
                         Have a question or want to work together? Feel free to reach out!
                     </p>
                 </motion.div>
-
+        
                 {/* Contact Form */}
                 <motion.div variants={itemVariants}>
                     <div className="relative">
