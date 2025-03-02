@@ -106,7 +106,7 @@ const Hero = () => {
               alt="Andrew"
               width={100}
               height={100}
-              className="rounded-full object-cover ring-2 ring-slate-200 dark:ring-slate-800 transition-shadow duration-300 hover:ring-slate-300 dark:hover:ring-slate-700"
+              className="rounded-2xl object-cover ring-2 ring-slate-200 dark:ring-slate-800 transition-shadow duration-300 hover:ring-slate-300 dark:hover:ring-slate-700"
               style={{
                 boxShadow: "0 0 0 2px rgba(255, 255, 255, 0.1)",
               }}
@@ -119,7 +119,7 @@ const Hero = () => {
             <h1 className="text-lg leading-none tracking-tighter sm:text-xl md:text-2xl">
               Hey, I am
               <LineShadowText
-                className="block italic font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-1"
+                className="block italic font-bold text-4xl md:text-6xl mt-1"
                 shadowColor={shadowColor}
               >
                 Andrew
@@ -179,7 +179,7 @@ const Hero = () => {
                 href="https://github.com/primebeyonder"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-900 dark:text-neutral-200 hover:text-[#6e5494] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-neutral-900 dark:text-neutral-200 hover:text-[#6e5494] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="GitHub Profile"
               >
                 <Github size={22} />
@@ -191,7 +191,7 @@ const Hero = () => {
                 href="https://leetcode.com/u/MyatKyawThu/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-900 dark:text-neutral-200 hover:text-[#FFA116] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-neutral-900 dark:text-neutral-200 hover:text-[#FFA116] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="LeetCode Profile"
               >
                 <Code2 size={22} />
@@ -203,7 +203,7 @@ const Hero = () => {
                 href="https://linkedin.com/in/myat-kyaw-thu-0b8177334"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-900 dark:text-neutral-200 hover:text-[#0077B5] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-neutral-900 dark:text-neutral-200 hover:text-[#0077B5] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="LinkedIn Profile"
               >
                 <Linkedin size={22} />
@@ -213,7 +213,7 @@ const Hero = () => {
             <motion.div variants={socialItemVariants} whileHover="hover">
               <Link
                 href="mailto:myatkyawthu4002@gmail.com"
-                className="text-neutral-900 dark:text-neutral-200 hover:text-[#D44638] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-neutral-900 dark:text-neutral-200 hover:text-[#D44638] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="Email Contact"
               >
                 <Mail size={22} />
@@ -224,7 +224,7 @@ const Hero = () => {
               <Link
                 href="/myatkyawthu.pdf"
                 download
-                className="text-neutral-900 dark:text-neutral-200 hover:text-[#4285F4] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-neutral-900 dark:text-neutral-200 hover:text-[#4285F4] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="Download Resume"
               >
                 <FileText size={22} />

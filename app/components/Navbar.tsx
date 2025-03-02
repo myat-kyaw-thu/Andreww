@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
-import { Moon, Sun, Clock, Home, Award } from 'lucide-react'
+import { Moon, Sun, Clock, Home, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -33,7 +33,7 @@ export default function Navbar() {
   // Handle active section detection
   useMotionValueEvent(scrollY, "change", () => {
     const sections = ["top", "achievements"]
-    const currentSection = sections.find(section => {
+    const currentSection = sections.find((section) => {
       const element = document.getElementById(section)
       if (!element) return false
       const rect = element.getBoundingClientRect()
@@ -67,7 +67,7 @@ export default function Navbar() {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
-        })
+        }),
       )
     }
 
@@ -115,23 +115,23 @@ export default function Navbar() {
                 animate={hoverStyle}
                 initial={false}
               />
-              
+
               {navItems.map((item, index) => (
                 <button
                   key={item.id}
-                  ref={el => navRefs.current[index] = el}
+                  ref={(el) => (navRefs.current[index] = el)}
                   onClick={() => scrollToSection(item.id)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={cn(
                     "relative px-4 py-2 rounded-lg text-sm font-medium z-10",
                     "text-slate-700 dark:text-slate-300",
-                    activeSection === item.id && "text-slate-900 dark:text-white"
+                    activeSection === item.id && "text-slate-900 dark:text-white",
                   )}
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     {item.icon}
-                    {item.label}
+                    <span className="hidden sm:inline">{item.label}</span>
                   </span>
                 </button>
               ))}
@@ -178,3 +178,4 @@ export default function Navbar() {
     </motion.div>
   )
 }
+

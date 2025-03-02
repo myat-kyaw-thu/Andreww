@@ -1,6 +1,7 @@
 import AboutSection from "./components/About";
 import { BlurFade } from "./components/BlurFade";
 import ContactSection from "./components/ContactSeciton";
+import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
 import ProjectsSection from "./components/projects";
@@ -20,12 +21,9 @@ export default function Home() {
       <BlurFade delay={0.65} inView direction="up">
         <ProjectsSection />
       </BlurFade>
-      <BlurFade delay={0.80} inView direction="up">
         <SkillsSection />
-      </BlurFade>
-      <BlurFade delay={0.90} inView direction="up">
         <ContactSection />
-      </BlurFade>
+        <Footer/>
     </main>
   <Navbar />
 </div>
