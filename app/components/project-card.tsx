@@ -2,6 +2,7 @@
 
 import type React from "react"
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion"
 import { ArrowRight, Github, LinkIcon } from "lucide-react"
 import Image from "next/image" // Changed import
@@ -67,6 +68,7 @@ const techStackIcons: { [key: string]: { icon: React.ElementType; color: string 
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const router = useRouter();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -146,7 +148,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                       <motion.div
                         whileTap={{ scale: 0.9 }}
                         transition={{ duration: 0.2 }}
-                        className="rounded-full p-1 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        className="rounded-r-xl p-1 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         <Icon className="w-4 h-4 transition-colors duration-200" style={{ color: techStack.color }} />
                       </motion.div>
@@ -196,6 +198,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
             className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 p-1 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
             aria-label="View details"
+            onClick={() => router.push(`/projects/${project.project_id}`)}
           >
             <ArrowRight className="w-3.5 h-3.5" />
           </motion.button>
