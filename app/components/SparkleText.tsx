@@ -52,7 +52,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
   text,
   colors = { first: "#374151", second: "#87CEEB" },
   className,
-  sparklesCount = 5,  // Reduced sparkle count to 4
+  sparklesCount = 4,  // Reduced sparkle count to 4
   ...props
 }) => {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
@@ -63,8 +63,8 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
       const starY = `${Math.random() * 100}%`;
       const color = Math.random() > 0.5 ? colors.first : colors.second;
       const delay = Math.random() * 1;  // Slightly shorter delay for the sparkle to appear later
-      const scale = Math.random() * 0.5 + 0.5;  // Make the scale a bit smaller
-      const lifespan = Math.random() * 20 + 10;  // Slower lifespan (longer duration)
+      const scale = Math.random() * 0.3 + 0.3;  // Make the scale a bit smaller
+      const lifespan = Math.random() * 30 + 30;  // Slower lifespan (longer duration)
       const id = `${starX}-${starY}-${Date.now()}`;
       return { id, x: starX, y: starY, color, delay, scale, lifespan };
     };

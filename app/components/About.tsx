@@ -1,9 +1,37 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useState } from "react";
 import { SparklesText } from "./SparkleText"
+import { motion, AnimatePresence } from "framer-motion"
 
+const LanguageHighlight = ({ children, color }: { children: React.ReactNode; color: string }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <motion.span
+      className="relative inline-block font-semibold"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+    >
+      {children}
+      <AnimatePresence>
+        {isHovered && (
+          <motion.span
+            className="absolute bottom-0 left-0 w-full h-0.5"
+            style={{ backgroundColor: color }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            exit={{ scaleX: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        )}
+      </AnimatePresence>
+    </motion.span>
+  )
+}
 export default function AboutSection() {
+  const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null)
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -15,64 +43,34 @@ export default function AboutSection() {
     },
   }
 
-  const highlightVariants = {
-    hidden: { 
+  const textVariants = {
+    hidden: {
       opacity: 0,
-      y: 20 
+      y: 20,
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
       transition: {
         type: "spring",
         stiffness: 100,
         damping: 15,
-      }
+      },
     },
   }
 
-  const HighlightedText = ({ children, color = "slate" }: { children: React.ReactNode; color?: string }) => (
-    <motion.span
-      className={`relative inline-block ${
-        color === "slate" 
-          ? "text-slate-900 dark:text-slate-100" 
-          : `text-${color}-500 dark:text-${color}-400`
-      }`}
-      variants={highlightVariants}
-      whileHover={{ 
-        y: -1,
-        transition: { duration: 0.2 }
-      }}
-    >
-      <span className="relative z-10">{children}</span>
-      <motion.span
-        className={`absolute -inset-1 rounded-md ${
-          color === "slate" 
-            ? "bg-slate-100 dark:bg-slate-800/50" 
-            : `bg-${color}-100/30 dark:bg-${color}-900/30`
-        }`}
-        initial={{ scale: 0 }}
-        whileHover={{ scale: 1 }}
-        transition={{ duration: 0.2 }}
-      />
-    </motion.span>
-  )
-
-  const ItalicText = ({ children }: { children: React.ReactNode }) => (
-    <motion.span
-      className="inline-block italic relative"
-      variants={highlightVariants}
-    >
-      <span className="relative z-10">{children}</span>
-      <motion.span
-        className="absolute bottom-0 left-0 w-full h-px bg-current opacity-60"
-        initial={{ scaleX: 0 }}
-        whileHover={{ scaleX: 1 }}
-        transition={{ duration: 0.3 }}
-      />
-    </motion.span>
-  )
-
+  const glitchEffect = {
+    hidden: {
+      opacity: 0,
+      x: 3,
+      transition: { duration: 0.1 },
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.1 },
+    },
+  }
   return (
     <motion.section 
       className="w-full max-w-2xl space-y-8 my-10"
@@ -83,9 +81,8 @@ export default function AboutSection() {
     >
       <motion.div 
         className="space-y-2"
-        variants={highlightVariants}
       >
-        <SparklesText text="About Me" />
+        <SparklesText text="About" />
         <motion.div 
           className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
           initial={{ scaleX: 0 }}
@@ -94,31 +91,69 @@ export default function AboutSection() {
         />
       </motion.div>
 
-      <motion.p 
-        className="text-slate-700 dark:text-slate-300 leading-relaxed text-base space-y-2"
+       <motion.div
+        className="text-slate-700 dark:text-slate-300 leading-relaxed text-base space-y-4"
         variants={containerVariants}
       >
-        <motion.span variants={highlightVariants} className="block">
-          As a passionate developer dedicated to crafting innovative web applications, I focus on solving real-world problems with{" "}
-          <HighlightedText color="blue">PHP</HighlightedText>,{" "}
-          <HighlightedText color="yellow">JavaScript</HighlightedText>, and{" "}
-          <HighlightedText color="blue">TypeScript</HighlightedText>.
-        </motion.span>
+        <motion.p variants={textVariants}>
+          As a passionate developer dedicated to crafting innovative web applications, I focus on solving real-world
+          problems with{" "}
+          <LanguageHighlight
+            color="#8892BF"
+            onHoverStart={() => setHoveredLanguage("PHP")}
+            onHoverEnd={() => setHoveredLanguage(null)}
+          >
+            PHP
+          </LanguageHighlight>
+          ,{" "}
+          <LanguageHighlight
+            color="#F7DF1E"
+            onHoverStart={() => setHoveredLanguage("JavaScript")}
+            onHoverEnd={() => setHoveredLanguage(null)}
+          >
+            JavaScript
+          </LanguageHighlight>
+          , and{" "}
+          <LanguageHighlight
+            color="#3178C6"
+            onHoverStart={() => setHoveredLanguage("TypeScript")}
+            onHoverEnd={() => setHoveredLanguage(null)}
+          >
+            TypeScript
+          </LanguageHighlight>
+          .
+        </motion.p>
 
-        <motion.span variants={highlightVariants} className="block mt-4">
-          With a year of experience, I prioritize delivering{" "}
-          <ItalicText>high-quality</ItalicText>, <ItalicText>maintainable solutions</ItalicText>. 
-          Every project reflects my commitment to efficiency—whether optimizing load times, improving performance 
-          by reducing bundle sizes, or transforming complex requirements into{" "}
-          <ItalicText>seamless, elegant solutions</ItalicText>.
-        </motion.span>
+        <motion.p variants={textVariants}>
+          With a year of experience, I prioritize delivering high-quality, maintainable solutions. Every project
+          reflects my commitment to efficiency—whether optimizing load times, improving performance by reducing bundle
+          sizes, or transforming complex requirements into seamless, elegant solutions.
+        </motion.p>
 
-        <motion.span variants={highlightVariants} className="block mt-4">
-          I ensure that every line of code I write meets the highest standards of{" "}
-          <ItalicText>quality</ItalicText> and{" "}
-          <ItalicText>maintainability</ItalicText>.
-        </motion.span>
-      </motion.p>
+        <AnimatePresence>
+          {hoveredLanguage === null && (
+            <motion.p variants={textVariants} initial="hidden" animate="visible" exit="hidden">
+              I ensure that every line of code I write meets the highest standards of quality and maintainability.
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {hoveredLanguage && (
+            <motion.p
+              variants={glitchEffect}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              className="font-mono text-sm"
+            >
+              {hoveredLanguage === "PHP" && "<?php echo 'Hello, World!'; ?>"}
+              {hoveredLanguage === "JavaScript" && "console.log('Hello, World!');"}
+              {hoveredLanguage === "TypeScript" && "const greeting: string = 'Hello, World!';"}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.section>
   )
 }
