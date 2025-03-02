@@ -462,13 +462,13 @@ export default function ProjectAdmin() {
                 </div>
 
                 {/* Note: For simplicity, we're not implementing the full editing UI for nested arrays like features, goals, etc. */}
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label>Project Features, Goals, Timeline and Team Members</Label>
                   <p className="text-sm text-muted-foreground">
                     These complex fields are not editable in this simplified UI. Use the API directly for full editing
                     capabilities.
                   </p>
-                </div>
+                </div> */}
               </TabsContent>
 
               <TabsContent value="technical" className="space-y-4 mt-4">
