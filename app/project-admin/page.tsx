@@ -168,7 +168,7 @@ export default function ProjectAdmin() {
       const data = await response.json()
       setProjects(data)
       setError(null)
-    } catch {
+    } catch  {
       setError("Failed to load projects")
     } finally {
       setIsLoading(false)
@@ -194,7 +194,7 @@ export default function ProjectAdmin() {
       setCurrentProject(emptyProject)
       setIsEditing(false)
       setError(null)
-    } catch {
+    } catch  {
       setError("Failed to create project")
     } finally {
       setIsLoading(false)
@@ -220,7 +220,7 @@ export default function ProjectAdmin() {
       setCurrentProject(emptyProject)
       setIsEditing(false)
       setError(null)
-    } catch {
+    } catch  {
       setError("Failed to update project")
     } finally {
       setIsLoading(false)
@@ -243,7 +243,7 @@ export default function ProjectAdmin() {
 
       setProjects(projects.filter((p) => p.id !== id))
       setError(null)
-    } catch {
+    } catch  {
       setError("Failed to delete project")
     } finally {
       setIsLoading(false)
@@ -339,7 +339,7 @@ export default function ProjectAdmin() {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{isEditing ? "Edit Project" : "Create New Project"}</DialogTitle>
-              <DialogDescription>Fill in the details for your project. Click save when you are done.</DialogDescription>
+              <DialogDescription>Fill in the details for your project. Click save when you're done.</DialogDescription>
             </DialogHeader>
 
             <Tabs defaultValue="basic" className="mt-4">
@@ -461,14 +461,405 @@ export default function ProjectAdmin() {
                   />
                 </div>
 
-                {/* Note: For simplicity, we're not implementing the full editing UI for nested arrays like features, goals, etc. */}
-                {/* <div className="space-y-2">
-                  <Label>Project Features, Goals, Timeline and Team Members</Label>
-                  <p className="text-sm text-muted-foreground">
-                    These complex fields are not editable in this simplified UI. Use the API directly for full editing
-                    capabilities.
-                  </p>
-                </div> */}
+                <div className="space-y-6">
+                  {/* Project Features */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-lg font-medium">Project Features</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newFeature = {
+                            feature_id:
+                              currentProject.project_features.length > 0
+                                ? Math.max(...currentProject.project_features.map((f) => f.feature_id)) + 1
+                                : 1,
+                            feature_name: "",
+                            feature_description: "",
+                          }
+                          setCurrentProject({
+                            ...currentProject,
+                            project_features: [...currentProject.project_features, newFeature],
+                          })
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-1" /> Add Feature
+                      </Button>
+                    </div>
+
+                    {currentProject.project_features.map((feature, index) => (
+                      <Card key={index} className="p-4">
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor={`feature-name-${index}`} className="font-medium">
+                              Feature {index + 1}
+                            </Label>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                const updatedFeatures = [...currentProject.project_features]
+                                updatedFeatures.splice(index, 1)
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_features: updatedFeatures,
+                                })
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`feature-name-${index}`}>Feature Name</Label>
+                            <Input
+                              id={`feature-name-${index}`}
+                              value={feature.feature_name}
+                              onChange={(e) => {
+                                const updatedFeatures = [...currentProject.project_features]
+                                updatedFeatures[index].feature_name = e.target.value
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_features: updatedFeatures,
+                                })
+                              }}
+                              placeholder="Feature name"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`feature-description-${index}`}>Feature Description</Label>
+                            <Textarea
+                              id={`feature-description-${index}`}
+                              value={feature.feature_description}
+                              onChange={(e) => {
+                                const updatedFeatures = [...currentProject.project_features]
+                                updatedFeatures[index].feature_description = e.target.value
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_features: updatedFeatures,
+                                })
+                              }}
+                              placeholder="Describe the feature"
+                              rows={2}
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                    {currentProject.project_features.length === 0 && (
+                      <div className="text-center p-4 border border-dashed rounded-md">
+                        <p className="text-muted-foreground">
+                          No features added yet. Click "Add Feature" to get started.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Project Goals */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-lg font-medium">Project Goals</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newGoal = {
+                            goal_id:
+                              currentProject.project_goals.length > 0
+                                ? Math.max(...currentProject.project_goals.map((g) => g.goal_id)) + 1
+                                : 1,
+                            goal_name: "",
+                            goal_description: "",
+                          }
+                          setCurrentProject({
+                            ...currentProject,
+                            project_goals: [...currentProject.project_goals, newGoal],
+                          })
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-1" /> Add Goal
+                      </Button>
+                    </div>
+
+                    {currentProject.project_goals.map((goal, index) => (
+                      <Card key={index} className="p-4">
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor={`goal-name-${index}`} className="font-medium">
+                              Goal {index + 1}
+                            </Label>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                const updatedGoals = [...currentProject.project_goals]
+                                updatedGoals.splice(index, 1)
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_goals: updatedGoals,
+                                })
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`goal-name-${index}`}>Goal Name</Label>
+                            <Input
+                              id={`goal-name-${index}`}
+                              value={goal.goal_name}
+                              onChange={(e) => {
+                                const updatedGoals = [...currentProject.project_goals]
+                                updatedGoals[index].goal_name = e.target.value
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_goals: updatedGoals,
+                                })
+                              }}
+                              placeholder="Goal name"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`goal-description-${index}`}>Goal Description</Label>
+                            <Textarea
+                              id={`goal-description-${index}`}
+                              value={goal.goal_description}
+                              onChange={(e) => {
+                                const updatedGoals = [...currentProject.project_goals]
+                                updatedGoals[index].goal_description = e.target.value
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_goals: updatedGoals,
+                                })
+                              }}
+                              placeholder="Describe the goal"
+                              rows={2}
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                    {currentProject.project_goals.length === 0 && (
+                      <div className="text-center p-4 border border-dashed rounded-md">
+                        <p className="text-muted-foreground">No goals added yet. Click "Add Goal" to get started.</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Project Timeline */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-lg font-medium">Project Timeline</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newMilestone = {
+                            milestone_id:
+                              currentProject.project_timeline.length > 0
+                                ? Math.max(...currentProject.project_timeline.map((m) => m.milestone_id)) + 1
+                                : 1,
+                            milestone_name: "",
+                            milestone_date: "",
+                            milestone_description: "",
+                          }
+                          setCurrentProject({
+                            ...currentProject,
+                            project_timeline: [...currentProject.project_timeline, newMilestone],
+                          })
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-1" /> Add Milestone
+                      </Button>
+                    </div>
+
+                    {currentProject.project_timeline.map((milestone, index) => (
+                      <Card key={index} className="p-4">
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor={`milestone-name-${index}`} className="font-medium">
+                              Milestone {index + 1}
+                            </Label>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                const updatedTimeline = [...currentProject.project_timeline]
+                                updatedTimeline.splice(index, 1)
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_timeline: updatedTimeline,
+                                })
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor={`milestone-name-${index}`}>Milestone Name</Label>
+                              <Input
+                                id={`milestone-name-${index}`}
+                                value={milestone.milestone_name}
+                                onChange={(e) => {
+                                  const updatedTimeline = [...currentProject.project_timeline]
+                                  updatedTimeline[index].milestone_name = e.target.value
+                                  setCurrentProject({
+                                    ...currentProject,
+                                    project_timeline: updatedTimeline,
+                                  })
+                                }}
+                                placeholder="Milestone name"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor={`milestone-date-${index}`}>Date</Label>
+                              <Input
+                                id={`milestone-date-${index}`}
+                                type="date"
+                                value={milestone.milestone_date}
+                                onChange={(e) => {
+                                  const updatedTimeline = [...currentProject.project_timeline]
+                                  updatedTimeline[index].milestone_date = e.target.value
+                                  setCurrentProject({
+                                    ...currentProject,
+                                    project_timeline: updatedTimeline,
+                                  })
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`milestone-description-${index}`}>Description</Label>
+                            <Textarea
+                              id={`milestone-description-${index}`}
+                              value={milestone.milestone_description}
+                              onChange={(e) => {
+                                const updatedTimeline = [...currentProject.project_timeline]
+                                updatedTimeline[index].milestone_description = e.target.value
+                                setCurrentProject({
+                                  ...currentProject,
+                                  project_timeline: updatedTimeline,
+                                })
+                              }}
+                              placeholder="Describe the milestone"
+                              rows={2}
+                            />
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                    {currentProject.project_timeline.length === 0 && (
+                      <div className="text-center p-4 border border-dashed rounded-md">
+                        <p className="text-muted-foreground">
+                          No timeline milestones added yet. Click "Add Milestone" to get started.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Team Members */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-lg font-medium">Team Members</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newMember = {
+                            member_id:
+                              currentProject.team_members.length > 0
+                                ? Math.max(...currentProject.team_members.map((m) => m.member_id)) + 1
+                                : 1,
+                            member_name: "",
+                            member_role: "",
+                          }
+                          setCurrentProject({
+                            ...currentProject,
+                            team_members: [...currentProject.team_members, newMember],
+                          })
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-1" /> Add Team Member
+                      </Button>
+                    </div>
+
+                    {currentProject.team_members.map((member, index) => (
+                      <Card key={index} className="p-4">
+                        <div className="grid gap-4">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor={`member-name-${index}`} className="font-medium">
+                              Team Member {index + 1}
+                            </Label>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => {
+                                const updatedMembers = [...currentProject.team_members]
+                                updatedMembers.splice(index, 1)
+                                setCurrentProject({
+                                  ...currentProject,
+                                  team_members: updatedMembers,
+                                })
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label htmlFor={`member-name-${index}`}>Name</Label>
+                              <Input
+                                id={`member-name-${index}`}
+                                value={member.member_name}
+                                onChange={(e) => {
+                                  const updatedMembers = [...currentProject.team_members]
+                                  updatedMembers[index].member_name = e.target.value
+                                  setCurrentProject({
+                                    ...currentProject,
+                                    team_members: updatedMembers,
+                                  })
+                                }}
+                                placeholder="Member name"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor={`member-role-${index}`}>Role</Label>
+                              <Input
+                                id={`member-role-${index}`}
+                                value={member.member_role}
+                                onChange={(e) => {
+                                  const updatedMembers = [...currentProject.team_members]
+                                  updatedMembers[index].member_role = e.target.value
+                                  setCurrentProject({
+                                    ...currentProject,
+                                    team_members: updatedMembers,
+                                  })
+                                }}
+                                placeholder="Member role"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                    {currentProject.team_members.length === 0 && (
+                      <div className="text-center p-4 border border-dashed rounded-md">
+                        <p className="text-muted-foreground">
+                          No team members added yet. Click "Add Team Member" to get started.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </TabsContent>
 
               <TabsContent value="technical" className="space-y-4 mt-4">
