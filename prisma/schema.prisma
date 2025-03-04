@@ -66,3 +66,19 @@ model TeamMember {
   project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
 }
+
+// New model for the simplified project index
+model ProjectIndex {
+  id                  String   @id @default(uuid())
+  project_id          String   @unique
+  project_title       String
+  project_subtitle    String
+  project_cover_img   String
+  project_tech_stacks String // Stored as JSON string
+  project_link        String
+  github_link         String?
+  project_status      String
+  personal            Boolean
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
