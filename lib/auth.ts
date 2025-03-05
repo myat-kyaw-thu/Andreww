@@ -30,4 +30,3 @@ export function verifyToken(request: NextRequest) {
     return { success: false, error: "Authentication error" }
   }
 }
-
