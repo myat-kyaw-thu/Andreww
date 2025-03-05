@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,7 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { AlertCircle, Edit, ExternalLink, Github, Image, Plus, Trash2, Upload } from 'lucide-react'
+import { AlertCircle, Edit, ExternalLink, Github, Image, Plus, Trash2, Upload } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
@@ -58,8 +60,11 @@ export default function ProjectsIndex() {
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement>(null)
+  // Add a new state variable for controlling the dialog
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
+    // Check if token exists in localStorage
     const storedToken = localStorage.getItem("admin_token")
     if (storedToken) {
       setToken(storedToken)
@@ -83,18 +88,23 @@ export default function ProjectsIndex() {
       } else {
         setIsAuthenticated(false)
         setError("Invalid authentication token")
+        // Clear invalid token from localStorage
+        localStorage.removeItem("admin_token")
       }
     } catch (err) {
       setError("Authentication failed")
       setIsAuthenticated(false)
+      localStorage.removeItem("admin_token")
     }
   }
 
   const handleLogin = () => {
-    verifyToken(token)
-    if (isAuthenticated) {
-      localStorage.setItem("admin_token", token)
+    if (!token.trim()) {
+      setError("Please enter an admin token")
+      return
     }
+
+    verifyToken(token)
   }
 
   const fetchProjects = async (authToken: string) => {
@@ -123,13 +133,13 @@ export default function ProjectsIndex() {
     try {
       // Create FormData for file upload
       const formData = new FormData()
-      
+
       // Add project data as JSON
-      formData.append('data', JSON.stringify(currentProject))
-      
+      formData.append("data", JSON.stringify(currentProject))
+
       // Add image file if selected
       if (imageFile) {
-        formData.append('image', imageFile)
+        formData.append("image", imageFile)
       }
 
       const response = await fetch("/api/projects-index", {
@@ -139,9 +149,15 @@ export default function ProjectsIndex() {
         },
         body: formData,
       })
-      
-      if (!response.ok) throw new Error("Failed to create project")
-      
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setIsAuthenticated(false)
+          throw new Error("Authentication failed. Please log in again.")
+        }
+        throw new Error("Failed to create project")
+      }
+
       const newProject = await response.json()
       setProjects([...projects, newProject])
       setCurrentProject(emptyProject)
@@ -149,8 +165,8 @@ export default function ProjectsIndex() {
       setImagePreview("")
       setIsEditing(false)
       setError(null)
-    } catch  {
-      setError("Failed to create project")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create project")
     } finally {
       setIsLoading(false)
     }
@@ -161,13 +177,13 @@ export default function ProjectsIndex() {
     try {
       // Create FormData for file upload
       const formData = new FormData()
-      
+
       // Add project data as JSON
-      formData.append('data', JSON.stringify(currentProject))
-      
+      formData.append("data", JSON.stringify(currentProject))
+
       // Add image file if selected
       if (imageFile) {
-        formData.append('image', imageFile)
+        formData.append("image", imageFile)
       }
 
       const response = await fetch(`/api/projects-index/${currentProject.id}`, {
@@ -177,18 +193,24 @@ export default function ProjectsIndex() {
         },
         body: formData,
       })
-      
-      if (!response.ok) throw new Error("Failed to update project")
-      
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setIsAuthenticated(false)
+          throw new Error("Authentication failed. Please log in again.")
+        }
+        throw new Error("Failed to update project")
+      }
+
       const updatedProject = await response.json()
-      setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p))
+      setProjects(projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)))
       setCurrentProject(emptyProject)
       setImageFile(null)
       setImagePreview("")
       setIsEditing(false)
       setError(null)
-    } catch  {
-      setError("Failed to update project")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update project")
     } finally {
       setIsLoading(false)
     }
@@ -196,31 +218,39 @@ export default function ProjectsIndex() {
 
   const handleDeleteProject = async (id: string) => {
     if (!confirm("Are you sure you want to delete this project?")) return
-    
+
     setIsLoading(true)
     try {
       const response = await fetch(`/api/projects-index/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       })
-      
-      if (!response.ok) throw new Error("Failed to delete project")
-      
-      setProjects(projects.filter(p => p.id !== id))
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setIsAuthenticated(false)
+          throw new Error("Authentication failed. Please log in again.")
+        }
+        throw new Error("Failed to delete project")
+      }
+
+      setProjects(projects.filter((p) => p.id !== id))
       setError(null)
-    } catch  {
-      setError("Failed to delete project")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete project")
     } finally {
       setIsLoading(false)
     }
   }
 
+  // Update the handleEditProject function to open the dialog
   const handleEditProject = (project: Project) => {
     setCurrentProject(project)
     setImagePreview(project.project_cover_img)
     setIsEditing(true)
+    setIsDialogOpen(true) // Open the dialog
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -229,14 +259,14 @@ export default function ProjectsIndex() {
   }
 
   const handleTechStackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const techStacks = e.target.value.split(",").map(item => item.trim())
+    const techStacks = e.target.value.split(",").map((item) => item.trim())
     setCurrentProject({ ...currentProject, project_tech_stacks: techStacks })
   }
 
   const handleStatusChange = (value: string) => {
-    setCurrentProject({ 
-      ...currentProject, 
-      project_status: value as "Planning" | "In Progress" | "Completed" | "On Hold" 
+    setCurrentProject({
+      ...currentProject,
+      project_status: value as "Planning" | "In Progress" | "Completed" | "On Hold",
     })
   }
 
@@ -248,7 +278,7 @@ export default function ProjectsIndex() {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
       setImageFile(file)
-      
+
       // Create a preview URL
       const reader = new FileReader()
       reader.onloadend = () => {
@@ -306,7 +336,7 @@ export default function ProjectsIndex() {
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Projects Index</h1>
-      
+
       {error && (
         <Alert variant="destructive" className="mb-4">
           <AlertCircle className="h-4 w-4" />
@@ -316,25 +346,29 @@ export default function ProjectsIndex() {
       )}
 
       <div className="flex justify-end mb-4">
-        <Dialog>
+        {/* Update the Dialog component to use controlled state */}
+        {/* Replace the existing Dialog component with this: */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={() => {
-              setCurrentProject(emptyProject)
-              setImageFile(null)
-              setImagePreview("")
-              setIsEditing(false)
-            }}>
+            <Button
+              onClick={() => {
+                setCurrentProject(emptyProject)
+                setImageFile(null)
+                setImagePreview("")
+                setIsEditing(false)
+                setIsDialogOpen(true) // Open the dialog
+              }}
+            >
               <Plus className="mr-2 h-4 w-4" /> Add New Project
             </Button>
           </DialogTrigger>
+
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>{isEditing ? "Edit Project" : "Create New Project"}</DialogTitle>
-              <DialogDescription>
-                Fill in the details for your project. Click save when you're done.
-              </DialogDescription>
+              <DialogDescription>Fill in the details for your project. Click save when you're done.</DialogDescription>
             </DialogHeader>
-            
+
             <div className="grid gap-6 py-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -349,10 +383,7 @@ export default function ProjectsIndex() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="project_status">Project Status</Label>
-                  <Select 
-                    value={currentProject.project_status} 
-                    onValueChange={handleStatusChange}
-                  >
+                  <Select value={currentProject.project_status} onValueChange={handleStatusChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
@@ -365,7 +396,7 @@ export default function ProjectsIndex() {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="project_title">Project Title</Label>
                 <Input
@@ -376,7 +407,7 @@ export default function ProjectsIndex() {
                   placeholder="Project Title"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="project_subtitle">Project Subtitle</Label>
                 <Textarea
@@ -388,7 +419,7 @@ export default function ProjectsIndex() {
                   rows={2}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="project_tech_stacks">Tech Stack (comma separated)</Label>
                 <Input
@@ -399,7 +430,7 @@ export default function ProjectsIndex() {
                   placeholder="React, Node.js, TypeScript"
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="project_link">Project Link</Label>
@@ -422,22 +453,20 @@ export default function ProjectsIndex() {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label>Project Cover Image</Label>
                 <div className="flex items-center gap-4">
-                  <div 
+                  <div
                     className="border rounded-md w-32 h-32 flex items-center justify-center overflow-hidden bg-gray-50 cursor-pointer"
                     onClick={triggerFileInput}
                   >
                     {imagePreview ? (
-                     <Image
+                      <img
                         src={imagePreview || "/placeholder.svg"}
                         alt="Project cover preview"
-                        width={500} // Replace with your desired width
-                        height={300} // Replace with your desired height
                         className="w-full h-full object-cover"
-                        />
+                      />
                     ) : (
                       <div className="flex flex-col items-center text-gray-400">
                         <Image className="w-8 h-8 mb-1" />
@@ -453,12 +482,7 @@ export default function ProjectsIndex() {
                       accept="image/*"
                       onChange={handleFileChange}
                     />
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      className="w-full mb-2"
-                      onClick={triggerFileInput}
-                    >
+                    <Button type="button" variant="outline" className="w-full mb-2" onClick={triggerFileInput}>
                       <Upload className="w-4 h-4 mr-2" />
                       {imageFile ? "Change Image" : "Upload Image"}
                     </Button>
@@ -470,27 +494,37 @@ export default function ProjectsIndex() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2">
-                <Switch 
-                  id="personal" 
-                  checked={currentProject.personal}
-                  onCheckedChange={handlePersonalChange}
-                />
+                <Switch id="personal" checked={currentProject.personal} onCheckedChange={handlePersonalChange} />
                 <Label htmlFor="personal">Personal Project</Label>
               </div>
             </div>
-            
+
             <DialogFooter>
-              <Button variant="outline" onClick={() => {
-                setCurrentProject(emptyProject)
-                setImageFile(null)
-                setImagePreview("")
-              }}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setCurrentProject(emptyProject)
+                  setImageFile(null)
+                  setImagePreview("")
+                  setIsDialogOpen(false) // Close the dialog
+                }}
+              >
                 Cancel
               </Button>
-              <Button onClick={isEditing ? handleUpdateProject : handleCreateProject} disabled={isLoading}>
-                {isLoading ? "Saving..." : (isEditing ? "Update Project" : "Create Project")}
+              <Button
+                onClick={async () => {
+                  if (isEditing) {
+                    await handleUpdateProject()
+                  } else {
+                    await handleCreateProject()
+                  }
+                  setIsDialogOpen(false) // Close the dialog after saving
+                }}
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving..." : isEditing ? "Update Project" : "Create Project"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -504,13 +538,13 @@ export default function ProjectsIndex() {
         </CardHeader>
         <CardContent>
           {isLoading && <p>Loading projects...</p>}
-          
+
           {!isLoading && projects.length === 0 && (
             <div className="text-center py-8">
               <p className="text-muted-foreground">No projects found. Create your first project!</p>
             </div>
           )}
-          
+
           {!isLoading && projects.length > 0 && (
             <Table>
               <TableHeader>
@@ -530,13 +564,11 @@ export default function ProjectsIndex() {
                     <TableCell>
                       <div className="w-12 h-12 rounded-md overflow-hidden bg-gray-100">
                         {project.project_cover_img ? (
-                         <Image
-                            src={imagePreview || "/placeholder.svg"}
-                            alt="Project cover preview"
-                            width={500} // Replace with your desired width
-                            height={300} // Replace with your desired height
+                          <img
+                            src={project.project_cover_img || "/placeholder.svg"}
+                            alt={project.project_title}
                             className="w-full h-full object-cover"
-                            />
+                          />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">
                             <Image className="w-6 h-6" />
@@ -554,18 +586,24 @@ export default function ProjectsIndex() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={
-                        project.project_status === "Completed" ? "default" :
-                        project.project_status === "In Progress" ? "secondary" :
-                        "outline"
-                      }>
+                      <Badge
+                        variant={
+                          project.project_status === "Completed"
+                            ? "default"
+                            : project.project_status === "In Progress"
+                              ? "secondary"
+                              : "outline"
+                        }
+                      >
                         {project.project_status}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-wrap gap-1">
                         {project.project_tech_stacks.slice(0, 3).map((tech, i) => (
-                          <Badge key={i} variant="outline">{tech}</Badge>
+                          <Badge key={i} variant="outline">
+                            {tech}
+                          </Badge>
                         ))}
                         {project.project_tech_stacks.length > 3 && (
                           <Badge variant="outline">+{project.project_tech_stacks.length - 3}</Badge>
@@ -575,9 +613,9 @@ export default function ProjectsIndex() {
                     <TableCell>
                       <div className="flex space-x-2">
                         {project.project_link && (
-                          <a 
-                            href={project.project_link} 
-                            target="_blank" 
+                          <a
+                            href={project.project_link}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:text-blue-700"
                           >
@@ -585,9 +623,9 @@ export default function ProjectsIndex() {
                           </a>
                         )}
                         {project.github_link && (
-                          <a 
-                            href={project.github_link} 
-                            target="_blank" 
+                          <a
+                            href={project.github_link}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-700 hover:text-gray-900"
                           >
@@ -598,18 +636,11 @@ export default function ProjectsIndex() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleEditProject(project)}
-                        >
+                        {/* Update the edit button to directly call handleEditProject */}
+                        <Button variant="ghost" size="icon" onClick={() => handleEditProject(project)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteProject(project.id!)}
-                        >
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteProject(project.id!)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -624,3 +655,4 @@ export default function ProjectsIndex() {
     </div>
   )
 }
+
