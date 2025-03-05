@@ -9,12 +9,7 @@ const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    // Verify authentication
-    const authResult = verifyToken(request)
-    if (!authResult.success) {
-      return NextResponse.json({ error: authResult.error }, { status: 401 })
-    }
-
+    // Public access - no authentication required
     const id = params.id
     const project = await prisma.projectIndex.findUnique({
       where: { id },

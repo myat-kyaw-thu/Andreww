@@ -7,20 +7,19 @@ import { v4 as uuidv4 } from "uuid"
 
 const prisma = new PrismaClient()
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Verify authentication
-    const authResult = verifyToken(request)
-    if (!authResult.success) {
-      return NextResponse.json({ error: authResult.error }, { status: 401 })
-    }
-
-    const projects = await prisma.projectIndex.findMany()
+    // Public access - no authentication required
+    const projects = await prisma.projectIndex.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
 
     // Parse the project_tech_stacks from JSON string to array
-    const formattedProjects = projects.map((project) => ({
+    const formattedProjects = projects.map(project => ({
       ...project,
-      project_tech_stacks: JSON.parse(project.project_tech_stacks as string),
+      project_tech_stacks: JSON.parse(project.project_tech_stacks as string)
     }))
 
     return NextResponse.json(formattedProjects)
@@ -29,6 +28,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 })
   }
 }
+
 
 export async function POST(request: NextRequest) {
   try {
