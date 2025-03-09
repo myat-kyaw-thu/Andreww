@@ -22,6 +22,9 @@ const helloInLanguages = [
 ]
 
 export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
+  const API_KEY = process.env.ADMIN_TOKEN || ''; // Store your API key in environment variables
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''; // Your API base URL
+  
   const [progress, setProgress] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [projectsLoaded, setProjectsLoaded] = useState(false)
@@ -34,7 +37,12 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch("/api/projects-index")
+        const response = await fetch(`${API_BASE_URL}/project-index`, {
+           method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
         if (response.ok) {
           // Projects loaded successfully
           setProjectsLoaded(true)
