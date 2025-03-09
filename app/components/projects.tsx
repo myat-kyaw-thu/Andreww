@@ -44,6 +44,9 @@ const titleVariants = {
 }
 
 export default function ProjectsSection() {
+  const API_KEY = process.env.ADMIN_TOKEN || ''; // Store your API key in environment variables
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''; // Your API base URL
+  
   const [projects, setProjects] = useState<ProjectCardProps['project'][]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -54,7 +57,12 @@ useEffect(() => {
         setIsLoading(true)
 
         // Simple fetch - no authentication needed for GET requests
-        const response = await fetch("/api/projects-index")
+        const response = await fetch(`${API_BASE_URL}/project-index`, {
+           method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
 
         if (!response.ok) {
           throw new Error("Failed to fetch projects")
