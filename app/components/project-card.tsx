@@ -84,6 +84,15 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  let techStacks = [];
+  try {
+    techStacks = Array.isArray(project.project_tech_stacks) 
+      ? project.project_tech_stacks  // It's already an array
+      : JSON.parse(project.project_tech_stacks); // Parse the string if it is not
+    console.log('Tech stack:', techStacks);
+  } catch (error) {
+    console.error('Failed to parse tech stack:', error);
+  }
   const router = useRouter()
   const [showAllTech, setShowAllTech] = useState(false)
 
@@ -178,74 +187,72 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <AnimatePresence>
-              {/* Show first 4 tech stacks or all if expanded */}
-              {(showAllTech ? project.project_tech_stacks : project.project_tech_stacks.slice(0, 4)).map(
-                (tech, index) => {
-                  const techColor = techStackColors[tech] || techStackColors.default
+           <AnimatePresence>
+            {/* Show first 4 tech stacks or all if expanded */}
+            {(showAllTech ? techStacks : techStacks.slice(0, 4)).map((tech: string, index: number) => {
+              const techColor: { color: string; bgColor: string } = techStackColors[tech] || techStackColors.default;
 
-                  return (
-                    <motion.div
-                      key={tech}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{
-                        duration: 0.2,
-                        delay: showAllTech ? 0.05 * index : 0.05 * index,
-                      }}
-                    >
-                      <Badge
-                        variant="outline"
-                        className="px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200"
-                        style={{
-                          backgroundColor: techColor.bgColor,
-                          color: techColor.color,
-                          borderColor: `${techColor.color}30`,
-                        }}
-                      >
-                        {tech}
-                      </Badge>
-                    </motion.div>
-                  )
-                },
-              )}
-
-              {/* Show +X badge if there are more tech stacks and not showing all */}
-              {!showAllTech && project.project_tech_stacks.length > 4 && (
+              return (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2, delay: 0.25 }}
+                  key={tech}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{
+                    duration: 0.2,
+                    delay: showAllTech ? 0.05 * index : 0.05 * index,
+                  }}
                 >
                   <Badge
                     variant="outline"
-                    className="px-1.5 py-0.5 text-[10px] font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    onClick={toggleTechStack}
+                    className="px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200"
+                    style={{
+                      backgroundColor: techColor.bgColor,
+                      color: techColor.color,
+                      borderColor: `${techColor.color}30`,
+                    }}
                   >
-                    +{project.project_tech_stacks.length - 4}
+                    {tech}
                   </Badge>
                 </motion.div>
-              )}
+              );
+            })}
 
-              {/* Show close button when showing all tech stacks */}
-              {showAllTech && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2, delay: 0.25 }}
-                  className="absolute -top-2 -right-2"
+            {/* Show +X badge if there are more tech stacks and not showing all */}
+            {!showAllTech && techStacks.length > 4 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2, delay: 0.25 }}
+              >
+                <Badge
+                  variant="outline"
+                  className="px-1.5 py-0.5 text-[10px] font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  onClick={toggleTechStack}
                 >
-                  <button
-                    onClick={toggleTechStack}
-                    className="p-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                    aria-label="Close tech stack list"
-                  >
-                    <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  +{techStacks.length - 4}
+                </Badge>
+              </motion.div>
+            )}
+
+            {/* Show close button when showing all tech stacks */}
+            {showAllTech && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2, delay: 0.25 }}
+                className="absolute -top-2 -right-2"
+              >
+                <button
+                  onClick={toggleTechStack}
+                  className="p-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  aria-label="Close tech stack list"
+                >
+                  <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
           </motion.div>
         </div>
 
