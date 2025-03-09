@@ -50,6 +50,9 @@ const emptyProject: Project = {
 }
 
 export default function ProjectsIndex() {
+  const API_KEY = process.env.ADMIN_TOKEN || "vEG15KfWn+uHufs7WYn+2DPocBE/lZ7n6h9dryozRqk="
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api"
+
   const [projects, setProjects] = useState<Project[]>([])
   const [currentProject, setCurrentProject] = useState<Project>(emptyProject)
   const [isEditing, setIsEditing] = useState(false)
@@ -64,12 +67,15 @@ export default function ProjectsIndex() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
-    // Check if token exists in localStorage
+    // Check if token exists in localStorage for the admin UI authentication
     const storedToken = localStorage.getItem("admin_token")
     if (storedToken) {
       setToken(storedToken)
       verifyToken(storedToken)
     }
+
+    // You can also directly fetch projects here if you want to show them before authentication
+    // fetchProjects()
   }, [])
 
   const verifyToken = async (tokenToVerify: string) => {
@@ -84,14 +90,14 @@ export default function ProjectsIndex() {
 
       if (response.ok) {
         setIsAuthenticated(true)
-        fetchProjects(tokenToVerify)
+        fetchProjects() // No need to pass token anymore
       } else {
         setIsAuthenticated(false)
         setError("Invalid authentication token")
         // Clear invalid token from localStorage
         localStorage.removeItem("admin_token")
       }
-    } catch (err) {
+    } catch {
       setError("Authentication failed")
       setIsAuthenticated(false)
       localStorage.removeItem("admin_token")
@@ -103,25 +109,21 @@ export default function ProjectsIndex() {
       setError("Please enter an admin token")
       return
     }
-
     verifyToken(token)
   }
 
-  const fetchProjects = async (authToken: string) => {
+  const fetchProjects = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch("/api/projects-index", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
+      // No authentication needed for GET requests with our new API
+      const response = await fetch(`${API_BASE_URL}/project-index`)
 
       if (!response.ok) throw new Error("Failed to fetch projects")
 
       const data = await response.json()
-      setProjects(data)
+      setProjects(data.map(formatProjectFromApi))
       setError(null)
-    } catch (err) {
+    } catch  {
       setError("Failed to load projects")
     } finally {
       setIsLoading(false)
@@ -135,25 +137,33 @@ export default function ProjectsIndex() {
       const formData = new FormData()
 
       // Add project data as JSON
-      formData.append("data", JSON.stringify(currentProject))
+      formData.append(
+        "data",
+        JSON.stringify({
+          ...currentProject,
+          project_tech_stacks: currentProject.project_tech_stacks,
+        }),
+      )
 
       // Add image file if selected
       if (imageFile) {
         formData.append("image", imageFile)
       }
 
-      const response = await fetch("/api/projects-index", {
+      const response = await fetch(`${API_BASE_URL}/project-index`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "x-api-key": API_KEY,
         },
         body: formData,
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          setIsAuthenticated(false)
-          throw new Error("Authentication failed. Please log in again.")
+          throw new Error("Authentication failed. Invalid API key.")
+        }
+        if (response.status === 413) {
+          throw new Error("Image file is too large. Please use a smaller image (max 10MB).")
         }
         throw new Error("Failed to create project")
       }
@@ -179,25 +189,33 @@ export default function ProjectsIndex() {
       const formData = new FormData()
 
       // Add project data as JSON
-      formData.append("data", JSON.stringify(currentProject))
+      formData.append(
+        "data",
+        JSON.stringify({
+          ...currentProject,
+          project_tech_stacks: currentProject.project_tech_stacks,
+        }),
+      )
 
       // Add image file if selected
       if (imageFile) {
         formData.append("image", imageFile)
       }
 
-      const response = await fetch(`/api/projects-index/${currentProject.id}`, {
+      const response = await fetch(`${API_BASE_URL}/project-index/${currentProject.id}`, {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "x-api-key": API_KEY,
         },
         body: formData,
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          setIsAuthenticated(false)
-          throw new Error("Authentication failed. Please log in again.")
+          throw new Error("Authentication failed. Invalid API key.")
+        }
+        if (response.status === 413) {
+          throw new Error("Image file is too large. Please use a smaller image (max 10MB).")
         }
         throw new Error("Failed to update project")
       }
@@ -221,17 +239,16 @@ export default function ProjectsIndex() {
 
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/projects-index/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/project-index/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "x-api-key": API_KEY, // Use the API key for authentication
         },
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          setIsAuthenticated(false)
-          throw new Error("Authentication failed. Please log in again.")
+          throw new Error("Authentication failed. Invalid API key.")
         }
         throw new Error("Failed to delete project")
       }
@@ -242,6 +259,17 @@ export default function ProjectsIndex() {
       setError(err instanceof Error ? err.message : "Failed to delete project")
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  // Add this helper function to format projects from the API
+  const formatProjectFromApi = (project: any): Project => {
+    return {
+      ...project,
+      project_tech_stacks:
+        typeof project.project_tech_stacks === "string"
+          ? JSON.parse(project.project_tech_stacks)
+          : project.project_tech_stacks,
     }
   }
 
