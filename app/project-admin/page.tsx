@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { AlertCircle, Edit, Plus, Trash2 } from "lucide-react"
+import { AlertCircle, Edit, Image, Plus, Trash2, Upload } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -108,6 +108,9 @@ const emptyProject: Project = {
 }
 
 export default function ProjectAdmin() {
+  const API_KEY = process.env.ADMIN_TOKEN || "" // Use the environment variable for the API key
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/" // Update with your API base URL
+
   const [projects, setProjects] = useState<Project[]>([])
   const [currentProject, setCurrentProject] = useState<Project>(emptyProject)
   const [isEditing, setIsEditing] = useState(false)
@@ -115,6 +118,10 @@ export default function ProjectAdmin() {
   const [error, setError] = useState<string | null>(null)
   const [token, setToken] = useState("")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string>("")
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   useEffect(() => {
     const storedToken = localStorage.getItem("admin_token")
@@ -136,12 +143,12 @@ export default function ProjectAdmin() {
 
       if (response.ok) {
         setIsAuthenticated(true)
-        fetchProjects(tokenToVerify)
+        fetchProjects()
       } else {
         setIsAuthenticated(false)
         setError("Invalid authentication token")
       }
-    } catch  {
+    } catch {
       setError("Authentication failed")
       setIsAuthenticated(false)
     }
@@ -154,21 +161,17 @@ export default function ProjectAdmin() {
     }
   }
 
-  const fetchProjects = async (authToken: string) => {
+  const fetchProjects = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch("/api/project", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
+      const response = await fetch(`${API_BASE_URL}/projects`)
 
       if (!response.ok) throw new Error("Failed to fetch projects")
 
       const data = await response.json()
       setProjects(data)
       setError(null)
-    } catch  {
+    } catch {
       setError("Failed to load projects")
     } finally {
       setIsLoading(false)
@@ -178,24 +181,45 @@ export default function ProjectAdmin() {
   const handleCreateProject = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch("/api/project", {
+      // Create FormData for file upload
+      const formData = new FormData()
+
+      // Add project data as JSON
+      formData.append("data", JSON.stringify(currentProject))
+
+      // Add image file if selected
+      if (imageFile) {
+        formData.append("image", imageFile)
+      }
+
+      const response = await fetch(`${API_BASE_URL}/projects`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "x-api-key": API_KEY,
         },
-        body: JSON.stringify(currentProject),
+        body: formData,
       })
 
-      if (!response.ok) throw new Error("Failed to create project")
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Authentication failed. Invalid API key.")
+        }
+        if (response.status === 413) {
+          throw new Error("Image file is too large. Please use a smaller image (max 10MB).")
+        }
+        throw new Error("Failed to create project")
+      }
 
       const newProject = await response.json()
       setProjects([...projects, newProject])
       setCurrentProject(emptyProject)
+      setImageFile(null)
+      setImagePreview("")
       setIsEditing(false)
+      setIsDialogOpen(false)
       setError(null)
-    } catch  {
-      setError("Failed to create project")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create project")
     } finally {
       setIsLoading(false)
     }
@@ -204,24 +228,45 @@ export default function ProjectAdmin() {
   const handleUpdateProject = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/project/${currentProject.id}`, {
+      // Create FormData for file upload
+      const formData = new FormData()
+
+      // Add project data as JSON
+      formData.append("data", JSON.stringify(currentProject))
+
+      // Add image file if selected
+      if (imageFile) {
+        formData.append("image", imageFile)
+      }
+
+      const response = await fetch(`${API_BASE_URL}/projects/${currentProject.id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "x-api-key": API_KEY,
         },
-        body: JSON.stringify(currentProject),
+        body: formData,
       })
 
-      if (!response.ok) throw new Error("Failed to update project")
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Authentication failed. Invalid API key.")
+        }
+        if (response.status === 413) {
+          throw new Error("Image file is too large. Please use a smaller image (max 10MB).")
+        }
+        throw new Error("Failed to update project")
+      }
 
       const updatedProject = await response.json()
       setProjects(projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)))
       setCurrentProject(emptyProject)
+      setImageFile(null)
+      setImagePreview("")
       setIsEditing(false)
+      setIsDialogOpen(false)
       setError(null)
-    } catch  {
-      setError("Failed to update project")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update project")
     } finally {
       setIsLoading(false)
     }
@@ -232,19 +277,24 @@ export default function ProjectAdmin() {
 
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/project/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/projects/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "x-api-key": API_KEY,
         },
       })
 
-      if (!response.ok) throw new Error("Failed to delete project")
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Authentication failed. Invalid API key.")
+        }
+        throw new Error("Failed to delete project")
+      }
 
       setProjects(projects.filter((p) => p.id !== id))
       setError(null)
-    } catch  {
-      setError("Failed to delete project")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete project")
     } finally {
       setIsLoading(false)
     }
@@ -252,7 +302,9 @@ export default function ProjectAdmin() {
 
   const handleEditProject = (project: Project) => {
     setCurrentProject(project)
+    setImagePreview(project.project_cover_img)
     setIsEditing(true)
+    setIsDialogOpen(true)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -271,6 +323,26 @@ export default function ProjectAdmin() {
 
   const handlePersonalChange = (value: string) => {
     setCurrentProject({ ...currentProject, personal: value === "true" })
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0]
+      setImageFile(file)
+
+      // Create a preview URL
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
   }
 
   if (!isAuthenticated) {
@@ -325,12 +397,15 @@ export default function ProjectAdmin() {
       )}
 
       <div className="flex justify-end mb-4">
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
               onClick={() => {
                 setCurrentProject(emptyProject)
+                setImageFile(null)
+                setImagePreview("")
                 setIsEditing(false)
+                setIsDialogOpen(true)
               }}
             >
               <Plus className="mr-2 h-4 w-4" /> Add New Project
@@ -339,7 +414,7 @@ export default function ProjectAdmin() {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{isEditing ? "Edit Project" : "Create New Project"}</DialogTitle>
-              <DialogDescription>Fill in the details for your project. Click save when you're done.</DialogDescription>
+              <DialogDescription>Fill in the details for your project. Click save when you are done.</DialogDescription>
             </DialogHeader>
 
             <Tabs defaultValue="basic" className="mt-4">
@@ -385,14 +460,44 @@ export default function ProjectAdmin() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="project_cover_img">Cover Image URL</Label>
-                  <Input
-                    id="project_cover_img"
-                    name="project_cover_img"
-                    value={currentProject.project_cover_img}
-                    onChange={handleInputChange}
-                    placeholder="/placeholder.svg?height=600&width=1200"
-                  />
+                  <Label>Project Cover Image</Label>
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="border rounded-md w-32 h-32 flex items-center justify-center overflow-hidden bg-gray-50 cursor-pointer"
+                      onClick={triggerFileInput}
+                    >
+                      {imagePreview ? (
+                        <img
+                          src={imagePreview || "/placeholder.svg"}
+                          alt="Project cover preview"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center text-gray-400">
+                          <Image className="w-8 h-8 mb-1" />
+                          <span className="text-xs">No image</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                      <Button type="button" variant="outline" className="w-full mb-2" onClick={triggerFileInput}>
+                        <Upload className="w-4 h-4 mr-2" />
+                        {imageFile ? "Change Image" : "Upload Image"}
+                      </Button>
+                      {imageFile && (
+                        <p className="text-sm text-muted-foreground">
+                          {imageFile.name} ({Math.round(imageFile.size / 1024)} KB)
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -551,7 +656,7 @@ export default function ProjectAdmin() {
                     {currentProject.project_features.length === 0 && (
                       <div className="text-center p-4 border border-dashed rounded-md">
                         <p className="text-muted-foreground">
-                          No features added yet. Click "Add Feature" to get started.
+                          No features added yet. Click Add Feature to get started.
                         </p>
                       </div>
                     )}
@@ -645,7 +750,7 @@ export default function ProjectAdmin() {
                     ))}
                     {currentProject.project_goals.length === 0 && (
                       <div className="text-center p-4 border border-dashed rounded-md">
-                        <p className="text-muted-foreground">No goals added yet. Click "Add Goal" to get started.</p>
+                        <p className="text-muted-foreground">No goals added yet. Click Add Goal to get started.</p>
                       </div>
                     )}
                   </div>
@@ -758,7 +863,7 @@ export default function ProjectAdmin() {
                     {currentProject.project_timeline.length === 0 && (
                       <div className="text-center p-4 border border-dashed rounded-md">
                         <p className="text-muted-foreground">
-                          No timeline milestones added yet. Click "Add Milestone" to get started.
+                          No timeline milestones added yet. Click Add Milestone  to get started.
                         </p>
                       </div>
                     )}
@@ -854,7 +959,7 @@ export default function ProjectAdmin() {
                     {currentProject.team_members.length === 0 && (
                       <div className="text-center p-4 border border-dashed rounded-md">
                         <p className="text-muted-foreground">
-                          No team members added yet. Click "Add Team Member" to get started.
+                          No team members added yet. Click Add Team Member to get started.
                         </p>
                       </div>
                     )}
@@ -1034,7 +1139,15 @@ export default function ProjectAdmin() {
             </Tabs>
 
             <DialogFooter className="mt-6">
-              <Button variant="outline" onClick={() => setCurrentProject(emptyProject)}>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setCurrentProject(emptyProject)
+                  setImageFile(null)
+                  setImagePreview("")
+                  setIsDialogOpen(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button onClick={isEditing ? handleUpdateProject : handleCreateProject} disabled={isLoading}>
