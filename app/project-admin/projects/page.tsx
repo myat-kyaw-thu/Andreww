@@ -263,7 +263,7 @@ export default function ProjectsIndex() {
   }
 
   // Add this helper function to format projects from the API
-  const formatProjectFromApi = (project: any): Project => {
+  const formatProjectFromApi = (project: Project): Project => {
     return {
       ...project,
       project_tech_stacks:
@@ -281,9 +281,12 @@ export default function ProjectsIndex() {
     setIsDialogOpen(true) // Open the dialog
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setCurrentProject({ ...currentProject, [name]: value })
+    setCurrentProject((prev) => ({
+      ...prev,
+      [name]: value === "" ? (name === "github_link" ? undefined : "") : value,
+    }))
   }
 
   const handleTechStackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -394,7 +397,7 @@ export default function ProjectsIndex() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>{isEditing ? "Edit Project" : "Create New Project"}</DialogTitle>
-              <DialogDescription>Fill in the details for your project. Click save when you're done.</DialogDescription>
+              <DialogDescription>Fill in the details for your project. Click save when you are done.</DialogDescription>
             </DialogHeader>
 
             <div className="grid gap-6 py-4">
@@ -465,7 +468,7 @@ export default function ProjectsIndex() {
                   <Input
                     id="project_link"
                     name="project_link"
-                    value={currentProject.project_link}
+                    value={currentProject.project_link || ""}
                     onChange={handleInputChange}
                     placeholder="https://example.com"
                   />
@@ -475,7 +478,7 @@ export default function ProjectsIndex() {
                   <Input
                     id="github_link"
                     name="github_link"
-                    value={currentProject.github_link}
+                    value={currentProject.github_link || ""}
                     onChange={handleInputChange}
                     placeholder="https://github.com/username/repo"
                   />
@@ -642,7 +645,7 @@ export default function ProjectsIndex() {
                       <div className="flex space-x-2">
                         {project.project_link && (
                           <a
-                            href={project.project_link}
+                            href={project.project_link || ""}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-500 hover:text-blue-700"
@@ -652,7 +655,7 @@ export default function ProjectsIndex() {
                         )}
                         {project.github_link && (
                           <a
-                            href={project.github_link}
+                            href={project.github_link || ""}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-gray-700 hover:text-gray-900"
