@@ -259,7 +259,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {/* Links and Detail Button with improved styling and restored animations */}
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
           <div className="flex gap-3">
-            {project.project_link && (
+            {project.project_link && project.project_link !== "" && (
               <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href={project.project_link}
@@ -272,7 +272,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 </Link>
               </motion.div>
             )}
-            {project.github_link && (
+            {project.github_link && project.github_link &&(
               <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href={project.github_link}
