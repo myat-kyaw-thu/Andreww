@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState } from "react";
@@ -87,7 +88,7 @@ export default function AboutSection() {
           className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          transition={{ duration: 1.5, delay: 0.5 }}
         />
       </motion.div>
 
