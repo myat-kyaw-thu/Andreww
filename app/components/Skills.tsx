@@ -145,20 +145,17 @@ export default function SkillsSection() {
         <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6 my-10">
           {/* Section Title */}
           <motion.div variants={itemVariants} className="space-y-2 mb-6">
-            <h2 className="text-3xl font-bold relative inline-block">
+            <h2 className="text-3xl font-bold relative inline-block mb-3">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
                 Skills & Technologies
               </span>
-              <motion.span
-                className="absolute -bottom-1 left-0 h-0.5 bg-gray-200 dark:bg-gray-800 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ delay: 0.3, duration: 0.6, ease: "easeInOut" }}
-              />
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-sm">
-              Technologies and tools I've worked with and enjoy using
-            </p>
+             <motion.div 
+                className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1.5, delay: 0.5 }}
+              />
           </motion.div>
 
           {/* Skills Grid */}
