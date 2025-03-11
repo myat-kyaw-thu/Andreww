@@ -1,6 +1,7 @@
 "use client"
 
 import AboutSection from "./components/About"
+import { AchievementsSection } from "./components/achievements-section"
 import { BlurFade } from "./components/BlurFade"
 import ContactSection from "./components/ContactSeciton"
 import Footer from "./components/Footer"
@@ -26,6 +27,7 @@ export default function Home() {
             <ProjectsSection />
           </BlurFade>
           <SkillsSection />
+          <AchievementsSection />
           <ContactSection />
           <Footer />
         </main>

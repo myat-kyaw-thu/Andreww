@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Best UI/UX Design Award",
+    "type": "Award",
+    "date": "2023-11-15T00:00:00.000Z",
+    "description": "Recognized for exceptional user interface design in the annual design competition, highlighting innovative approaches to user experience.",
+    "category": "Design",
+    "imageUrl": "/placeholder.svg?height=150&width=300"
+  },
+  {
+    "id": 2,
+    "title": "Full-Stack Developer Certification",
+    "type": "Certification",
+    "date": "2023-08-22T00:00:00.000Z",
+    "description": "Completed advanced certification in full-stack development, mastering both frontend and backend technologies with practical applications.",
+    "category": "Development",
+    "imageUrl": "/placeholder.svg?height=150&width=300"
+  },
+  {
+    "id": 3,
+    "title": "Project Leadership Excellence",
+    "type": "Recognition",
+    "date": "2023-05-10T00:00:00.000Z",
+    "description": "Acknowledged for outstanding leadership in guiding a cross-functional team to successful project completion ahead of schedule.",
+    "category": "Leadership"
+  }
+]
+
