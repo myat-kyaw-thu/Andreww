@@ -5,7 +5,7 @@ import { ThemeProvider } from './components/theme-provider'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Myat Kyaw Thu - Software Developer | React & Laravel Specialist',
   description:
     'Results-oriented software developer with hands-on experience building scalable web applications in JavaScript and PHP/Laravel. Explore my portfolio featuring CMS websites, wedding systems, and the ExamPlus Mini App on KBZPay.',
