@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProjectSitemap>
+  <Folder name="root">
+    <File name=".env" />
+    <File name=".gitignore" />
+    <File name=".next" />
+    <File name="eslint.config.mjs" />
+    <File name="mock-achievements.json" />
+    <File name="next-env.d.ts" />
+    <File name="node_modules" />
+    <File name="package.json" />
+    <File name="README.md" />
+    <File name="middleware.ts" />
+    <File name="tsconfig.json" />
+    <File name="utils.ts" />
+    
+    <Folder name="app">
+      <Folder name="api">
+        <Folder name="auth">
+          <!-- (Files for authentication logic) -->
+        </Folder>
+        <File name="route.ts" />
+      </Folder>
+      <Folder name="mail">
+        <File name="route.ts" />
+      </Folder>
+      <Folder name="components">
+        <File name="About.tsx" />
+        <File name="achievements-card.tsx" />
+        <File name="achievements-section.tsx" />
+        <File name="AnimatedGradientBtn.tsx" />
+        <File name="AnimatedShinyText.tsx" />
+        <File name="BlurFade.tsx" />
+        <File name="Footer.tsx" />
+        <File name="Hero.tsx" />
+        <File name="LineShadowText.tsx" />
+        <File name="MagicCard.tsx" />
+        <File name="Navbar.tsx" />
+        <File name="PageLoader.tsx" />
+        <File name="project-card.tsx" />
+        <File name="Projects.tsx" />
+        <File name="Skills.tsx" />
+        <File name="SparkleText.tsx" />
+        <File name="theme-provider.tsx" />
+        <File name="theme-toggle.tsx" />
+        <File name="WordRotate.tsx" />
+      </Folder>
+      <Folder name="project-admin">
+        <Folder name="[id]">
+          <File name="page.tsx" />
+        </Folder>
+        <File name="layout.tsx" />
+        <File name="not-found.tsx" />
+        <File name="page.tsx" />
+      </Folder>
+      <File name="page.tsx" />
+      <File name="route.ts" />
+      <File name="layout.tsx" />
+    </Folder>
+    
+    <Folder name="components_ui">
+      <File name="alert.tsx" />
+      <File name="badge.tsx" />
+      <File name="button.tsx" />
+      <File name="card.tsx" />
+      <File name="dialog.tsx" />
+      <File name="dropdown-menu.tsx" />
+      <File name="form.tsx" />
+      <File name="input.tsx" />
+      <File name="label.tsx" />
+      <File name="switch.tsx" />
+      <File name="table.tsx" />
+      <File name="tabs.tsx" />
+      <File name="textarea.tsx" />
+      <File name="tooltip.tsx" />
+    </Folder>
+    
+    <Folder name="lib">
+      <!-- (Additional libraries, custom hooks, or data-fetching utilities) -->
+    </Folder>
+    
+  </Folder>
+</ProjectSitemap>
