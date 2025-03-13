@@ -10,7 +10,6 @@ interface PageLoaderProps {
   children: React.ReactNode
   minDuration?: number
 }
-
 const helloInLanguages = [
   "Hello", // English
   "မင်္ဂလာပါ", // Myanmar
@@ -22,9 +21,8 @@ const helloInLanguages = [
 ]
 
 export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
-  const API_KEY = process.env.ADMIN_TOKEN || ''; // Store your API key in environment variables
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''; // Your API base URL
-  
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "" // Your API base URL
+
   const [progress, setProgress] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [projectsLoaded, setProjectsLoaded] = useState(false)
@@ -38,7 +36,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
     const fetchProjects = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/project-index`, {
-           method: "GET",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -55,7 +53,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
     }
 
     fetchProjects()
-  }, [])
+  }, [API_BASE_URL])
 
   // Handle the progress animation and timing
   useEffect(() => {
@@ -114,7 +112,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
             className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-gray-950"
           >
             <div className="relative flex flex-col items-center">
-              {/* Animated circles */}
+              {/* Animated circles - adjusted for mobile */}
               <div className="absolute">
                 <motion.div
                   animate={{
@@ -126,7 +124,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                   }}
-                  className="w-[300px] h-[300px] rounded-full bg-blue-100 dark:bg-blue-900/20 absolute -translate-x-1/2 -translate-y-1/2"
+                  className="w-[220px] sm:w-[300px] h-[220px] sm:h-[300px] rounded-full bg-blue-100 dark:bg-blue-900/20 absolute -translate-x-1/2 -translate-y-1/2"
                 />
                 <motion.div
                   animate={{
@@ -138,19 +136,19 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                   }}
-                  className="w-[400px] h-[400px] rounded-full bg-purple-100 dark:bg-purple-900/10 absolute -translate-x-1/2 -translate-y-1/2"
+                  className="w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] rounded-full bg-purple-100 dark:bg-purple-900/10 absolute -translate-x-1/2 -translate-y-1/2"
                 />
               </div>
 
               {/* Main content */}
-              <div className="flex flex-col items-center z-10 space-y-6">
+              <div className="flex flex-col items-center z-10 space-y-4 sm:space-y-6 px-4">
                 {/* Andrew says Hello - with dynamic positioning */}
                 <div
                   ref={greetingContainerRef}
                   className="flex items-baseline justify-center space-x-2 transition-all duration-300 ease-in-out"
                 >
                   <motion.span
-                    className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 transition-all duration-300 ease-in-out"
+                    className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100 transition-all duration-300 ease-in-out"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
@@ -160,20 +158,20 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
                   <WordRotate
                     words={helloInLanguages}
                     duration={1500}
-                    className="text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-600 dark:from-gray-400 dark:to-gray-400 text-3xl md:text-4xl font-bold"
+                    className="text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-600 dark:from-gray-400 dark:to-gray-400 text-2xl sm:text-3xl md:text-4xl font-bold"
                     motionProps={{
                       initial: { opacity: 0, y: 10 },
                       animate: { opacity: 1, y: 0 },
                       exit: { opacity: 0, y: -10 },
                       transition: { duration: 0.3, ease: "easeOut" },
                     }}
-                    parentRef={greetingContainerRef}
+                    parentRef={greetingContainerRef as React.RefObject<HTMLDivElement>}
                   />
                 </div>
 
                 {/* Progress bar */}
-                <div className="w-[280px] md:w-[400px] relative mt-8">
-                  <div className="h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div className="w-[240px] sm:w-[280px] md:w-[400px] relative mt-6 sm:mt-8">
+                  <div className="h-1.5 sm:h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-gray-800 dark:bg-gray-200 rounded-full"
                       animate={{ width: `${progress}%` }}
@@ -187,7 +185,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
 
                   {/* Percentage counter */}
                   <motion.div
-                    className="absolute -right-2 -top-8 text-sm font-medium text-gray-700 dark:text-gray-300"
+                    className="absolute -right-2 -top-6 sm:-top-8 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
@@ -198,7 +196,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
 
                 {/* Loading text with dots animation */}
                 <motion.div
-                  className="text-sm text-gray-500 dark:text-gray-400 mt-2"
+                  className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 sm:mt-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
