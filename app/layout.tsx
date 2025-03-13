@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { Space_Grotesk } from "next/font/google"
 import './globals.css'
 import { ThemeProvider } from './components/theme-provider'
+import CursorDot from '@/components/ui/cursor-dot';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -53,6 +54,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+           <CursorDot />
           {children}
            <Analytics />
         </ThemeProvider>
