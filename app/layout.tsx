@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/next';
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from './components/theme-provider'
@@ -20,34 +21,6 @@ export const metadata: Metadata = {
     'KBZPay integration',
     'CMS websites',
   ],
-  openGraph: {
-    title: 'Myat Kyaw Thu | Software Developer Portfolio',
-    description:
-      'View my latest projects, including two CMS websites, the MerryMarry Wedding System, and the ExamPlus Mini App on KBZPay. Follow my journey in building user-centric and high-performing solutions.',
-    url: 'https://myatkyawthu.dev', // Replace with your actual domain when ready
-    siteName: 'MyatKyawThuPortfolio',
-    images: [
-      {
-        url: 'https://myatkyawthu.dev/og-image.png', // Replace with your actual image URL
-        width: 1200,
-        height: 630,
-        alt: 'Myat Kyaw Thu Portfolio Preview',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Myat Kyaw Thu - Tech Portfolio',
-    description:
-      'Open-source enthusiast | Production server experience with Plesk & Nginx | Follow my development journey from CMS websites to advanced mini-apps.',
-    creator: '@myatkyawthu', // If you don't have Twitter, you can remove or replace
-    images: ['https://myatkyawthu.dev/twitter-card.png'], // Replace with your actual image URL
-  },
-  alternates: {
-    canonical: 'https://myatkyawthu.dev', // Replace with your domain
-  },
   generator: 'Next.js 15.1.7',
   applicationName: 'Developer Portfolio',
   authors: [
@@ -75,6 +48,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+           <Analytics />
         </ThemeProvider>
       </body>
     </html>
