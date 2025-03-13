@@ -272,7 +272,7 @@ export default function ContactSection() {
                     className="flex justify-center items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
                 >
                     <AlertCircle className="w-4 h-4" />
-                    <span>I'll get back to you as soon as possible</span>
+                    <span>I will get back to you as soon as possible</span>
                 </motion.div>
             </motion.div>
         </section>
