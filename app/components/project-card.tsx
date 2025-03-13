@@ -2,9 +2,9 @@
 
 import type React from "react"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowRight, Github, LinkIcon, X } from 'lucide-react'
+import { Github, LinkIcon, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
@@ -34,7 +34,7 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
   Svelte: { color: "#FF3E00", bgColor: "rgba(255, 62, 0, 0.1)" },
   TailwindCSS: { color: "#06B6D4", bgColor: "rgba(6, 182, 212, 0.1)" },
   Bootstrap: { color: "#7952B3", bgColor: "rgba(121, 82, 179, 0.1)" },
-  "ShadcnUi": { color: "#000000", bgColor: "rgba(0, 0, 0, 0.1)" }, // Adjust this color as needed
+  ShadcnUi: { color: "#000000", bgColor: "rgba(0, 0, 0, 0.1)" }, // Adjust this color as needed
   "Framer-Motion": { color: "#00C3FF", bgColor: "rgba(236,	58,	182, 0.1)" }, // Adjust this color as needed
   GSAP: { color: "#88CCF1", bgColor: "rgba(53, 235, 88, 0.1)" }, // Adjust this color as needed
 
@@ -84,17 +84,18 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-  let techStacks = [];
+  let techStacks = []
   try {
-    techStacks = Array.isArray(project.project_tech_stacks) 
-      ? project.project_tech_stacks  // It's already an array
-      : JSON.parse(project.project_tech_stacks); // Parse the string if it is not
-    console.log('Tech stack:', techStacks);
+    techStacks = Array.isArray(project.project_tech_stacks)
+      ? project.project_tech_stacks // It's already an array
+      : JSON.parse(project.project_tech_stacks) // Parse the string if it is not
+    console.log("Tech stack:", techStacks)
   } catch (error) {
-    console.error('Failed to parse tech stack:', error);
+    console.error("Failed to parse tech stack:", error)
   }
-  const router = useRouter()
+
   const [showAllTech, setShowAllTech] = useState(false)
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   // Toggle showing all tech stacks
   const toggleTechStack = (e: React.MouseEvent) => {
@@ -102,28 +103,49 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     setShowAllTech(!showAllTech)
   }
 
+  // Toggle description expansion
+  const toggleDescription = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setIsDescriptionExpanded(!isDescriptionExpanded)
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex flex-col bg-white dark:bg-gray-950 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 transition-colors duration-200"
+      whileHover={{
+        y: -5,
+        transition: { duration: 0.2, ease: "easeOut" },
+      }}
+      className="flex flex-col bg-white dark:bg-gray-950 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 transition-colors duration-200 shadow-sm hover:shadow-md"
     >
-      {/* Project Image with subtle zoom effect and gradient overlay */}
+      {/* Project Image with enhanced zoom effect and gradient overlay */}
       <div className="w-full h-[160px] relative group overflow-hidden">
-        <Image
-          src={project.project_cover_img || "/placeholder.svg"}
-          alt={project.project_title}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority={false}
+        <motion.div
+          whileHover={{ scale: 1.07 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="w-full h-full"
+        >
+          <Image
+            src={project.project_cover_img || "/placeholder.svg"}
+            alt={project.project_title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={false}
+          />
+        </motion.div>
+        {/* Improved gradient overlay with animation */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
         />
-        {/* Improved gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         {/* Status badge with improved positioning and styling */}
-        <motion.div 
+        <motion.div
           className="absolute top-3 right-3 z-10"
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
@@ -141,164 +163,223 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </Badge>
         </motion.div>
 
-        {/* Personal/Work badge with improved styling */}
-        <motion.div 
+        {/* Minimalist project type indicator */}
+        <motion.div
           className="absolute top-3 left-3 z-10"
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, width: 0 }}
+          animate={{ opacity: 1, width: "auto" }}
           transition={{ delay: 0.1 }}
         >
-          <Badge
-            variant={project.personal ? "outline" : "secondary"}
-            className="bg-white/90 dark:bg-gray-900/90 text-xs font-medium backdrop-blur-sm border-opacity-50 pointer-events-none hover:bg-white/90 dark:hover:bg-gray-900/90"
+          <div
+            className={`h-5 pl-1.5 pr-2 flex items-center gap-1 rounded-sm ${
+              project.personal
+                ? "border-l-2 border-purple-400 bg-purple-50/80 dark:bg-purple-950/30"
+                : "border-l-2 border-blue-400 bg-blue-50/80 dark:bg-blue-950/30"
+            } backdrop-blur-sm`}
           >
-            {project.personal ? "Personal" : "Work"}
-          </Badge>
+            <span
+              className={`text-xs font-medium ${
+                project.personal ? "text-purple-700 dark:text-purple-300" : "text-blue-700 dark:text-blue-300"
+              }`}
+            >
+              {project.personal ? "Personal" : "Work"}
+            </span>
+          </div>
         </motion.div>
       </div>
 
       {/* Project Details */}
       <div className="p-4 flex flex-col justify-between flex-1">
         <div className="space-y-3">
-          {/* Title with subtle animation */}
+          {/* Title with enhanced animation */}
           <motion.h3
             className="text-base font-semibold text-gray-900 dark:text-gray-100 line-clamp-1"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
+            whileHover={{ x: 3 }}
           >
             {project.project_title}
           </motion.h3>
 
-          {/* Subtitle with subtle animation */}
-          <motion.p
-            className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            {project.project_subtitle}
-          </motion.p>
+          {/* Expandable subtitle with animation */}
+          <div className="relative">
+            <AnimatePresence initial={false} mode="wait">
+              {isDescriptionExpanded ? (
+                <motion.div
+                  key="expanded"
+                  initial={{ height: "2.5rem", opacity: 0.8 }}
+                  animate={{
+                    height: "auto",
+                    opacity: 1,
+                    transition: {
+                      height: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] },
+                      opacity: { duration: 0.25, ease: "easeInOut" },
+                    },
+                  }}
+                  exit={{
+                    height: "2.5rem",
+                    opacity: 0.8,
+                    transition: {
+                      height: { duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] },
+                      opacity: { duration: 0.2, ease: "easeInOut" },
+                    },
+                  }}
+                >
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                    {project.project_subtitle}
+                    <button
+                      onClick={toggleDescription}
+                      className="ml-1 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 inline-flex items-center"
+                    >
+                      <span className="underline">show less</span>
+                    </button>
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="collapsed"
+                  className="relative"
+                  initial={{ opacity: 0.8 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                    {project.project_subtitle}
+                  </p>
+                  {project.project_subtitle.length > 80 && (
+                    <motion.button
+                      initial={{ opacity: 0.8 }}
+                      animate={{ opacity: 1 }}
+                      onClick={toggleDescription}
+                      className="absolute bottom-0 right-0 text-xs font-medium bg-gradient-to-l from-white dark:from-gray-950 pl-5 inline-flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                    >
+                      <span className="underline">...more</span>
+                    </motion.button>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-          {/* Tech Stack Badges with tech-specific colors */}
+          {/* Tech Stack Badges with fixed height container to prevent layout shift */}
           <motion.div
-            className="flex flex-wrap gap-1.5 pt-1 relative"
+            className="flex flex-wrap gap-1.5 pt-1 relative min-h-[28px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
           >
-           <AnimatePresence>
-            {/* Show first 4 tech stacks or all if expanded */}
-            {(showAllTech ? techStacks : techStacks.slice(0, 4)).map((tech: string, index: number) => {
-              const techColor: { color: string; bgColor: string } = techStackColors[tech] || techStackColors.default;
+            <AnimatePresence>
+              {/* Show first 4 tech stacks or all if expanded */}
+              {(showAllTech ? techStacks : techStacks.slice(0, 4)).map((tech: string, index: number) => {
+                const techColor: { color: string; bgColor: string } = techStackColors[tech] || techStackColors.default
 
-              return (
+                return (
+                  <motion.div
+                    key={tech}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{
+                      duration: 0.2,
+                      delay: showAllTech ? 0.05 * index : 0.05 * index,
+                    }}
+                  >
+                    <Badge
+                      variant="outline"
+                      className="px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200"
+                      style={{
+                        backgroundColor: techColor.bgColor,
+                        color: techColor.color,
+                        borderColor: `${techColor.color}30`,
+                      }}
+                    >
+                      {tech}
+                    </Badge>
+                  </motion.div>
+                )
+              })}
+
+              {/* Show +X badge if there are more tech stacks and not showing all */}
+              {!showAllTech && techStacks.length > 4 && (
                 <motion.div
-                  key={tech}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{
-                    duration: 0.2,
-                    delay: showAllTech ? 0.05 * index : 0.05 * index,
-                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2, delay: 0.25 }}
                 >
                   <Badge
                     variant="outline"
-                    className="px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200"
-                    style={{
-                      backgroundColor: techColor.bgColor,
-                      color: techColor.color,
-                      borderColor: `${techColor.color}30`,
-                    }}
+                    className="px-1.5 py-0.5 text-[10px] font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    onClick={toggleTechStack}
                   >
-                    {tech}
+                    +{techStacks.length - 4}
                   </Badge>
                 </motion.div>
-              );
-            })}
+              )}
 
-            {/* Show +X badge if there are more tech stacks and not showing all */}
-            {!showAllTech && techStacks.length > 4 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2, delay: 0.25 }}
-              >
-                <Badge
-                  variant="outline"
-                  className="px-1.5 py-0.5 text-[10px] font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  onClick={toggleTechStack}
+              {/* Show close button when showing all tech stacks */}
+              {showAllTech && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2, delay: 0.25 }}
+                  className="absolute -top-2 -right-2"
                 >
-                  +{techStacks.length - 4}
-                </Badge>
-              </motion.div>
-            )}
-
-            {/* Show close button when showing all tech stacks */}
-            {showAllTech && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2, delay: 0.25 }}
-                className="absolute -top-2 -right-2"
-              >
-                <button
-                  onClick={toggleTechStack}
-                  className="p-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                  aria-label="Close tech stack list"
-                >
-                  <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <button
+                    onClick={toggleTechStack}
+                    className="p-1 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    aria-label="Close tech stack list"
+                  >
+                    <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
 
-        {/* Links and Detail Button with improved styling and restored animations */}
+        {/* Links section with improved styling */}
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
           <div className="flex gap-3">
             {project.project_link && project.project_link !== "" && (
-              <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 500, damping: 15 }}
+              >
                 <Link
                   href={project.project_link}
                   className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <LinkIcon className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+                  <LinkIcon className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform duration-300" />
                   <span className="font-medium group-hover:underline">Demo</span>
                 </Link>
               </motion.div>
             )}
-            {project.github_link && project.github_link &&(
-              <motion.div whileHover={{ y: -1 }} whileTap={{ scale: 0.95 }}>
+            {project.github_link && project.github_link && (
+              <motion.div
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 500, damping: 15 }}
+              >
                 <Link
                   href={project.github_link}
                   className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Github className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+                  <Github className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform duration-300" />
                   <span className="font-medium group-hover:underline">Source</span>
                 </Link>
               </motion.div>
             )}
           </div>
-
-          <motion.button
-            whileHover={{ x: 2 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 p-1.5 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            aria-label="View details"
-            onClick={() => router.push(`/projects/${project.project_id}`)}
-          >
-            <ArrowRight className="w-4 h-4" />
-          </motion.button>
         </div>
       </div>
     </motion.div>
   )
 }
+
