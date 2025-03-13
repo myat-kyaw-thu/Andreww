@@ -32,6 +32,13 @@ import {
 import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
+import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
+
 const skillsData = {
   Languages: {
     icon: Code2,
@@ -145,11 +152,12 @@ export default function SkillsSection() {
         <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6 my-10">
           {/* Section Title */}
           <motion.div variants={itemVariants} className="space-y-2 mb-6">
-            <h2 className="text-3xl font-bold relative inline-block mb-3">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
-                Skills & Technologies
-              </span>
-            </h2>
+           <h2 className={`${spaceGrotesk.className} text-3xl font-bold relative inline-block mb-3`}>
+            <span className="bg-clip-text text-gray-800 dark:text-gray-200 ">
+              Skills & Technologies
+            </span>
+          </h2>
+
              <motion.div 
                 className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
                 initial={{ scaleX: 0 }}
@@ -185,11 +193,14 @@ export default function SkillsSection() {
                       <CategoryIcon className="w-4 h-4 text-gray-700 dark:text-gray-300" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100">{category}</h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{skills.length} technologies</p>
+                      <h3 className={`${archivo.className} font-semibold text-sm text-gray-900 dark:text-gray-100`}>
+                        {category}
+                      </h3>
+                      <p className={`${spaceMono.className} text-xs text-gray-500 dark:text-gray-400 mt-0.5`}>
+                        {skills.length} technologies
+                      </p>
                     </div>
                   </div>
-
                   {/* Skills Icons */}
                   <div className="flex-1 flex items-start mt-2">
                     <motion.div variants={containerVariants} className="flex flex-wrap gap-2">

@@ -20,6 +20,11 @@ interface Achievement {
 interface AchievementCardProps {
   achievement: Achievement
 }
+import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
 export function AchievementCard({ achievement }: AchievementCardProps) {
   const [isHovered, setIsHovered] = useState(false)
@@ -94,12 +99,9 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
       <div className="relative z-10">
         {/* Header with title and type */}
         <div className="flex items-start justify-between mb-3">
-          <motion.h3
-            className="text-lg font-medium text-gray-900 dark:text-gray-100 pr-4"
-          >
-            {achievement.title}
-          </motion.h3>
-
+         <motion.h3 className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-gray-100 pr-4`}>
+          {achievement.title}
+        </motion.h3>
           <motion.div
             className="flex items-center justify-center p-1.5 rounded-full bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400"
             animate={{
@@ -119,7 +121,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
 
         {/* Date with subtle animation */}
         <motion.div
-          className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3"
+          className={`${spaceMono.className} flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3`}
           animate={{
             opacity: isHovered ? 0.9 : 0.7,
             x: isHovered ? 1 : 0,
@@ -162,7 +164,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
                 }}
                 layout
               >
-                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{achievement.description}</p>
+                <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-300 leading-relaxed`}>{achievement.description}</p>
                 <motion.button
                   onClick={toggleDescription}
                   className="mt-2 flex items-center text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"

@@ -1,10 +1,15 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/next';
-import { Inter } from 'next/font/google'
+import { Space_Grotesk } from "next/font/google"
 import './globals.css'
 import { ThemeProvider } from './components/theme-provider'
 
-const inter = Inter({ subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  // You can use specific weights if needed
+  // weight: ['300', '400', '500', '600', '700']
+})
 
 export const metadata: Metadata = {
   title: 'Myat Kyaw Thu - Software Developer | React & Laravel Specialist',
@@ -40,7 +45,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+       <link rel="icon" href="/profile2.png" className="rounded-full" />
+      <body className={spaceGrotesk.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

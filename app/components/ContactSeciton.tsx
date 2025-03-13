@@ -12,6 +12,13 @@ import { toast } from "sonner"
 import { useForm } from "react-hook-form"
 import { User2, Mail, MessageSquare, Send, Loader2, CheckCircle2, XCircle, AlertCircle, FileText } from "lucide-react"
 
+import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
+
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
@@ -107,12 +114,12 @@ export default function ContactSection() {
             >
                 {/* Section Header */}
                 <motion.div variants={itemVariants} className="space-y-2 text-start mb-8">
-                    <h2 className="text-3xl font-bold relative inline-block mb-3">
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
-                            Get in Touch
-                        </span>
-                  
+                    <h2 className={`${spaceGrotesk.className} text-3xl font-bold relative inline-block mb-3`}>
+                    <span className="bg-clip-text text-transparent bg-gray-700 dark:bg-gray-200">
+                        Get in Touch
+                    </span>
                     </h2>
+
                      <motion.div 
                         className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
                         initial={{ scaleX: 0 }}
@@ -130,7 +137,7 @@ export default function ContactSection() {
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
-                                className="relative space-y-4 p-6 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm"
+                                className={`${archivo.className} relative space-y-4 p-6 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm`}
                             >
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {/* Name Field */}
@@ -232,7 +239,7 @@ export default function ContactSection() {
                                 />
 
                                 {/* Submit Button */}
-                                <div className="flex justify-end">
+                                <div className={`${spaceMono.className} flex justify-end`}>
                                     <Button type="submit" disabled={isSubmitting} className="relative group">
                                         <AnimatePresence mode="wait">
                                             {isSubmitting ? (
@@ -271,8 +278,8 @@ export default function ContactSection() {
                     variants={itemVariants}
                     className="flex justify-center items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
                 >
-                    <AlertCircle className="w-4 h-4" />
-                    <span>I will get back to you as soon as possible</span>
+                    <AlertCircle className={` w-4 h-4`} />
+                    <span className={spaceMono.className}> I will get back to you as soon as possible</span>
                 </motion.div>
             </motion.div>
         </section>

@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AchievementCard } from "./achievement-card";
+import { Space_Grotesk } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+
 
 // Mock data for achievements
 export const achievementsData = [
@@ -19,7 +23,7 @@ export const achievementsData = [
     id: 2,
     title: "ExamPlus Mini App Launch Ahead of Schedule",
     type: "Project Milestone",
-    date: new Date("2024-08-22"), // Example date; adjust as needed
+    date: new Date("2024-12-22"), // Example date; adjust as needed
     description:
       "Collaborated with the KBZ QA team to fix bugs promptly, introduced a coupon business model, and successfully launched the ExamPlus Mini App two days before the deadline.",
     category: "Development",
@@ -28,7 +32,7 @@ export const achievementsData = [
     id: 3,
     title: "NCC Computing Level 4",
     type: "Certification",
-    date: new Date("2023-06-15"), // Example date
+    date: new Date("2024-01-15"), // Example date
     description:
       "Completed an advanced computing curriculum, focusing on software development fundamentals, problem-solving techniques, and industry-relevant practices.",
     category: "Certification",
@@ -37,7 +41,7 @@ export const achievementsData = [
     id: 4,
     title: "JLPT N3 Pass",
     type: "Language Proficiency",
-    date: new Date("2023-11-01"), // Example date
+    date: new Date("2023-12-06"), // Example date
     description:
       "Successfully passed the Japanese Language Proficiency Test (N3), demonstrating intermediate Japanese skills and facilitating collaboration with Japanese-speaking stakeholders.",
     category: "Language",
@@ -46,7 +50,7 @@ export const achievementsData = [
     id: 5,
     title: "Led the Development of Two CMS Websites",
     type: "Project Leadership",
-    date: new Date("2023-12-01"), // Example date
+    date: new Date("2024-10-01"), // Example date
     description:
       "Designed and developed two CMS websites with user-friendly interfaces and secure authentication systems, improving content management efficiency for clients.",
     category: "Development",
@@ -55,7 +59,7 @@ export const achievementsData = [
     id: 6,
     title: "MerryMarry Wedding System Development",
     type: "Project Achievement",
-    date: new Date("2024-05-10"), // Example date
+    date: new Date("2025-02-10"), // Example date
     description:
       "Developed the MerryMarry Wedding System from concept to launch, ensuring seamless user experience and robust functionality for wedding planning and booking.",
     category: "Development",
@@ -64,7 +68,7 @@ export const achievementsData = [
     id: 7,
     title: "Enhanced Shwe Min Lab System",
     type: "Technical Contribution",
-    date: new Date("2023-10-05"), // Example date
+    date: new Date("2025-3-05"), // Example date
     description:
       "Improved the UI and implemented new backend APIs for flexible pricing plans, including Excel input/export features, making lab system management more efficient.",
     category: "Development",
@@ -88,7 +92,7 @@ export function AchievementsSection() {
       <motion.div
         className="mb-8"
       >
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Achievements</h2>
+        <h2 className={`${spaceGrotesk.className} text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4`}>Achievements</h2>
        
         <motion.div 
           className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"

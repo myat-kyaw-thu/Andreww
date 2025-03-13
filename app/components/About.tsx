@@ -5,6 +5,13 @@ import { useState } from "react";
 import { SparklesText } from "./SparkleText"
 import { motion, AnimatePresence } from "framer-motion"
 
+import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
+
 const LanguageHighlight = ({ children, color }: { children: React.ReactNode; color: string; onHoverStart: () => void; onHoverEnd: () => void }) => {
   const [isHovered, setIsHovered] = useState(false)
 
@@ -18,7 +25,7 @@ const LanguageHighlight = ({ children, color }: { children: React.ReactNode; col
       <AnimatePresence>
         {isHovered && (
           <motion.span
-            className="absolute bottom-0 left-0 w-full h-0.5"
+            className={`${spaceMono.className} absolute bottom-0 left-0 w-full h-0.5`}
             style={{ backgroundColor: color }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
@@ -83,7 +90,7 @@ export default function AboutSection() {
       <motion.div 
         className="space-y-2"
       >
-        <SparklesText text="About" />
+        <SparklesText text="About" className={spaceGrotesk.className}/>
         <motion.div 
           className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
           initial={{ scaleX: 0 }}
@@ -93,7 +100,7 @@ export default function AboutSection() {
       </motion.div>
 
        <motion.div
-        className="text-slate-700 dark:text-slate-300 leading-relaxed text-base space-y-4"
+        className={`${archivo.className}  dark:text-slate-300 leading-relaxed text-base space-y-4`}
         variants={containerVariants}
       >
         <motion.p variants={textVariants}>

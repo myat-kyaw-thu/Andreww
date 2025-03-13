@@ -7,15 +7,17 @@ import { Moon, Sun, Clock, Home, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
+import { Archivo } from "next/font/google"
+
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("top")
   const [mounted, setMounted] = useState(false)
   const [time, setTime] = useState<string>("")
-  const [visible, setVisible] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [hoverStyle, setHoverStyle] = useState({})
   const navRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const lastScrollY = useRef(0)
   const { scrollY } = useScroll()
   const { theme, setTheme } = useTheme()
 
@@ -25,17 +27,6 @@ export default function Navbar() {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
-  })
-
-  // Handle scroll visibility
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const currentScrollY = latest
-    if (currentScrollY > lastScrollY.current && currentScrollY > 150) {
-      setVisible(true)
-    } else if (currentScrollY < lastScrollY.current) {
-      setVisible(false)
-    }
-    lastScrollY.current = currentScrollY
   })
 
   // Handle active section detection
@@ -106,12 +97,7 @@ export default function Navbar() {
   ]
 
   return (
-    <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: visible ? 0 : 100 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none pb-6 px-4"
-    >
+    <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none pb-6 px-4">
       <div className="max-w-xl mx-auto">
         <nav className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20 pointer-events-auto overflow-hidden">
           {/* Scroll indicator border */}
@@ -147,7 +133,7 @@ export default function Navbar() {
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     {item.icon}
-                    <span className="hidden sm:inline">{item.label}</span>
+                    <span className={`${archivo.className} hidden sm:inline`}>{item.label}</span>
                   </span>
                 </button>
               ))}
@@ -191,7 +177,7 @@ export default function Navbar() {
           </div>
         </nav>
       </div>
-    </motion.div>
+    </div>
   )
 }
 

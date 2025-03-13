@@ -9,6 +9,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 
+import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
+
 interface ProjectCardProps {
   project: {
     project_id: string
@@ -193,7 +200,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <div className="space-y-3">
           {/* Title with enhanced animation */}
           <motion.h3
-            className="text-base font-semibold text-gray-900 dark:text-gray-100 line-clamp-1"
+            className={`${spaceGrotesk.className} text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-1`}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -226,7 +233,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                     },
                   }}
                 >
-                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-400 leading-relaxed`}>
                     {project.project_subtitle}
                     <button
                       onClick={toggleDescription}
@@ -245,7 +252,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   exit={{ opacity: 0.8 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                  <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed`}>
                     {project.project_subtitle}
                   </p>
                   {project.project_subtitle.length > 80 && (
@@ -288,7 +295,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   >
                     <Badge
                       variant="outline"
-                      className="px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200"
+                      className={`${spaceMono.className} px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200`}
                       style={{
                         backgroundColor: techColor.bgColor,
                         color: techColor.color,

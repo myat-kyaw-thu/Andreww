@@ -7,6 +7,13 @@ import { motion } from "framer-motion"
 import { LineShadowText } from "./LineShadowText"
 import { Github, FileText, Linkedin, Mail, Code2 } from "lucide-react"
 import Link from "next/link"
+import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
+
 
 const Hero = () => {
   const theme = useTheme()
@@ -102,10 +109,10 @@ const Hero = () => {
         >
           <div className="relative">
             <Image
-              src="/profile.jpg"
+              src="/profile2.png"
               alt="Andrew"
-              width={100}
-              height={100}
+              width={130}
+              height={130}
               className="rounded-2xl object-cover ring-2 ring-slate-200 dark:ring-slate-800 transition-shadow duration-300 hover:ring-slate-300 dark:hover:ring-slate-700"
               style={{
                 boxShadow: "0 0 0 2px rgba(255, 255, 255, 0.1)",
@@ -116,10 +123,10 @@ const Hero = () => {
 
         <div className="flex-1 flex flex-col items-center sm:items-start">
           <motion.div variants={itemVariants} className="text-center sm:text-left">
-            <h1 className="text-lg leading-none tracking-tighter sm:text-xl md:text-2xl">
+           <h1 className={`${spaceMono.className} text-lg leading-none tracking-tighter sm:text-xl md:text-2xl`}>
               Hey, I am
               <LineShadowText
-                className="block italic font-bold text-4xl md:text-6xl mt-1"
+                 className={`${spaceGrotesk.className} block italic font-bold text-5xl md:text-6xl mt-1`}
                 shadowColor={shadowColor}
               >
                 Andrew
@@ -129,7 +136,7 @@ const Hero = () => {
 
           <motion.p
             variants={itemVariants}
-            className="text-sm sm:text-base md:text-lg text-neutral-900 dark:text-neutral-200 mt-4 text-center sm:text-left"
+            className={`${archivo.className} text-sm sm:text-base md:text-lg text-neutral-900 dark:text-neutral-200 mt-4 text-center sm:text-left`}
           >
             Full Stack Developer | Based in{" "}
             <Link
@@ -155,7 +162,7 @@ const Hero = () => {
                     href={tech.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`underline italic font-semibold ${tech.color} hover:opacity-80 transition-opacity duration-300 relative group`}
+                    className={`underline italic font-semibold ${spaceGrotesk.className} ${tech.color} hover:opacity-80 transition-opacity duration-300 relative group`}
                   >
                     <span>{tech.name}</span>
                     <motion.span

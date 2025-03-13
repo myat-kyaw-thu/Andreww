@@ -7,6 +7,12 @@ import { Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from 'lucide-react'
 
+import { Space_Grotesk, Archivo } from "next/font/google"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
 interface ProjectCardProps {
   project: {
     project_id: string;
@@ -109,8 +115,10 @@ useEffect(() => {
       {workProjects.length > 0 && (
         <div>
           <motion.div variants={titleVariants} className="flex flex-col gap-2 mb-8">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Professional Work</span>
-            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
+            <span className={`${archivo.className} text-sm font-medium text-gray-500 dark:text-gray-400`}>
+              Professional Work
+            </span>
+            <h2 className={`${spaceGrotesk.className} text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400`}>
               Work Experiences
             </h2>
             <motion.div 
@@ -133,8 +141,10 @@ useEffect(() => {
       {personalProjects.length > 0 && (
         <div>
           <motion.div variants={titleVariants} className="flex flex-col gap-2 mb-8">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Personal Projects</span>
-            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
+            <span className={`${archivo.className} text-sm font-medium text-gray-500 dark:text-gray-400`}>
+              Personal Projects
+            </span>
+            <h2 className={`${spaceGrotesk.className} text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400`}>
               Own Portfolio
             </h2>
              <motion.div 

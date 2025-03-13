@@ -5,6 +5,10 @@ import { Github, Mail, Linkedin, Code2, ExternalLink } from 'lucide-react'
 import Link from "next/link"
 import { useTheme } from "next-themes"
 
+import { Archivo } from "next/font/google"
+
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+
 export default function Footer() {
   const controls = useAnimation()
   const { theme } = useTheme()
@@ -141,7 +145,7 @@ export default function Footer() {
             variants={itemVariants}
           >
             <motion.p
-              className="text-sm text-slate-500 dark:text-slate-400 tracking-wide"
+              className={`${archivo.className} text-sm text-slate-500 dark:text-slate-400 tracking-wide`}
               whileHover={{
                 color: theme === 'dark' ? '#e2e8f0' : '#475569',
                 transition: { duration: 0.2 }
@@ -164,7 +168,7 @@ export default function Footer() {
             </motion.span>
             <motion.a
               href="/sitemap.xml"
-              className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors duration-200"
+              className={`${archivo.className} text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors duration-200`}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
             >
