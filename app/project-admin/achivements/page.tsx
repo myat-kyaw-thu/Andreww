@@ -51,6 +51,7 @@ export default function AchievementsAdmin() {
 
     // You can also directly fetch projects here if you want to show them before authentication
     // fetchProjects()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchAchievements = async () => {

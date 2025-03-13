@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import type React from "react"
@@ -76,6 +77,7 @@ export default function ProjectsIndex() {
 
     // You can also directly fetch projects here if you want to show them before authentication
     // fetchProjects()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const verifyToken = async (tokenToVerify: string) => {
@@ -500,6 +502,7 @@ export default function ProjectsIndex() {
                       />
                     ) : (
                       <div className="flex flex-col items-center text-gray-400">
+                        {/* eslint-disable-next-line jsx-a11y/alt-text */}
                         <Image className="w-8 h-8 mb-1" />
                         <span className="text-xs">No image</span>
                       </div>
@@ -602,6 +605,7 @@ export default function ProjectsIndex() {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            {/* eslint-disable-next-line jsx-a11y/alt-text */}
                             <Image className="w-6 h-6" />
                           </div>
                         )}

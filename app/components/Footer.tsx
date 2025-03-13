@@ -77,7 +77,7 @@ export default function Footer() {
             className="flex justify-center gap-6"
             variants={itemVariants}
           >
-            {socialLinks.map((link, index) => (
+            {socialLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}

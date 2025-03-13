@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://myatkyawthu.dev', // Replace with your domain
   },
-  generator: 'Next.js 14.1.3',
+  generator: 'Next.js 15.1.7',
   applicationName: 'Developer Portfolio',
   authors: [
     {
