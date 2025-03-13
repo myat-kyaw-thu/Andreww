@@ -1,9 +1,9 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { motion, useScroll, useMotionValueEvent } from "framer-motion"
+import { motion, useScroll, useMotionValueEvent, useSpring } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
-import { Moon, Sun, Clock, Home, Award } from 'lucide-react'
+import { Moon, Sun, Clock, Home, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -19,6 +19,14 @@ export default function Navbar() {
   const { scrollY } = useScroll()
   const { theme, setTheme } = useTheme()
 
+  // Scroll indicator
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  })
+
   // Handle scroll visibility
   useMotionValueEvent(scrollY, "change", (latest) => {
     const currentScrollY = latest
@@ -33,7 +41,7 @@ export default function Navbar() {
   // Handle active section detection
   useMotionValueEvent(scrollY, "change", () => {
     const sections = ["top", "achievements"]
-    const currentSection = sections.find(section => {
+    const currentSection = sections.find((section) => {
       const element = document.getElementById(section)
       if (!element) return false
       const rect = element.getBoundingClientRect()
@@ -67,7 +75,7 @@ export default function Navbar() {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
-        })
+        }),
       )
     }
 
@@ -105,7 +113,13 @@ export default function Navbar() {
       className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none pb-6 px-4"
     >
       <div className="max-w-xl mx-auto">
-        <nav className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20 pointer-events-auto overflow-hidden">
+        <nav className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20 pointer-events-auto overflow-hidden">
+          {/* Scroll indicator border */}
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 h-[4px] bg-gradient-to-r from-slate-400 to-slate-300 dark:from-slate-600 dark:to-slate-700 origin-left z-10"
+            style={{ scaleX }}
+          />
+
           <div className="h-16 px-6 flex items-center justify-between">
             {/* Left side - Navigation Links */}
             <div className="flex items-center gap-1 relative">
@@ -115,18 +129,20 @@ export default function Navbar() {
                 animate={hoverStyle}
                 initial={false}
               />
-              
+
               {navItems.map((item, index) => (
                 <button
                   key={item.id}
-                  ref={el => navRefs.current[index] = el}
+                  ref={(el) => {
+                    navRefs.current[index] = el
+                  }}
                   onClick={() => scrollToSection(item.id)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={cn(
                     "relative px-4 py-2 rounded-lg text-sm font-medium z-10",
                     "text-slate-700 dark:text-slate-300",
-                    activeSection === item.id && "text-slate-900 dark:text-white"
+                    activeSection === item.id && "text-slate-900 dark:text-white",
                   )}
                 >
                   <span className="relative z-10 flex items-center gap-2">
@@ -178,3 +194,4 @@ export default function Navbar() {
     </motion.div>
   )
 }
+
