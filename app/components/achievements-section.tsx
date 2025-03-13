@@ -5,34 +5,72 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AchievementCard } from "./achievement-card";
 
 // Mock data for achievements
-const achievementsData = [
+export const achievementsData = [
   {
     id: 1,
-    title: "Best UI/UX Design Award",
-    type: "Award",
-    date: new Date("2023-11-15"),
-    description: "Recognized for exceptional user interface design in the annual design competition, highlighting innovative approaches to user experience and accessibility. The project demonstrated creative solutions to complex interaction problems.",
-    category: "Design",
-    imageUrl: "/placeholder.svg?height=150&width=300"
+    title: "Professional Web Developer Certificate (Fairway Tech)",
+    type: "Certification",
+    date: new Date("2024-01-01"), // Adjust if you have an exact date
+    description:
+      "Awarded by Fairway Tech for advanced proficiency in web development using PHP and JavaScript. Emphasized building scalable applications with best practices and hands-on projects.",
+    category: "Certification",
   },
   {
     id: 2,
-    title: "Full-Stack Developer Certification",
-    type: "Certification",
-    date: new Date("2023-08-22"),
-    description: "Completed advanced certification in full-stack development, mastering both frontend and backend technologies with practical applications. The program covered modern frameworks, API design, and deployment strategies.",
+    title: "ExamPlus Mini App Launch Ahead of Schedule",
+    type: "Project Milestone",
+    date: new Date("2024-08-22"), // Example date; adjust as needed
+    description:
+      "Collaborated with the KBZ QA team to fix bugs promptly, introduced a coupon business model, and successfully launched the ExamPlus Mini App two days before the deadline.",
     category: "Development",
-    imageUrl: "/placeholder.svg?height=150&width=300"
   },
   {
     id: 3,
-    title: "Project Leadership Excellence",
-    type: "Recognition",
-    date: new Date("2023-05-10"),
-    description: "Acknowledged for outstanding leadership in guiding a cross-functional team to successful project completion ahead of schedule. Demonstrated effective communication, resource allocation, and problem-solving skills.",
-    category: "Leadership"
+    title: "NCC Computing Level 4",
+    type: "Certification",
+    date: new Date("2023-06-15"), // Example date
+    description:
+      "Completed an advanced computing curriculum, focusing on software development fundamentals, problem-solving techniques, and industry-relevant practices.",
+    category: "Certification",
+  },
+  {
+    id: 4,
+    title: "JLPT N3 Pass",
+    type: "Language Proficiency",
+    date: new Date("2023-11-01"), // Example date
+    description:
+      "Successfully passed the Japanese Language Proficiency Test (N3), demonstrating intermediate Japanese skills and facilitating collaboration with Japanese-speaking stakeholders.",
+    category: "Language",
+  },
+  {
+    id: 5,
+    title: "Led the Development of Two CMS Websites",
+    type: "Project Leadership",
+    date: new Date("2023-12-01"), // Example date
+    description:
+      "Designed and developed two CMS websites with user-friendly interfaces and secure authentication systems, improving content management efficiency for clients.",
+    category: "Development",
+  },
+  {
+    id: 6,
+    title: "MerryMarry Wedding System Development",
+    type: "Project Achievement",
+    date: new Date("2024-05-10"), // Example date
+    description:
+      "Developed the MerryMarry Wedding System from concept to launch, ensuring seamless user experience and robust functionality for wedding planning and booking.",
+    category: "Development",
+  },
+  {
+    id: 7,
+    title: "Enhanced Shwe Min Lab System",
+    type: "Technical Contribution",
+    date: new Date("2023-10-05"), // Example date
+    description:
+      "Improved the UI and implemented new backend APIs for flexible pricing plans, including Excel input/export features, making lab system management more efficient.",
+    category: "Development",
   }
 ];
+
 
 export function AchievementsSection() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -46,11 +84,8 @@ export function AchievementsSection() {
   const categories = Array.from(new Set(achievementsData.map(a => a.category)));
   
   return (
-    <section className="py-12">
+    <section className="py-12" id="achievements">
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
         className="mb-8"
       >
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Achievements</h2>
