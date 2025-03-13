@@ -112,13 +112,14 @@ useEffect(() => {
             <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400">
               Work Experiences
             </h2>
-          </motion.div>
-           <motion.div 
+            <motion.div 
             className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.5, delay: 0.5 }}
           />
+          </motion.div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
             {workProjects.map((project ) => (
               <ProjectCard key={project.project_id} project={project} />
