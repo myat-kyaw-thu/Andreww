@@ -5,7 +5,7 @@ import { useState } from "react";
 import { SparklesText } from "./SparkleText"
 import { motion, AnimatePresence } from "framer-motion"
 
-const LanguageHighlight = ({ children, color }: { children: React.ReactNode; color: string }) => {
+const LanguageHighlight = ({ children, color }: { children: React.ReactNode; color: string; onHoverStart: () => void; onHoverEnd: () => void }) => {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
