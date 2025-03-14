@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from 'react'
 import AboutSection from "./components/About"
 import { AchievementsSection } from "./components/achievements-section"
 import { BlurFade } from "./components/BlurFade"
@@ -12,6 +13,14 @@ import ProjectsSection from "./components/projects"
 import SkillsSection from "./components/Skills"
 
 export default function Home() {
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      import('eruda').then((eruda) => {
+        eruda.default.init()
+      })
+    }
+  }, [])
+
   return (
     <PageLoader minDuration={4000}>
       <div id="top">
