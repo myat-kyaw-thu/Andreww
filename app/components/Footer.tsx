@@ -12,7 +12,7 @@ const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 export default function Footer() {
   const controls = useAnimation()
   const { theme } = useTheme()
-  const currentYear = new Date().getFullYear()
+  const currentYear = 2025
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -77,7 +77,7 @@ export default function Footer() {
       <div className="max-w-2xl mx-auto px-6 py-12">
         <motion.div className="grid gap-8">
           {/* Social Links */}
-          <motion.div 
+          <motion.div
             className="flex justify-center gap-6"
             variants={itemVariants}
           >
@@ -119,12 +119,12 @@ export default function Footer() {
           </motion.div>
 
           {/* Decorative line with dots */}
-          <motion.div 
+          <motion.div
             className="relative flex items-center justify-center gap-2"
             variants={itemVariants}
           >
             <motion.div className="h-px w-16 bg-gradient-to-r from-transparent to-slate-200 dark:to-slate-800" />
-            <motion.div 
+            <motion.div
               className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"
               animate={{
                 scale: [1, 1.2, 1],
@@ -140,7 +140,7 @@ export default function Footer() {
           </motion.div>
 
           {/* Copyright with subtle animation */}
-          <motion.div 
+          <motion.div
             className="flex items-center justify-center gap-2"
             variants={itemVariants}
           >

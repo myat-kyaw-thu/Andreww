@@ -60,6 +60,7 @@ export default function Navbar() {
   // Update clock
   useEffect(() => {
     const updateTime = () => {
+      // This is already safe across browsers - no change needed
       const now = new Date()
       setTime(
         now.toLocaleTimeString("en-US", {

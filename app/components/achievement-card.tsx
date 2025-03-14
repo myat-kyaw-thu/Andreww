@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { format } from "date-fns"
 import { Award, Code, Briefcase, Lightbulb, Medal, Trophy, Calendar, ChevronDown, ChevronUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { safeFormatDate } from "@/lib/date-utils"
 
 interface Achievement {
   id: number
@@ -99,9 +99,9 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
       <div className="relative z-10">
         {/* Header with title and type */}
         <div className="flex items-start justify-between mb-3">
-         <motion.h3 className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-gray-100 pr-4`}>
-          {achievement.title}
-        </motion.h3>
+          <motion.h3 className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-gray-100 pr-4`}>
+            {achievement.title}
+          </motion.h3>
           <motion.div
             className="flex items-center justify-center p-1.5 rounded-full bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400"
             animate={{
@@ -136,7 +136,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
           >
             <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
           </motion.div>
-          {format(new Date(achievement.date), "MMMM d, yyyy")}
+          {safeFormatDate(achievement.date, "MMMM d, yyyy")}
         </motion.div>
 
         {/* Expandable description */}
