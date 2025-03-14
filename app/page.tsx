@@ -14,11 +14,11 @@ import SkillsSection from "./components/Skills"
 
 export default function Home() {
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+   
       import('eruda').then((eruda) => {
         eruda.default.init()
       })
-    }
+    
   }, [])
 
   return (
