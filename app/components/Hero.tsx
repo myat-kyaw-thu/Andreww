@@ -13,8 +13,6 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
 const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
-
-
 const Hero = () => {
   const theme = useTheme()
   const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black"
@@ -48,7 +46,6 @@ const Hero = () => {
       },
     },
   }
-
 
   const socialVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -123,10 +120,10 @@ const Hero = () => {
 
         <div className="flex-1 flex flex-col items-center sm:items-start">
           <motion.div variants={itemVariants} className="text-center sm:text-left">
-           <h1 className={`${spaceMono.className} text-lg leading-none tracking-tighter sm:text-xl md:text-2xl`}>
+            <h1 className={`${spaceMono.className} text-lg leading-none tracking-tighter sm:text-xl md:text-2xl`}>
               Hey, I am
               <LineShadowText
-                 className={`${spaceGrotesk.className} block italic font-bold text-5xl md:text-6xl mt-1`}
+                className={`${spaceGrotesk.className} block italic font-bold text-5xl md:text-6xl mt-1`}
                 shadowColor={shadowColor}
               >
                 Andrew
@@ -228,14 +225,23 @@ const Hero = () => {
             </motion.div>
 
             <motion.div variants={socialItemVariants} whileHover="hover">
-              <Link
+              <a
                 href="/myatkyawthu.pdf"
-                download
+                download="myatkyawthu.pdf"
                 className="text-neutral-900 dark:text-neutral-200 hover:text-[#4285F4] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="Download Resume"
+                onClick={(e) => {
+                  e.preventDefault()
+                  const link = document.createElement("a")
+                  link.href = "/myatkyawthu.pdf"
+                  link.download = "myatkyawthu.pdf"
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                }}
               >
                 <FileText size={22} />
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </div>
