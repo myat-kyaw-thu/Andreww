@@ -3,7 +3,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState,  useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { AlertCircle, Edit, ExternalLink, Github, Image, Plus, Trash2, Upload } from "lucide-react"
+import { AlertCircle, Edit, ExternalLink, Github,  Plus, Trash2, Upload } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
@@ -51,7 +51,7 @@ const emptyProject: Project = {
 }
 
 export default function ProjectsIndex() {
-  const API_KEY = process.env.ADMIN_TOKEN || "vEG15KfWn+uHufs7WYn+2DPocBE/lZ7n6h9dryozRqk="
+  const API_KEY = process.env.ADMIN_TOKEN
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api"
 
   const [projects, setProjects] = useState<Project[]>([])
@@ -64,21 +64,7 @@ export default function ProjectsIndex() {
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement>(null)
-  // Add a new state variable for controlling the dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  useEffect(() => {
-    // Check if token exists in localStorage for the admin UI authentication
-    const storedToken = localStorage.getItem("admin_token")
-    if (storedToken) {
-      setToken(storedToken)
-      verifyToken(storedToken)
-    }
-
-    // You can also directly fetch projects here if you want to show them before authentication
-    // fetchProjects()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const verifyToken = async (tokenToVerify: string) => {
     try {
@@ -92,17 +78,14 @@ export default function ProjectsIndex() {
 
       if (response.ok) {
         setIsAuthenticated(true)
-        fetchProjects() // No need to pass token anymore
+        fetchProjects()
       } else {
         setIsAuthenticated(false)
         setError("Invalid authentication token")
-        // Clear invalid token from localStorage
-        localStorage.removeItem("admin_token")
       }
     } catch {
       setError("Authentication failed")
       setIsAuthenticated(false)
-      localStorage.removeItem("admin_token")
     }
   }
 
@@ -117,9 +100,7 @@ export default function ProjectsIndex() {
   const fetchProjects = async () => {
     setIsLoading(true)
     try {
-      // No authentication needed for GET requests with our new API
       const response = await fetch(`${API_BASE_URL}/project-index`)
-
       if (!response.ok) throw new Error("Failed to fetch projects")
 
       const data = await response.json()
@@ -135,10 +116,7 @@ export default function ProjectsIndex() {
   const handleCreateProject = async () => {
     setIsLoading(true)
     try {
-      // Create FormData for file upload
       const formData = new FormData()
-
-      // Add project data as JSON
       formData.append(
         "data",
         JSON.stringify({
@@ -147,35 +125,25 @@ export default function ProjectsIndex() {
         }),
       )
 
-      // Add image file if selected
       if (imageFile) {
         formData.append("image", imageFile)
       }
 
       const response = await fetch(`${API_BASE_URL}/project-index`, {
         method: "POST",
-        headers: {
-          "x-api-key": API_KEY,
-        },
+        headers: { "x-api-key": API_KEY || "" },
         body: formData,
       })
 
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Authentication failed. Invalid API key.")
-        }
-        if (response.status === 413) {
-          throw new Error("Image file is too large. Please use a smaller image (max 10MB).")
-        }
+        if (response.status === 401) throw new Error("Authentication failed. Invalid API key.")
+        if (response.status === 413) throw new Error("Image file is too large (max 10MB).")
         throw new Error("Failed to create project")
       }
 
       const newProject = await response.json()
       setProjects([...projects, newProject])
-      setCurrentProject(emptyProject)
-      setImageFile(null)
-      setImagePreview("")
-      setIsEditing(false)
+      resetForm()
       setError(null)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create project")
@@ -187,10 +155,7 @@ export default function ProjectsIndex() {
   const handleUpdateProject = async () => {
     setIsLoading(true)
     try {
-      // Create FormData for file upload
       const formData = new FormData()
-
-      // Add project data as JSON
       formData.append(
         "data",
         JSON.stringify({
@@ -199,35 +164,25 @@ export default function ProjectsIndex() {
         }),
       )
 
-      // Add image file if selected
       if (imageFile) {
         formData.append("image", imageFile)
       }
 
       const response = await fetch(`${API_BASE_URL}/project-index/${currentProject.id}`, {
         method: "PUT",
-        headers: {
-          "x-api-key": API_KEY,
-        },
+        headers: { "x-api-key": API_KEY || "" },
         body: formData,
       })
 
       if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Authentication failed. Invalid API key.")
-        }
-        if (response.status === 413) {
-          throw new Error("Image file is too large. Please use a smaller image (max 10MB).")
-        }
+        if (response.status === 401) throw new Error("Authentication failed. Invalid API key.")
+        if (response.status === 413) throw new Error("Image file is too large (max 10MB).")
         throw new Error("Failed to update project")
       }
 
       const updatedProject = await response.json()
       setProjects(projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)))
-      setCurrentProject(emptyProject)
-      setImageFile(null)
-      setImagePreview("")
-      setIsEditing(false)
+      resetForm()
       setError(null)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update project")
@@ -238,22 +193,15 @@ export default function ProjectsIndex() {
 
   const handleDeleteProject = async (id: string) => {
     if (!confirm("Are you sure you want to delete this project?")) return
-
     setIsLoading(true)
     try {
       const response = await fetch(`${API_BASE_URL}/project-index/${id}`, {
         method: "DELETE",
-        headers: {
-          "x-api-key": API_KEY, // Use the API key for authentication
-        },
+        headers: { "x-api-key": API_KEY || "" },
       })
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Authentication failed. Invalid API key.")
-        }
-        throw new Error("Failed to delete project")
-      }
+      if (!response.ok) throw new Error(response.status === 401 ? 
+        "Authentication failed. Invalid API key." : "Failed to delete project")
 
       setProjects(projects.filter((p) => p.id !== id))
       setError(null)
@@ -264,35 +212,37 @@ export default function ProjectsIndex() {
     }
   }
 
-  // Add this helper function to format projects from the API
-  const formatProjectFromApi = (project: Project): Project => {
-    return {
-      ...project,
-      project_tech_stacks:
-        typeof project.project_tech_stacks === "string"
-          ? JSON.parse(project.project_tech_stacks)
-          : project.project_tech_stacks,
-    }
-  }
+  const formatProjectFromApi = (project: Project): Project => ({
+    ...project,
+    project_tech_stacks: typeof project.project_tech_stacks === "string" ?
+      JSON.parse(project.project_tech_stacks) : project.project_tech_stacks,
+  })
 
-  // Update the handleEditProject function to open the dialog
   const handleEditProject = (project: Project) => {
     setCurrentProject(project)
     setImagePreview(project.project_cover_img)
     setIsEditing(true)
-    setIsDialogOpen(true) // Open the dialog
+    setIsDialogOpen(true)
   }
 
- const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const resetForm = () => {
+    setCurrentProject(emptyProject)
+    setImageFile(null)
+    setImagePreview("")
+    setIsEditing(false)
+    setIsDialogOpen(false)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setCurrentProject((prev) => ({
+    setCurrentProject(prev => ({
       ...prev,
       [name]: value === "" ? (name === "github_link" ? undefined : "") : value,
     }))
   }
 
   const handleTechStackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const techStacks = e.target.value.split(",").map((item) => item.trim())
+    const techStacks = e.target.value.split(",").map(item => item.trim())
     setCurrentProject({ ...currentProject, project_tech_stacks: techStacks })
   }
 
@@ -308,24 +258,16 @@ export default function ProjectsIndex() {
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       const file = e.target.files[0]
       setImageFile(file)
-
-      // Create a preview URL
       const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
+      reader.onloadend = () => setImagePreview(reader.result as string)
       reader.readAsDataURL(file)
     }
   }
 
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click()
-    }
-  }
+  const triggerFileInput = () => fileInputRef.current?.click()
 
   if (!isAuthenticated) {
     return (
@@ -379,19 +321,9 @@ export default function ProjectsIndex() {
       )}
 
       <div className="flex justify-end mb-4">
-        {/* Update the Dialog component to use controlled state */}
-        {/* Replace the existing Dialog component with this: */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button
-              onClick={() => {
-                setCurrentProject(emptyProject)
-                setImageFile(null)
-                setImagePreview("")
-                setIsEditing(false)
-                setIsDialogOpen(true) // Open the dialog
-              }}
-            >
+            <Button onClick={() => resetForm()}>
               <Plus className="mr-2 h-4 w-4" /> Add New Project
             </Button>
           </DialogTrigger>
@@ -399,7 +331,7 @@ export default function ProjectsIndex() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>{isEditing ? "Edit Project" : "Create New Project"}</DialogTitle>
-              <DialogDescription>Fill in the details for your project. Click save when you are done.</DialogDescription>
+              <DialogDescription>Fill in the project details</DialogDescription>
             </DialogHeader>
 
             <div className="grid gap-6 py-4">
@@ -448,7 +380,7 @@ export default function ProjectsIndex() {
                   name="project_subtitle"
                   value={currentProject.project_subtitle}
                   onChange={handleInputChange}
-                  placeholder="A brief description of the project"
+                  placeholder="Brief description"
                   rows={2}
                 />
               </div>
@@ -457,237 +389,148 @@ export default function ProjectsIndex() {
                 <Label htmlFor="project_tech_stacks">Tech Stack (comma separated)</Label>
                 <Input
                   id="project_tech_stacks"
-                  name="project_tech_stacks"
                   value={currentProject.project_tech_stacks.join(", ")}
                   onChange={handleTechStackChange}
                   placeholder="React, Node.js, TypeScript"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="project_link">Project Link</Label>
-                  <Input
-                    id="project_link"
-                    name="project_link"
-                    value={currentProject.project_link || ""}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="github_link">GitHub Link</Label>
-                  <Input
-                    id="github_link"
-                    name="github_link"
-                    value={currentProject.github_link || ""}
-                    onChange={handleInputChange}
-                    placeholder="https://github.com/username/repo"
-                  />
+              <div className="space-y-2">
+                <Label>Project Cover Image</Label>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*"
+                />
+                <div className="flex items-center gap-4">
+                  <Button variant="outline" onClick={triggerFileInput}>
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Image
+                  </Button>
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="h-16 w-16 object-cover rounded-md"
+                    />
+                  )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label>Project Cover Image</Label>
-                <div className="flex items-center gap-4">
-                  <div
-                    className="border rounded-md w-32 h-32 flex items-center justify-center overflow-hidden bg-gray-50 cursor-pointer"
-                    onClick={triggerFileInput}
-                  >
-                    {imagePreview ? (
-                      <img
-                        src={imagePreview || "/placeholder.svg"}
-                        alt="Project cover preview"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex flex-col items-center text-gray-400">
-                        {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                        <Image className="w-8 h-8 mb-1" />
-                        <span className="text-xs">No image</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                    <Button type="button" variant="outline" className="w-full mb-2" onClick={triggerFileInput}>
-                      <Upload className="w-4 h-4 mr-2" />
-                      {imageFile ? "Change Image" : "Upload Image"}
-                    </Button>
-                    {imageFile && (
-                      <p className="text-sm text-muted-foreground">
-                        {imageFile.name} ({Math.round(imageFile.size / 1024)} KB)
-                      </p>
-                    )}
-                  </div>
-                </div>
+                <Label htmlFor="project_link">Project Link</Label>
+                <Input
+                  id="project_link"
+                  name="project_link"
+                  value={currentProject.project_link}
+                  onChange={handleInputChange}
+                  placeholder="https://example.com"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="github_link">GitHub Link (optional)</Label>
+                <Input
+                  id="github_link"
+                  name="github_link"
+                  value={currentProject.github_link || ""}
+                  onChange={handleInputChange}
+                  placeholder="https://github.com/your-project"
+                />
               </div>
 
               <div className="flex items-center space-x-2">
-                <Switch id="personal" checked={currentProject.personal} onCheckedChange={handlePersonalChange} />
+                <Switch
+                  id="personal"
+                  checked={currentProject.personal}
+                  onCheckedChange={handlePersonalChange}
+                />
                 <Label htmlFor="personal">Personal Project</Label>
               </div>
             </div>
 
             <DialogFooter>
               <Button
-                variant="outline"
-                onClick={() => {
-                  setCurrentProject(emptyProject)
-                  setImageFile(null)
-                  setImagePreview("")
-                  setIsDialogOpen(false) // Close the dialog
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={async () => {
-                  if (isEditing) {
-                    await handleUpdateProject()
-                  } else {
-                    await handleCreateProject()
-                  }
-                  setIsDialogOpen(false) // Close the dialog after saving
-                }}
+                onClick={isEditing ? handleUpdateProject : handleCreateProject}
                 disabled={isLoading}
               >
-                {isLoading ? "Saving..." : isEditing ? "Update Project" : "Create Project"}
+                {isLoading ? "Saving..." : "Save Project"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Projects</CardTitle>
-          <CardDescription>Manage your projects index</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoading && <p>Loading projects...</p>}
-
-          {!isLoading && projects.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">No projects found. Create your first project!</p>
-            </div>
-          )}
-
-          {!isLoading && projects.length > 0 && (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Project ID</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Tech Stack</TableHead>
-                  <TableHead>Links</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {projects.map((project) => (
-                  <TableRow key={project.id}>
-                    <TableCell>
-                      <div className="w-12 h-12 rounded-md overflow-hidden bg-gray-100">
-                        {project.project_cover_img ? (
-                          <img
-                            src={project.project_cover_img || "/placeholder.svg"}
-                            alt={project.project_title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                            <Image className="w-6 h-6" />
-                          </div>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>{project.project_id}</TableCell>
-                    <TableCell>
-                      <div>
-                        <div className="font-medium">{project.project_title}</div>
-                        <div className="text-sm text-muted-foreground truncate max-w-xs">
-                          {project.project_subtitle}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          project.project_status === "Completed"
-                            ? "default"
-                            : project.project_status === "In Progress"
-                              ? "secondary"
-                              : "outline"
-                        }
-                      >
-                        {project.project_status}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Tech Stack</TableHead>
+              <TableHead>Links</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {projects.map((project) => (
+              <TableRow key={project.id}>
+                <TableCell className="font-medium">{project.project_title}</TableCell>
+                <TableCell>
+                  <Badge variant="outline">{project.project_status}</Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-wrap gap-1">
+                    {project.project_tech_stacks.map((tech) => (
+                      <Badge key={tech} variant="secondary">
+                        {tech}
                       </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {project.project_tech_stacks.slice(0, 3).map((tech, i) => (
-                          <Badge key={i} variant="outline">
-                            {tech}
-                          </Badge>
-                        ))}
-                        {project.project_tech_stacks.length > 3 && (
-                          <Badge variant="outline">+{project.project_tech_stacks.length - 3}</Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        {project.project_link && (
-                          <a
-                            href={project.project_link || ""}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
-                        {project.github_link && (
-                          <a
-                            href={project.github_link || ""}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-700 hover:text-gray-900"
-                          >
-                            <Github className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        {/* Update the edit button to directly call handleEditProject */}
-                        <Button variant="ghost" size="icon" onClick={() => handleEditProject(project)}>
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteProject(project.id!)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    {project.project_link && (
+                      <a href={project.project_link} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                    {project.github_link && (
+                      <a href={project.github_link} target="_blank" rel="noopener noreferrer">
+                        <Github className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {project.personal ? "Personal" : "Professional"}
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditProject(project)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => project.id && handleDeleteProject(project.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }
-
