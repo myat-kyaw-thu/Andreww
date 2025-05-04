@@ -1,13 +1,13 @@
 "use client"
 
-import Image from "next/image"
-import React from "react"
-import { useTheme } from "next-themes"
 import { motion } from "framer-motion"
-import { LineShadowText } from "./LineShadowText"
-import { Github, FileText, Linkedin, Mail, Code2 } from "lucide-react"
+import { Code2, FileText, Github, Linkedin, Mail } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google"
+import Image from "next/image"
 import Link from "next/link"
-import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+import React from "react"
+import { LineShadowText } from "./LineShadowText"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
@@ -180,7 +180,7 @@ const Hero = () => {
           <motion.div className="flex space-x-4 mt-5 justify-center sm:justify-start" variants={socialVariants}>
             <motion.div variants={socialItemVariants} whileHover="hover">
               <Link
-                href="https://github.com/primebeyonder"
+                href="https://github.com/myat-kyaw-thu"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-neutral-900 dark:text-neutral-200 hover:text-[#6e5494] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -251,4 +251,3 @@ const Hero = () => {
 }
 
 export default Hero
-
