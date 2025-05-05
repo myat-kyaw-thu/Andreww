@@ -3,18 +3,17 @@
 import type React from "react"
 import { useState } from "react"
 
-import { motion, AnimatePresence } from "framer-motion"
+import { Badge } from "@/components/ui/badge"
+import { AnimatePresence, motion } from "framer-motion"
 import { Github, LinkIcon, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
 
-import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
 const archivo = Archivo({ subsets: ["latin"], display: "swap" })
-
 
 interface ProjectCardProps {
   project: {
@@ -41,9 +40,9 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
   Svelte: { color: "#FF3E00", bgColor: "rgba(255, 62, 0, 0.1)" },
   TailwindCSS: { color: "#06B6D4", bgColor: "rgba(6, 182, 212, 0.1)" },
   Bootstrap: { color: "#7952B3", bgColor: "rgba(121, 82, 179, 0.1)" },
-  ShadcnUi: { color: "#000000", bgColor: "rgba(0, 0, 0, 0.1)" }, // Adjust this color as needed
-  "Framer-Motion": { color: "#00C3FF", bgColor: "rgba(236,	58,	182, 0.1)" }, // Adjust this color as needed
-  GSAP: { color: "#88CCF1", bgColor: "rgba(53, 235, 88, 0.1)" }, // Adjust this color as needed
+  ShadcnUI: { color: "#18181B", bgColor: "rgba(24, 24, 27, 0.1)" }, // Corrected to match shadcn/ui theme
+  "Framer-Motion": { color: "#0055FF", bgColor: "rgba(0, 85, 255, 0.1)" }, // Corrected to match Framer brand
+  GSAP: { color: "#88CE02", bgColor: "rgba(136, 206, 2, 0.1)" }, // Corrected to match GreenSock brand
 
   // Backend
   "Node.js": { color: "#339933", bgColor: "rgba(51, 153, 51, 0.1)" },
@@ -53,6 +52,7 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
   Laravel: { color: "#FF2D20", bgColor: "rgba(255, 45, 32, 0.1)" },
   Spring: { color: "#6DB33F", bgColor: "rgba(109, 179, 63, 0.1)" },
   FastAPI: { color: "#009688", bgColor: "rgba(0, 150, 136, 0.1)" },
+  Bun: { color: "#FBF0DF", bgColor: "rgba(251, 240, 223, 0.25)" },
 
   // Languages
   TypeScript: { color: "#3178C6", bgColor: "rgba(49, 120, 198, 0.1)" },
@@ -70,6 +70,7 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
   PostgreSQL: { color: "#4169E1", bgColor: "rgba(65, 105, 225, 0.1)" },
   SQLite: { color: "#003B57", bgColor: "rgba(0, 59, 87, 0.1)" },
   Redis: { color: "#DC382D", bgColor: "rgba(220, 56, 45, 0.1)" },
+  Prisma: { color: "#2D3748", bgColor: "rgba(45, 55, 72, 0.1)" },
 
   // Tools & Infrastructure
   Docker: { color: "#2496ED", bgColor: "rgba(36, 150, 237, 0.1)" },
@@ -79,12 +80,13 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
   Vercel: { color: "#000000", bgColor: "rgba(0, 0, 0, 0.05)" },
 
   // Libraries & Frameworks
-  Zod: { color: "#3E67B1", bgColor: "rgba(62, 103, 177, 0.1)" },
+  Zod: { color: "#3068D4", bgColor: "rgba(48, 104, 212, 0.1)" }, // Corrected to match Zod brand
   Redux: { color: "#764ABC", bgColor: "rgba(118, 74, 188, 0.1)" },
   GraphQL: { color: "#E10098", bgColor: "rgba(225, 0, 152, 0.1)" },
-  Prisma: { color: "#2D3748", bgColor: "rgba(45, 55, 72, 0.1)" },
-  Bun: { color: "#FBF0DF", bgColor: "rgba(251, 240, 223, 0.25)" },
   Webpack: { color: "#8DD6F9", bgColor: "rgba(141, 214, 249, 0.1)" },
+
+  // Payment
+  Stripe: { color: "#635BFF", bgColor: "rgba(99, 91, 255, 0.1)" }, // Added Stripe
 
   // Default color for unknown tech stacks
   default: { color: "#718096", bgColor: "rgba(113, 128, 150, 0.1)" },
@@ -252,7 +254,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   exit={{ opacity: 0.8 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed`}>
+                  <p
+                    className={`${archivo.className} text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed`}
+                  >
                     {project.project_subtitle}
                   </p>
                   {project.project_subtitle.length > 80 && (
@@ -349,6 +353,18 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {/* Links section with improved styling */}
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
           <div className="flex gap-3">
+            <motion.div
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 500, damping: 15 }}
+            >
+              <Link
+                href={`/projects/${project.project_id}`}
+                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
+              >
+                <span className="font-medium group-hover:underline">Details</span>
+              </Link>
+            </motion.div>
             {project.project_link && project.project_link !== "" && (
               <motion.div
                 whileHover={{ y: -2 }}
@@ -389,4 +405,3 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     </motion.div>
   )
 }
-
