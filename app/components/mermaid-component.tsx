@@ -7,13 +7,13 @@ interface MermaidProps {
   chart: string
 }
 
-export default function Mermaid({ chart }: MermaidProps) {
+export default function MermaidChart({ chart }: MermaidProps) {
   const mermaidRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Initialize mermaid with proper configuration
     mermaid.initialize({
-      startOnLoad: false,
+      startOnLoad: true,
       theme: document.documentElement.classList.contains("dark") ? "dark" : "default",
       securityLevel: "loose",
       fontFamily: "inherit",
@@ -25,21 +25,22 @@ export default function Mermaid({ chart }: MermaidProps) {
           // Clear previous content
           mermaidRef.current.innerHTML = ""
 
-          // Generate a unique ID for this diagram
-          const id = `mermaid-${Math.random().toString(36).substring(2, 11)}`
+          // Create a unique ID for this diagram
+          const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`
 
-          // Create a new div with the unique ID
+          // Create a container with the mermaid class
           const container = document.createElement("div")
-          container.id = id
-          container.className = "mermaid-diagram w-full overflow-auto"
+          container.className = "mermaid"
+          container.textContent = chart
           mermaidRef.current.appendChild(container)
 
-          // Render the chart
-          const { svg } = await mermaid.render(id, chart)
-          container.innerHTML = svg
+          // Run mermaid
+          mermaid.contentLoaded()
         } catch (error) {
           console.error("Mermaid rendering error:", error)
-          mermaidRef.current.innerHTML = `<div class="p-4 text-red-500 border border-red-300 rounded">Error rendering flowchart. Please check the syntax.</div>`
+          if (mermaidRef.current) {
+            mermaidRef.current.innerHTML = `<div class="p-4 text-red-500 border border-red-300 rounded">Error rendering flowchart. Please check the syntax.</div>`
+          }
         }
       }
     }
@@ -52,7 +53,7 @@ export default function Mermaid({ chart }: MermaidProps) {
         if (mutation.type === "attributes" && mutation.attributeName === "class") {
           const isDark = document.documentElement.classList.contains("dark")
           mermaid.initialize({
-            startOnLoad: false,
+            startOnLoad: true,
             theme: isDark ? "dark" : "default",
             securityLevel: "loose",
             fontFamily: "inherit",
@@ -69,5 +70,5 @@ export default function Mermaid({ chart }: MermaidProps) {
     }
   }, [chart])
 
-  return <div className="mermaid-container" ref={mermaidRef}></div>
+  return <div ref={mermaidRef}></div>
 }
