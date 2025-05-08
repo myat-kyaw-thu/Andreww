@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Globe, Users } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Globe, Users } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -18,199 +18,236 @@ const MermaidChart = dynamic(() => import("./mermaid-component"), { ssr: false }
 async function getProjectById(id: string) {
   // Mock data for demonstration
   return {
-      project_id: "examplus-kbz-mini-app",
-      project_title: "ExamPlus Mini Application for KBZAPP",
-      project_subtitle: "Integrated exam management platform within the KBZAPP ecosystem",
-      project_images: [
-        "/placeholder.svg?height=600&width=1200",
-        "/placeholder.svg?height=600&width=600",
-        "/placeholder.svg?height=600&width=600",
-        "/placeholder.svg?height=600&width=600",
-        "/placeholder.svg?height=600&width=600",
-      ],
-      project_tech_stacks: ["Vue.js", "JavaScript", "TailwindCSS", "Shadcn UI", "Pinia"],
-      project_link: "https://examplus-mini.kbzapp.com",
-      project_status: "In Progress",
-      personal: true,
-      project_description:
-        "The ExamPlus Mini Application provides seamless access to educational exams and packages through KBZAPP. Users can browse, purchase, and manage exams, receiving coupon codes that can be redeemed on the ExamPlus website. The application features comprehensive exam categorization, detailed results tracking, and an intuitive user interface designed to enhance the learning experience.",
-      project_features: [
-        {
-          feature_id: 1,
-          feature_name: "Exam Browsing and Management",
-          feature_description:
-            "Search and filter exams by tags and categories, view detailed exam information, and manage purchased exams.",
-        },
-        {
-          feature_id: 2,
-          feature_name: "Package Management",
-          feature_description: "Browse and purchase exam packages containing multiple related exams with bundled pricing.",
-        },
-        {
-          feature_id: 3,
-          feature_name: "Coupon Code Integration",
-          feature_description:
-            "Receive and manage coupon codes for purchased exams and packages that can be redeemed on the ExamPlus website.",
-        },
-        {
-          feature_id: 4,
-          feature_name: "Exam History and Results",
-          feature_description:
-            "Track exam history and view detailed results, including identification of correct and incorrect answers.",
-        },
-      ],
-      technical_specifications: {
-        frontend: {
-          frameworks: "Vue.js",
-          libraries: "Pinia for state management, Shadcn UI for components",
-        },
-        backend: {
-          frameworks: "Node.js",
-          libraries: "Express.js",
-        },
-        database: {
-          type: "Relational",
-          system: "PostgreSQL",
-        },
-        styling: {
-          framework: "TailwindCSS",
-          component_library: "Shadcn UI",
-        },
-        architecture: {
-          pattern: "Component-based architecture",
-          state_management: "Pinia store modules for exams, packages, and user profile",
-        },
-        programming_languages: ["JavaScript"],
-        testing_frameworks: ["Vitest", "Vue Test Utils"],
+    "project_id": "shwe-min-lab-admin",
+    "project_title": "Shwe Min Lab Admin Dashboard",
+    "project_subtitle": "Full-featured laboratory logistics and invoice management system",
+    "project_images": [
+      "/screens/dashboard-overview.png",
+      "/screens/clinic-runner-management.png",
+      "/screens/labtest-workflow.png",
+      "/screens/invoice-config.png"
+    ],
+    "project_tech_stacks": [
+      "Laravel", "PHP", "Typescript", "Vue.js", "TailwindCSS", "Shadcn UI", "Firebase", "MySQL"
+    ],
+    "project_link": "https://app.uat.shwemin.mssmyanmar.com/login",
+    "project_status": "In Development",
+    "personal": false,
+    "project_description": "Shwe Min Lab Admin Dashboard is a comprehensive platform designed to manage clinics, runners, lab test workflows, invoice generation, pricing plans, and role-based permissions. The system aims to digitize and streamline the medical lab logistics process by enabling a scalable and modular admin experience.",
+
+    "project_features": [
+      {
+        "feature_id": 1,
+        "feature_name": "Clinic & Runner Management",
+        "feature_description": "CRUD functionality for clinics and runners, with pricing plan assignment to specific clinics."
       },
-      project_goals: [
-        {
-          goal_id: 1,
-          goal_name: "Streamlined Exam Access",
-          goal_description:
-            "Provide an intuitive interface for browsing, purchasing, and accessing educational exams through coupon code integration.",
-        },
-        {
-          goal_id: 2,
-          goal_name: "Comprehensive Learning Management",
-          goal_description:
-            "Enable users to track their exam history, review results, and identify areas for improvement through detailed feedback.",
-        },
-        {
-          goal_id: 3,
-          goal_name: "Seamless Integration Experience",
-          goal_description: "Create a smooth transition between KBZAPP and the ExamPlus platform for exam completion.",
-        },
-      ],
-      project_flowchart: {
-        mermaid_code: `flowchart TD
-        A[User enters Mini App from KBZAPP] --> B{Choose Tab}
-
-        B --> C[Exam Tab]
-        B --> D[Package Tab]
-        B --> E[Profile Tab]
-
-        %% Exam Tab Flow
-        C --> C1[Search/Filter Exams by Tag/Category]
-        C1 --> C2[View Exam Details]
-        C2 --> C3{Exam Type}
-        C3 --> C4[Individual Exam]
-        C3 --> C5[Part of a Package]
-        C2 --> C6[Buy or Favorite Exam]
-        C6 --> C7[Receive Coupon Code]
-        C7 --> C8[Copy Code and Visit ExamPlus Website]
-        C8 --> C9[Enter Code to Access Exam on ExamPlus]
-        C9 --> C10[Answer Exam on ExamPlus]
-
-        %% Package Tab Flow
-        D --> D1[Search/Filter Packages by Tag/Category]
-        D1 --> D2[View Package Details]
-        D2 --> D3[See List of Included Exams]
-        D2 --> D4[Buy Package]
-        D4 --> D5[Receive Coupon Code for All Exams in Package]
-        D5 --> D6[Visit ExamPlus and Redeem Code]
-
-        %% Profile Tab Flow
-        E --> E1[View Purchased Exams]
-        E --> E2[View Purchased Packages]
-        E --> E3[View History of Attempted Exams]
-        E3 --> E4[View Exam Result]
-        E4 --> E5[See Questions with Correct/Incorrect Markings]
-
-        style C fill:#f9f,stroke:#333,stroke-width:1px
-        style D fill:#bbf,stroke:#333,stroke-width:1px
-        style E fill:#bfb,stroke:#333,stroke-width:1px
-      `,
-        description:
-          "This flowchart illustrates the complete user journey within the ExamPlus Mini Application, from entering through KBZAPP to viewing exam results. It highlights the three main tabs (Exam, Package, Profile) and the key actions users can perform in each section.",
+      {
+        "feature_id": 2,
+        "feature_name": "Lab Workflow Management",
+        "feature_description": "Manage lab test collection from clinics, assign to runners, confirm reception, and track delivery for invoicing."
       },
-      team_members: [
-        {
-          member_id: 1,
-          member_name: "John Doe",
-          member_role: "Project Manager",
-        },
-        {
-          member_id: 2,
-          member_name: "Jane Smith",
-          member_role: "Lead Vue Developer",
-        },
-        {
-          member_id: 3,
-          member_name: "Bob Johnson",
-          member_role: "UI/UX Designer",
-        },
-      ],
+      {
+        "feature_id": 3,
+        "feature_name": "Invoice Header/Footer Generator",
+        "feature_description": "Admin can customize PDF-ready invoice headers and footers for document consistency."
+      },
+      {
+        "feature_id": 4,
+        "feature_name": "Dynamic Pricing Plan Import/Export",
+        "feature_description": "Supports Excel export of current pricing and bulk import of updated plans for system-wide changes."
+      },
+      {
+        "feature_id": 5,
+        "feature_name": "Tube Rules Configuration",
+        "feature_description": "Assign specific tube types and required quantities per lab test for accurate logistics tracking."
+      },
+      {
+        "feature_id": 6,
+        "feature_name": "Advertisement Management",
+        "feature_description": "Create and manage text sliders, fullscreen ads, and banner ads for system announcements or external promotions."
+      },
+      {
+        "feature_id": 7,
+        "feature_name": "Role-Based Access Control",
+        "feature_description": "Create user roles, assign granular permissions, and control access to admin modules and data."
+      }
+    ],
 
+    "technical_specifications": {
+      "frontend": {
+        "frameworks": "Vue.js",
+        "libraries": "Shadcn UI, Vue Router, Firebase Auth, Pinia"
+      },
+      "backend": {
+        "frameworks": "Laravel",
+        "languages": "PHP, TypeScript",
+        "libraries": "Laravel Sanctum",
+        "authentication": "Firebase + Laravel Sanctum"
+      },
+      "database": {
+        "type": "Relational",
+        "system": "MySQL"
+      },
+      "styling": {
+        "framework": "TailwindCSS",
+        "component_library": "Shadcn UI"
+      },
+      "architecture": {
+        "pattern": "Modular MVC + Component-driven frontend",
+        "state_management": "Pinia (Frontend)"
+      },
+      "programming_languages": ["PHP", "TypeScript"],
+      "testing_frameworks": ["Jest", "Cypress"],
+      "mobile_api": {
+        "developer": "Myat Kyaw Thu",
+        "scope": "Full mobile integration for clinics and runners"
+      }
+    },
+
+    "project_goals": [
+      {
+        "goal_id": 1,
+        "goal_name": "Centralized Admin Control",
+        "goal_description": "Provide a centralized interface to manage all clinical operations, test routing, and invoicing."
+      },
+      {
+        "goal_id": 2,
+        "goal_name": "Automated Lab Workflow",
+        "goal_description": "Ensure accurate and timely test collection, delivery, and confirmation through a digital workflow."
+      },
+      {
+        "goal_id": 3,
+        "goal_name": "Scalable Role Management",
+        "goal_description": "Implement role-based access control for multiple departments and admin tiers."
+      },
+      {
+        "goal_id": 4,
+        "goal_name": "Efficient Pricing Management",
+        "goal_description": "Support rapid updates to lab pricing using import/export workflows integrated with Excel."
+      }
+    ],
+
+    "project_flowchart": {
+      "mermaid_code": `flowchart LR
+
+%% Sidebar Menu
+A[Sidebar Menu] --> B[User Settings]
+A --> C[Clinic / Runner]
+A --> D[Ads & Pricing Plan]
+A --> E[Invoice Setup]
+A --> F[Invoice List]
+A --> G[Lab Management]
+A --> H[Pickup Checking]
+A --> I[Lab Test Rule]
+A --> J[Admin Profile]
+A --> K[Permissions]
+
+%% Clinic / Runner
+C --> C1[CRUD Clinics]
+C --> C2[CRUD Runners]
+C --> C3[Assign Pricing Plan]
+
+%% Ads & Pricing
+D --> D1[Create Text Slider Ad]
+D --> D2[Create Fullscreen Ad]
+D --> D3[Create Banner Ad]
+D --> D4[Export Pricing to Excel]
+D --> D5[Import Updated Pricing]
+
+%% Invoice Header/Footer
+E --> E1[Create Header/Footer for PDF]
+
+%% Invoice List
+F --> F1[View & Manage Invoices]
+
+%% Lab Management Process
+G --> G1[Receive Lab Tests]
+G1 --> G2[Deliver to Runner]
+G2 --> G3[Confirm Received]
+G3 --> G4[Generate Invoice & Result]
+G4 --> F1
+
+%% Lab Test Rule
+I --> I1[Assign Tubes to Tests]
+I --> I2[Set Tube Quantity]
+
+%% Admin Profile
+J --> J1[Edit Profile]
+
+%% Permissions
+K --> K1[Create Roles]
+K1 --> K2[Assign Permissions]
+K2 --> K3[Set Access Levels]
+`,
+      "description": "Structured user and admin journey through modules like clinic management, lab operations, invoicing, and role control."
+    },
+
+    "team_members": [
+      {
+        "member_id": 1,
+        "member_name": "Myat Kyaw Thu",
+        "member_role": "Fullstack Developer (Web + Mobile API)"
+      },
+      {
+        "member_id": 2,
+        "member_name": "Zayar Min Htike",
+        "member_role": "Project Manager / System Design"
+      },
+      {
+        "member_id": 3,
+        "member_name": "Kyaw Thiha Lynn",
+        "member_role": "UI/UX Designer"
+      }
+    ]
   }
 }
 
 export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
   interface Project {
-    project_id: string;
-    project_title: string;
-    project_subtitle: string;
-    project_images: string[];
-    project_tech_stacks: string[];
-    project_link: string;
-    project_status: string;
-    personal: boolean;
-    project_description: string;
+    project_id: string
+    project_title: string
+    project_subtitle: string
+    project_images: string[]
+    project_tech_stacks: string[]
+    project_link: string
+    project_status: string
+    personal: boolean
+    project_description: string
     project_features: {
-      feature_id: number;
-      feature_name: string;
-      feature_description: string;
-    }[];
+      feature_id: number
+      feature_name: string
+      feature_description: string
+    }[]
     technical_specifications: {
       frontend: {
-        frameworks: string;
-        libraries: string;
-      };
+        frameworks: string
+        libraries: string
+      }
       backend: {
-        frameworks: string;
-        libraries: string;
-      };
+        frameworks: string
+        libraries: string
+      }
       database: {
-        type: string;
-        system: string;
-      };
-      programming_languages: string[];
-      testing_frameworks: string[];
-    };
+        type: string
+        system: string
+      }
+      programming_languages: string[]
+      testing_frameworks: string[]
+    }
     project_goals: {
-      goal_id: number;
-      goal_name: string;
-      goal_description: string;
-    }[];
+      goal_id: number
+      goal_name: string
+      goal_description: string
+    }[]
     project_flowchart: {
-      mermaid_code: string;
-      description: string;
-    };
+      mermaid_code: string
+      description: string
+    }
     team_members: {
-      member_id: number;
-      member_name: string;
-      member_role: string;
-    }[];
+      member_id: number
+      member_name: string
+      member_role: string
+    }[]
   }
   const [project, setProject] = useState<Project>()
   const [loading, setLoading] = useState(true)
@@ -254,11 +291,11 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
     if (thumbnailsWrapperRef.current && project?.project_images) {
       const maxVisibleIndex = Math.min(
         project.project_images.length - visibleThumbnails,
-        Math.max(0, currentImageIndex - 1)
+        Math.max(0, currentImageIndex - 1),
       )
       thumbnailsWrapperRef.current.style.transform = `translateY(-${maxVisibleIndex * thumbnailHeight}px)`
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentImageIndex, project?.project_images])
 
   const nextImage = () => {
@@ -287,7 +324,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project?.project_images])
 
   if (loading) {
@@ -343,11 +380,11 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
             {/* Main Image Container */}
             <div className="w-full md:w-4/5 relative">
               <div className="relative overflow-hidden rounded-xl">
-                <div className="w-full h-[400px] bg-gray-100 dark:bg-gray-800 rounded-xl relative">
+                <div className="w-full aspect-[16/9] bg-gray-100 dark:bg-gray-800 rounded-xl relative">
                   {project.project_images.map((image: string, index: number) => (
                     <div
                       key={index}
-                      className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+                      className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
                         index === currentImageIndex ? "opacity-100" : "opacity-0"
                       }`}
                     >
@@ -399,8 +436,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                     {project.project_images.map((image: string, index: number) => (
                       <div
                         key={index}
-                        className={`h-[150px] transition-all duration-300 ${
-                          index === currentImageIndex ? "ring-2 ring-primary" : ""
+                        className={`h-[150px] transition-all duration-300 overflow-hidden rounded-md ${
+                          index === currentImageIndex
+                            ? "shadow-[inset_0_0_0_2px] shadow-primary"
+                            : "hover:shadow-[inset_0_0_0_1px] hover:shadow-gray-300 dark:hover:shadow-gray-600"
                         }`}
                         onClick={() => setCurrentImageIndex(index)}
                       >
@@ -410,7 +449,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                             alt={`Thumbnail ${index + 1}`}
                             fill
                             sizes="(max-width: 768px) 100vw, 40vw"
-                            className="object-cover rounded-md cursor-pointer shadow-sm"
+                            className="object-cover cursor-pointer"
                           />
                         </div>
                       </div>
@@ -423,7 +462,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   {project.project_images.map((_: string, index: number) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-full cursor-pointer ${
+                      className={`w-2 h-2 rounded-full cursor-pointer transition-all duration-300 ${
                         index === currentImageIndex ? "bg-primary" : "bg-gray-300 dark:bg-gray-600"
                       }`}
                       onClick={() => setCurrentImageIndex(index)}
@@ -494,79 +533,94 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
 
             <TabsContent value="technical" className="animate-in fade-in duration-300">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardContent className="p-6 space-y-4">
-                    <h3 className="font-medium text-lg">Frontend</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Frameworks:</span>
-                        <span>{project.technical_specifications.frontend.frameworks}</span>
+                <Card className="h-full">
+                  <CardContent className="p-6">
+                    <h3 className="font-medium text-lg mb-4">Frontend</h3>
+                    <dl className="space-y-3">
+                      <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                        <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Frameworks:</dt>
+                        <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                          {project.technical_specifications.frontend.frameworks}
+                        </dd>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Libraries:</span>
-                        <span>{project.technical_specifications.frontend.libraries}</span>
+                      <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                        <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Libraries:</dt>
+                        <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                          {project.technical_specifications.frontend.libraries}
+                        </dd>
                       </div>
-                    </div>
+                    </dl>
                   </CardContent>
                 </Card>
 
-                {
-                  project.technical_specifications.backend && (
-                    <Card>
-                      <CardContent className="p-6 space-y-4">
-                        <h3 className="font-medium text-lg">Backend</h3>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Frameworks:</span>
-                            <span>{project.technical_specifications.backend.frameworks}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-600 dark:text-gray-400">Libraries:</span>
-                            <span>{project.technical_specifications.backend.libraries}</span>
-                          </div>
+                {project.technical_specifications.backend && (
+                  <Card className="h-full">
+                    <CardContent className="p-6">
+                      <h3 className="font-medium text-lg mb-4">Backend</h3>
+                      <dl className="space-y-3">
+                        <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                          <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Frameworks:</dt>
+                          <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                            {project.technical_specifications.backend.frameworks}
+                          </dd>
                         </div>
-                      </CardContent>
-                    </Card>
-                  )}
-               {
-                project.technical_specifications.database && (
-                <Card>
-                  <CardContent className="p-6 space-y-4">
-                    <h3 className="font-medium text-lg">Database</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Type:</span>
-                        <span>{project.technical_specifications.database.type}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">System:</span>
-                        <span>{project.technical_specifications.database.system}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+                        <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                          <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Libraries:</dt>
+                          <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                            {project.technical_specifications.backend.libraries}
+                          </dd>
+                        </div>
+                      </dl>
+                    </CardContent>
+                  </Card>
+                )}
 
-                <Card>
-                  <CardContent className="p-6 space-y-4">
-                    <h3 className="font-medium text-lg">Languages & Testing</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Languages:</span>
-                        <span>{project.technical_specifications.programming_languages.join(", ")}</span>
+                {project.technical_specifications.database && (
+                  <Card className="h-full">
+                    <CardContent className="p-6">
+                      <h3 className="font-medium text-lg mb-4">Database</h3>
+                      <dl className="space-y-3">
+                        <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                          <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Type:</dt>
+                          <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                            {project.technical_specifications.database.type}
+                          </dd>
+                        </div>
+                        <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                          <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">System:</dt>
+                          <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                            {project.technical_specifications.database.system}
+                          </dd>
+                        </div>
+                      </dl>
+                    </CardContent>
+                  </Card>
+                )}
+
+                <Card className="h-full">
+                  <CardContent className="p-6">
+                    <h3 className="font-medium text-lg mb-4">Languages & Testing</h3>
+                    <dl className="space-y-3">
+                      <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                        <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Languages:</dt>
+                        <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                          {project.technical_specifications.programming_languages.join(", ")}
+                        </dd>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Testing:</span>
-                        <span>{project.technical_specifications.testing_frameworks.join(", ")}</span>
+                      <div className="grid grid-cols-[120px_1fr] items-baseline gap-2">
+                        <dt className="text-sm font-medium text-gray-600 dark:text-gray-400">Testing:</dt>
+                        <dd className="text-sm truncate hover:text-clip hover:whitespace-normal">
+                          {project.technical_specifications.testing_frameworks.join(", ")}
+                        </dd>
                       </div>
-                    </div>
+                    </dl>
                   </CardContent>
                 </Card>
               </div>
             </TabsContent>
 
             <TabsContent value="goals" className="animate-in fade-in duration-300">
-              <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {project.project_goals.map((goal) => (
                   <Card key={goal.goal_id} className="overflow-hidden hover:shadow-md transition-all duration-300">
                     <CardContent className="p-6">
@@ -596,83 +650,85 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
 
         {/* Right column - Project details */}
         <div className="space-y-8">
-          <Card className="overflow-hidden">
-            <CardContent className="p-6 space-y-6">
-              <div className="space-y-2">
-                <h3 className="text-lg font-medium">Project Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6">
+            <Card className="overflow-hidden">
+              <CardContent className="p-6 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Project Details</h3>
 
-                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                  <span className="text-gray-600 dark:text-gray-400">Status</span>
-                  <div className="flex items-center">
-                    <svg
-                      className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400"
-                      fill="none"
-                      height="24"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
+                    <span className="text-gray-600 dark:text-gray-400">Status</span>
+                    <div className="flex items-center">
+                      <svg
+                        className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400"
+                        fill="none"
+                        height="24"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                      <span>{project.project_status}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
+                    <span className="text-gray-600 dark:text-gray-400">Website</span>
+                    <a
+                      href={project.project_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
                     >
-                      <circle cx="12" cy="12" r="10" />
-                      <polyline points="12 6 12 12 16 14" />
-                    </svg>
-                    <span>{project.project_status}</span>
+                      <Globe className="h-4 w-4 mr-1" />
+                      <span>Visit Site</span>
+                      <ArrowUpRight className="h-3 w-3 ml-1" />
+                    </a>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                  <span className="text-gray-600 dark:text-gray-400">Website</span>
-                  <a
-                    href={project.project_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
-                  >
-                    <Globe className="h-4 w-4 mr-1" />
-                    <span>Visit Site</span>
-                    <ArrowUpRight className="h-3 w-3 ml-1" />
-                  </a>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-medium">Team</h3>
+                  <div className="space-y-4">
+                    {project.team_members.map((member) => (
+                      <div key={member.member_id} className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                          <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        </div>
+                        <div>
+                          <div className="font-medium">{member.member_name}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{member.member_role}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div className="space-y-2">
-                <h3 className="text-lg font-medium">Team</h3>
-                <div className="space-y-4">
-                  {project.team_members.map((member) => (
-                    <div key={member.member_id} className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                        <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{member.member_name}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">{member.member_role}</div>
-                      </div>
+            <Card className="overflow-hidden hover:shadow-md transition-all duration-300">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-medium mb-4">Tech Stack</h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.project_tech_stacks.map((tech: string) => (
+                    <div
+                      key={tech}
+                      className="flex items-center p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 mr-3"></div>
+                      <span className="text-sm">{tech}</span>
                     </div>
                   ))}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden hover:shadow-md transition-all duration-300">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-medium mb-4">Tech Stack</h3>
-              <div className="space-y-2">
-                {project.project_tech_stacks.map((tech: string) => (
-                  <div
-                    key={tech}
-                    className="flex items-center p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-600 mr-3"></div>
-                    <span>{tech}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
