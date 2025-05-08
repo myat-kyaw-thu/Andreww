@@ -4,163 +4,164 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Globe, Users } from "lucide-react"
+import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Globe, Users } from 'lucide-react'
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import Mermaid from "./mermaid-component"
+
+// Dynamically import the Mermaid component with no SSR to avoid hydration issues
+const MermaidChart = dynamic(() => import("./mermaid-component"), { ssr: false })
 
 // This would typically come from an API or database
 async function getProjectById(id: string) {
   // Mock data for demonstration
   return {
-    project_id: "kbz-mini-app",
-    project_title: "KBZPay Mini Application",
-    project_subtitle: "Secure payment processing application integrated with KBZPay ecosystem",
-    project_images: [
-      "/placeholder.svg?height=600&width=1200",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-      "/placeholder.svg?height=600&width=600",
-    ],
-    project_tech_stacks: ["React", "Node.js", "TypeScript", "MongoDB", "Express", "Next.js"],
-    project_link: "https://kbz-mini-app.com",
-    project_status: "In Progress",
-    personal: true,
-    project_description:
-      "The KBZPay Mini Application is designed to provide seamless and secure payment processing within the KBZPay ecosystem. It leverages cutting-edge technologies to ensure fast, reliable, and user-friendly transactions. The application aims to enhance the overall payment experience by integrating advanced features such as QR code scanning, real-time notifications, and robust security measures.",
-    project_features: [
-      {
-        feature_id: 1,
-        feature_name: "Secure Payment Processing",
-        feature_description:
-          "Utilizes advanced security protocols to protect user transactions, including encryption and secure authentication methods.",
+      project_id: "examplus-kbz-mini-app",
+      project_title: "ExamPlus Mini Application for KBZAPP",
+      project_subtitle: "Integrated exam management platform within the KBZAPP ecosystem",
+      project_images: [
+        "/placeholder.svg?height=600&width=1200",
+        "/placeholder.svg?height=600&width=600",
+        "/placeholder.svg?height=600&width=600",
+        "/placeholder.svg?height=600&width=600",
+        "/placeholder.svg?height=600&width=600",
+      ],
+      project_tech_stacks: ["Vue.js", "JavaScript", "TailwindCSS", "Shadcn UI", "Pinia"],
+      project_link: "https://examplus-mini.kbzapp.com",
+      project_status: "In Progress",
+      personal: true,
+      project_description:
+        "The ExamPlus Mini Application provides seamless access to educational exams and packages through KBZAPP. Users can browse, purchase, and manage exams, receiving coupon codes that can be redeemed on the ExamPlus website. The application features comprehensive exam categorization, detailed results tracking, and an intuitive user interface designed to enhance the learning experience.",
+      project_features: [
+        {
+          feature_id: 1,
+          feature_name: "Exam Browsing and Management",
+          feature_description:
+            "Search and filter exams by tags and categories, view detailed exam information, and manage purchased exams.",
+        },
+        {
+          feature_id: 2,
+          feature_name: "Package Management",
+          feature_description: "Browse and purchase exam packages containing multiple related exams with bundled pricing.",
+        },
+        {
+          feature_id: 3,
+          feature_name: "Coupon Code Integration",
+          feature_description:
+            "Receive and manage coupon codes for purchased exams and packages that can be redeemed on the ExamPlus website.",
+        },
+        {
+          feature_id: 4,
+          feature_name: "Exam History and Results",
+          feature_description:
+            "Track exam history and view detailed results, including identification of correct and incorrect answers.",
+        },
+      ],
+      technical_specifications: {
+        frontend: {
+          frameworks: "Vue.js",
+          libraries: "Pinia for state management, Shadcn UI for components",
+        },
+        backend: {
+          frameworks: "Node.js",
+          libraries: "Express.js",
+        },
+        database: {
+          type: "Relational",
+          system: "PostgreSQL",
+        },
+        styling: {
+          framework: "TailwindCSS",
+          component_library: "Shadcn UI",
+        },
+        architecture: {
+          pattern: "Component-based architecture",
+          state_management: "Pinia store modules for exams, packages, and user profile",
+        },
+        programming_languages: ["JavaScript"],
+        testing_frameworks: ["Vitest", "Vue Test Utils"],
       },
-      {
-        feature_id: 2,
-        feature_name: "QR Code Integration",
-        feature_description: "Allows users to make payments by scanning QR codes, simplifying the transaction process.",
-      },
-      {
-        feature_id: 3,
-        feature_name: "Real-time Notifications",
-        feature_description:
-          "Provides instant updates on transaction status, ensuring users are informed about their payments.",
-      },
-      {
-        feature_id: 4,
-        feature_name: "User Profile Management",
-        feature_description:
-          "Enables users to manage their profiles securely, including transaction history and account settings.",
-      },
-    ],
-    technical_specifications: {
-      frontend: {
-        frameworks: "React, Next.js",
-        libraries: "Redux for state management",
-      },
-      backend: {
-        frameworks: "Node.js, Express",
-        libraries: "Passport.js for authentication",
-      },
-      database: {
-        type: "NoSQL",
-        system: "MongoDB",
-      },
-      programming_languages: ["TypeScript", "JavaScript"],
-      testing_frameworks: ["Jest", "Enzyme"],
-    },
-    project_goals: [
-      {
-        goal_id: 1,
-        goal_name: "Enhance User Experience",
-        goal_description:
-          "Improve the overall user interface and interaction flow to increase user satisfaction and engagement.",
-      },
-      {
-        goal_id: 2,
-        goal_name: "Increase Security",
-        goal_description:
-          "Implement robust security measures to prevent fraud and unauthorized access, ensuring the integrity of user data.",
-      },
-      {
-        goal_id: 3,
-        goal_name: "Optimize Performance",
-        goal_description: "Ensure the application performs efficiently across various devices and network conditions.",
-      },
-    ],
-    project_flowchart: {
-      mermaid_code: `flowchart TD
-  %% Entry Point
-  Start([Start: Patient Requests Blood Test])
+      project_goals: [
+        {
+          goal_id: 1,
+          goal_name: "Streamlined Exam Access",
+          goal_description:
+            "Provide an intuitive interface for browsing, purchasing, and accessing educational exams through coupon code integration.",
+        },
+        {
+          goal_id: 2,
+          goal_name: "Comprehensive Learning Management",
+          goal_description:
+            "Enable users to track their exam history, review results, and identify areas for improvement through detailed feedback.",
+        },
+        {
+          goal_id: 3,
+          goal_name: "Seamless Integration Experience",
+          goal_description: "Create a smooth transition between KBZAPP and the ExamPlus platform for exam completion.",
+        },
+      ],
+      project_flowchart: {
+        mermaid_code: `flowchart TD
+        A[User enters Mini App from KBZAPP] --> B{Choose Tab}
 
-  %% Clinic Processes
-  ClinicForm([Clinic Fills Test Form<br>and Confirms Details])
-  GenerateInfo([System Generates Test List<br>and Tube Count])
-  SubmitRequest([Clinic Submits Request to System])
+        B --> C[Exam Tab]
+        B --> D[Package Tab]
+        B --> E[Profile Tab]
 
-  %% Runner Pickup Flow
-  RunnerAssigned([Runner Automatically Assigned])
-  NotifyRunner([Runner Gets Pickup Notification])
-  PickupConfirmed([Runner Confirms Pickup])
-  DeliverToLab([Runner Delivers Sample to Lab])
+        %% Exam Tab Flow
+        C --> C1[Search/Filter Exams by Tag/Category]
+        C1 --> C2[View Exam Details]
+        C2 --> C3{Exam Type}
+        C3 --> C4[Individual Exam]
+        C3 --> C5[Part of a Package]
+        C2 --> C6[Buy or Favorite Exam]
+        C6 --> C7[Receive Coupon Code]
+        C7 --> C8[Copy Code and Visit ExamPlus Website]
+        C8 --> C9[Enter Code to Access Exam on ExamPlus]
+        C9 --> C10[Answer Exam on ExamPlus]
 
-  %% Lab Reception
-  ConfirmDelivery([Lab Reception Confirms Delivery])
-  ScanAndMatch([Sample Scanned & Linked<br>to Patient/Test Info])
-  VerifySample([Verify Sample and Test List])
+        %% Package Tab Flow
+        D --> D1[Search/Filter Packages by Tag/Category]
+        D1 --> D2[View Package Details]
+        D2 --> D3[See List of Included Exams]
+        D2 --> D4[Buy Package]
+        D4 --> D5[Receive Coupon Code for All Exams in Package]
+        D5 --> D6[Visit ExamPlus and Redeem Code]
 
-  %% Lab Processing
-  LabProcessing([Lab Technician Processes Sample])
-  GenerateResults([Generate Digital and Paper Results])
-  ResultChecked([Lab Verifies Results])
+        %% Profile Tab Flow
+        E --> E1[View Purchased Exams]
+        E --> E2[View Purchased Packages]
+        E --> E3[View History of Attempted Exams]
+        E3 --> E4[View Exam Result]
+        E4 --> E5[See Questions with Correct/Incorrect Markings]
 
-  %% Delivery & Archive
-  NotifyClinic([System Notifies Clinic / Runner])
-  DeliverResult([Deliver Result to Patient])
-  Archive([Archive Test and Result to History])
-  End([End])
-
-  %% Flow
-  Start --> ClinicForm --> GenerateInfo --> SubmitRequest
-  SubmitRequest --> RunnerAssigned --> NotifyRunner --> PickupConfirmed --> DeliverToLab
-
-  DeliverToLab --> ConfirmDelivery --> ScanAndMatch --> VerifySample
-  VerifySample --> LabProcessing --> GenerateResults --> ResultChecked
-
-  ResultChecked --> NotifyClinic --> DeliverResult --> Archive --> End
-
-  %% Parallel interaction from Clinic side
-  ClinicForm --- NotifyRunner
-  SubmitRequest --- NotifyClinic
-
-  %% Styling
-  classDef stage fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
-  classDef terminal fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px;
-  class Start,End terminal;
-  class ClinicForm,GenerateInfo,SubmitRequest,RunnerAssigned,NotifyRunner,PickupConfirmed,DeliverToLab,ConfirmDelivery,ScanAndMatch,VerifySample,LabProcessing,GenerateResults,ResultChecked,NotifyClinic,DeliverResult,Archive stage;`,
-      description:
-        "This flowchart illustrates the complete process flow of the KBZPay Mini Application, from user order initiation to delivery confirmation. It highlights key decision points and the roles of different team members in the process.",
-    },
-    team_members: [
-      {
-        member_id: 1,
-        member_name: "John Doe",
-        member_role: "Project Manager",
+        style C fill:#f9f,stroke:#333,stroke-width:1px
+        style D fill:#bbf,stroke:#333,stroke-width:1px
+        style E fill:#bfb,stroke:#333,stroke-width:1px
+      `,
+        description:
+          "This flowchart illustrates the complete user journey within the ExamPlus Mini Application, from entering through KBZAPP to viewing exam results. It highlights the three main tabs (Exam, Package, Profile) and the key actions users can perform in each section.",
       },
-      {
-        member_id: 2,
-        member_name: "Jane Smith",
-        member_role: "Lead Developer",
-      },
-      {
-        member_id: 3,
-        member_name: "Bob Johnson",
-        member_role: "UI/UX Designer",
-      },
-    ],
+      team_members: [
+        {
+          member_id: 1,
+          member_name: "John Doe",
+          member_role: "Project Manager",
+        },
+        {
+          member_id: 2,
+          member_name: "Jane Smith",
+          member_role: "Lead Vue Developer",
+        },
+        {
+          member_id: 3,
+          member_name: "Bob Johnson",
+          member_role: "UI/UX Designer",
+        },
+      ],
+
   }
 }
 
@@ -211,11 +212,12 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
       member_role: string;
     }[];
   }
-
-  const [project, setProject] = useState<Project | null>(null)
+  const [project, setProject] = useState<Project>()
   const [loading, setLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const thumbnailsRef = useRef<HTMLDivElement>(null)
+  const thumbnailsWrapperRef = useRef<HTMLDivElement>(null)
+  const visibleThumbnails = 3
+  const thumbnailHeight = 150 + 16 // Height + gap
 
   useEffect(() => {
     async function loadProject() {
@@ -248,17 +250,16 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
   }, [params.id])
 
   useEffect(() => {
-    // Scroll to keep the current thumbnail visible
-    if (thumbnailsRef.current) {
-      const thumbnailElements = thumbnailsRef.current.querySelectorAll(".thumbnail-item")
-      if (thumbnailElements[currentImageIndex]) {
-        thumbnailElements[currentImageIndex].scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-        })
-      }
+    // Update thumbnail scroll position when current image changes
+    if (thumbnailsWrapperRef.current && project?.project_images) {
+      const maxVisibleIndex = Math.min(
+        project.project_images.length - visibleThumbnails,
+        Math.max(0, currentImageIndex - 1)
+      )
+      thumbnailsWrapperRef.current.style.transform = `translateY(-${maxVisibleIndex * thumbnailHeight}px)`
     }
-  }, [currentImageIndex])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentImageIndex, project?.project_images])
 
   const nextImage = () => {
     if (project?.project_images) {
@@ -272,6 +273,23 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
     }
   }
 
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        prevImage()
+      } else if (e.key === "ArrowRight") {
+        nextImage()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project?.project_images])
+
   if (loading) {
     return <div className="container mx-auto px-4 py-12 max-w-6xl">Loading...</div>
   }
@@ -281,7 +299,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl animate-in fade-in duration-700">
+    <div className="container mx-auto px-4 py-12 max-w-auto animate-in fade-in duration-700">
       <div className="mb-8">
         <Button
           asChild
@@ -318,81 +336,101 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
             </h1>
 
             <p className="text-xl text-gray-600 dark:text-gray-400 transition-all">{project.project_subtitle}</p>
-
-            <div className="flex flex-wrap gap-2 pt-2">
-              {project.project_tech_stacks.map((tech: string) => (
-                <Badge key={tech} variant="secondary" className="transition-all hover:scale-105">
-                  {tech}
-                </Badge>
-              ))}
-            </div>
           </div>
 
-          {/* Project Images Gallery */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* Main large image with navigation controls */}
-            <div className="md:col-span-3 relative overflow-hidden rounded-xl group">
-              {/* Fixed aspect ratio container to prevent layout shifts */}
-              <div className="relative w-full aspect-[16/9] bg-gray-100 dark:bg-gray-800">
-                <Image
-                  src={project.project_images[currentImageIndex] || "/placeholder.svg"}
-                  alt={`${project.project_title} main image`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 75vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  priority={currentImageIndex === 0}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          {/* Image Gallery - Based on the PHP Blade implementation */}
+          <div className="flex flex-col md:flex-row w-full gap-4">
+            {/* Main Image Container */}
+            <div className="w-full md:w-4/5 relative">
+              <div className="relative overflow-hidden rounded-xl">
+                <div className="w-full h-[400px] bg-gray-100 dark:bg-gray-800 rounded-xl relative">
+                  {project.project_images.map((image: string, index: number) => (
+                    <div
+                      key={index}
+                      className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+                        index === currentImageIndex ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      <Image
+                        src={image || "/placeholder.svg"}
+                        alt={`Product Image ${index + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                        className="object-cover rounded-xl"
+                        priority={index === 0}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-4">
+                  <button
+                    onClick={prevImage}
+                    className="p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-md hover:bg-white dark:hover:bg-gray-800 transition-all"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </button>
+
+                  <div className="px-4 py-1 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full text-black dark:text-white font-medium">
+                    <span>{currentImageIndex + 1}</span> / <span>{project.project_images.length}</span>
+                  </div>
+
+                  <button
+                    onClick={nextImage}
+                    className="p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-md hover:bg-white dark:hover:bg-gray-800 transition-all"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
-
-              {/* Navigation buttons */}
-              <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 p-2 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-800 transition-colors"
-                aria-label="Previous image"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-
-              <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 p-2 rounded-full shadow-md hover:bg-white dark:hover:bg-gray-800 transition-colors"
-                aria-label="Next image"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
             </div>
 
-            {/* Vertical thumbnails with scroll */}
-            <div
-              ref={thumbnailsRef}
-              className="md:col-span-1 h-[400px] overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent"
-            >
-              {project.project_images.map((image: string, index: number) => (
-                <div
-                  key={index}
-                  className={`relative overflow-hidden rounded-xl group thumbnail-item cursor-pointer transition-all duration-300 ${
-                    currentImageIndex === index ? "ring-2 ring-primary ring-offset-2 dark:ring-offset-gray-950" : ""
-                  }`}
-                  onClick={() => setCurrentImageIndex(index)}
-                >
-                  {/* Fixed aspect ratio container for thumbnails */}
-                  <div className="relative w-full aspect-square bg-gray-100 dark:bg-gray-800">
-                    <Image
-                      src={image || "/placeholder.svg"}
-                      alt={`${project.project_title} image ${index + 1}`}
-                      fill
-                      sizes="(max-width: 768px) 33vw, 25vw"
-                      className={`object-cover transition-transform duration-500 ${
-                        currentImageIndex === index ? "brightness-100" : "brightness-90 hover:brightness-100"
-                      }`}
-                    />
-                    {currentImageIndex === index && (
-                      <div className="absolute inset-0 bg-primary/10 pointer-events-none"></div>
-                    )}
+            {/* Thumbnails Container */}
+            <div className="w-full md:w-2/5">
+              <div className="relative h-[450px]">
+                <div className="h-full overflow-hidden">
+                  <div
+                    ref={thumbnailsWrapperRef}
+                    className="flex flex-col gap-4 transition-transform duration-300 ease-in-out"
+                  >
+                    {project.project_images.map((image: string, index: number) => (
+                      <div
+                        key={index}
+                        className={`h-[150px] transition-all duration-300 ${
+                          index === currentImageIndex ? "ring-2 ring-primary" : ""
+                        }`}
+                        onClick={() => setCurrentImageIndex(index)}
+                      >
+                        <div className="relative w-full h-full">
+                          <Image
+                            src={image || "/placeholder.svg"}
+                            alt={`Thumbnail ${index + 1}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 40vw"
+                            className="object-cover rounded-md cursor-pointer shadow-sm"
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
+
+                {/* Thumbnail Navigation Indicators */}
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col gap-1">
+                  {project.project_images.map((_: string, index: number) => (
+                    <div
+                      key={index}
+                      className={`w-2 h-2 rounded-full cursor-pointer ${
+                        index === currentImageIndex ? "bg-primary" : "bg-gray-300 dark:bg-gray-600"
+                      }`}
+                      onClick={() => setCurrentImageIndex(index)}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -472,22 +510,26 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardContent className="p-6 space-y-4">
-                    <h3 className="font-medium text-lg">Backend</h3>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Frameworks:</span>
-                        <span>{project.technical_specifications.backend.frameworks}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">Libraries:</span>
-                        <span>{project.technical_specifications.backend.libraries}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
+                {
+                  project.technical_specifications.backend && (
+                    <Card>
+                      <CardContent className="p-6 space-y-4">
+                        <h3 className="font-medium text-lg">Backend</h3>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">Frameworks:</span>
+                            <span>{project.technical_specifications.backend.frameworks}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">Libraries:</span>
+                            <span>{project.technical_specifications.backend.libraries}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+               {
+                project.technical_specifications.database && (
                 <Card>
                   <CardContent className="p-6 space-y-4">
                     <h3 className="font-medium text-lg">Database</h3>
@@ -503,6 +545,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                     </div>
                   </CardContent>
                 </Card>
+              )}
 
                 <Card>
                   <CardContent className="p-6 space-y-4">
@@ -542,59 +585,7 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                 <CardContent className="p-6 space-y-4">
                   <h3 className="font-medium text-lg">Project Flow Diagram</h3>
                   <div className="relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-                    <Mermaid
-                      chart={`
-flowchart TD
-  %% Entry Point
-  Start([Start: Patient Requests Blood Test])
-
-  %% Clinic Processes
-  ClinicForm([Clinic Fills Test Form<br>and Confirms Details])
-  GenerateInfo([System Generates Test List<br>and Tube Count])
-  SubmitRequest([Clinic Submits Request to System])
-
-  %% Runner Pickup Flow
-  RunnerAssigned([Runner Automatically Assigned])
-  NotifyRunner([Runner Gets Pickup Notification])
-  PickupConfirmed([Runner Confirms Pickup])
-  DeliverToLab([Runner Delivers Sample to Lab])
-
-  %% Lab Reception
-  ConfirmDelivery([Lab Reception Confirms Delivery])
-  ScanAndMatch([Sample Scanned & Linked<br>to Patient/Test Info])
-  VerifySample([Verify Sample and Test List])
-
-  %% Lab Processing
-  LabProcessing([Lab Technician Processes Sample])
-  GenerateResults([Generate Digital and Paper Results])
-  ResultChecked([Lab Verifies Results])
-
-  %% Delivery & Archive
-  NotifyClinic([System Notifies Clinic / Runner])
-  DeliverResult([Deliver Result to Patient])
-  Archive([Archive Test and Result to History])
-  End([End])
-
-  %% Flow
-  Start --> ClinicForm --> GenerateInfo --> SubmitRequest
-  SubmitRequest --> RunnerAssigned --> NotifyRunner --> PickupConfirmed --> DeliverToLab
-
-  DeliverToLab --> ConfirmDelivery --> ScanAndMatch --> VerifySample
-  VerifySample --> LabProcessing --> GenerateResults --> ResultChecked
-
-  ResultChecked --> NotifyClinic --> DeliverResult --> Archive --> End
-
-  %% Parallel interaction from Clinic side
-  ClinicForm --- NotifyRunner
-  SubmitRequest --- NotifyClinic
-
-  %% Styling
-  classDef stage fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
-  classDef terminal fill:#C8E6C9,stroke:#2E7D32,stroke-width:2px;
-  class Start,End terminal;
-  class ClinicForm,GenerateInfo,SubmitRequest,RunnerAssigned,NotifyRunner,PickupConfirmed,DeliverToLab,ConfirmDelivery,ScanAndMatch,VerifySample,LabProcessing,GenerateResults,ResultChecked,NotifyClinic,DeliverResult,Archive stage;
-        `}
-                    />
+                    <MermaidChart chart={project.project_flowchart.mermaid_code} />
                   </div>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">{project.project_flowchart.description}</p>
                 </CardContent>
