@@ -1,11 +1,16 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Award, Code, Briefcase, Lightbulb, Medal, Trophy, Calendar, ChevronDown, ChevronUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
 import { safeFormatDate } from "@/lib/date-utils"
+import { cn } from "@/lib/utils"
+import { AnimatePresence, motion } from "framer-motion"
+import { Award, Briefcase, Calendar, ChevronDown, ChevronUp, Code, Lightbulb, Medal, Trophy } from 'lucide-react'
+import { Archivo, Space_Grotesk, Space_Mono } from 'next/font/google'
+import { useState } from "react"
+
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
 interface Achievement {
   id: number
@@ -20,11 +25,6 @@ interface Achievement {
 interface AchievementCardProps {
   achievement: Achievement
 }
-import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
-
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
-const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
-const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
 export function AchievementCard({ achievement }: AchievementCardProps) {
   const [isHovered, setIsHovered] = useState(false)
@@ -43,22 +43,60 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
         return <Award className="w-4 h-4" />
       case "innovation":
         return <Lightbulb className="w-4 h-4" />
+      case "language proficiency":
+        return <Award className="w-4 h-4" />
+      case "project leadership":
+        return <Briefcase className="w-4 h-4" />
+      case "project achievement":
+        return <Trophy className="w-4 h-4" />
+      case "technical contribution":
+        return <Code className="w-4 h-4" />
       default:
         return <Briefcase className="w-4 h-4" />
     }
   }
 
-  // Get category color
+  // Get category color based on category
   const getCategoryColor = () => {
     switch (achievement.category.toLowerCase()) {
       case "design":
-        return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700"
+        return "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800/30"
       case "development":
-        return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700"
+        return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/30"
       case "leadership":
-        return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700"
+        return "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/30"
+      case "certification":
+        return "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800/30"
+      case "language":
+        return "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-300 dark:border-rose-800/30"
       default:
         return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700"
+    }
+  }
+
+  // Get type color based on type
+  const getTypeColor = () => {
+    switch (achievement.type.toLowerCase()) {
+      case "award":
+        return "bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
+      case "certification":
+        return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300"
+      case "project milestone":
+        return "bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-300"
+      case "recognition":
+        return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300"
+      case "innovation":
+        return "bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:text-rose-300"
+      case "language proficiency":
+        return "bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-300"
+      case "project leadership":
+        return "bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
+      case "project achievement":
+        return "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-300"
+      case "technical contribution":
+        return "bg-cyan-50 text-cyan-600 dark:bg-cyan-900/20 dark:text-cyan-300"
+      default:
+        return "bg-gray-50 text-gray-600 dark:bg-gray-800/50 dark:text-gray-300"
     }
   }
 
@@ -69,77 +107,52 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-lg border border-gray-200 bg-white p-5 transition-all duration-300 dark:border-gray-800 dark:bg-gray-950"
+      className="relative overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950"
       initial={{ opacity: 0, y: 10 }}
       animate={{
         opacity: 1,
         y: 0,
-        height: "auto",
         transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
       }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      layout
     >
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-
-      {/* Subtle accent line at the top with improved animation */}
+      {/* Restored top line animation with improved smoothness */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800"
-        initial={{ scaleX: 0, originX: 0 }}
+        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-700"
+        initial={{ scaleX: 0.15, opacity: 0.7 }}
         animate={{
           scaleX: isHovered ? 1 : 0.15,
           opacity: isHovered ? 1 : 0.7,
+          transition: {
+            scaleX: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+            opacity: { duration: 0.5, ease: "easeInOut" }
+          }
         }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      <div className="relative z-10">
+      {/* Background pattern with subtle animation */}
+      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+
+      <div className="relative z-10 p-5">
         {/* Header with title and type */}
         <div className="flex items-start justify-between mb-3">
-          <motion.h3 className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-gray-100 pr-4`}>
-            {achievement.title}
-          </motion.h3>
-          <motion.div
-            className="flex items-center justify-center p-1.5 rounded-full bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400"
-            animate={{
-              rotate: isHovered ? [0, -5, 5, 0] : 0,
-              scale: isHovered ? [1, 1.05, 1] : 1,
-              backgroundColor: isHovered ? "rgba(249, 250, 251, 0.8)" : "rgba(249, 250, 251, 0.5)",
-            }}
-            transition={{
-              rotate: { duration: 0.5, ease: "easeInOut" },
-              scale: { duration: 0.3, ease: "easeOut" },
-              backgroundColor: { duration: 0.3 },
-            }}
-          >
-            {getTypeIcon()}
-          </motion.div>
+          <div className="flex-1">
+            <h3 className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-gray-100 pr-4`}>
+              {achievement.title}
+            </h3>
+
+            {/* Date with calendar icon */}
+            <div className={`${spaceMono.className} flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1.5`}>
+              <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
+              {safeFormatDate(achievement.date, "MMMM d, yyyy")}
+            </div>
+          </div>
+
+          <div className={cn("flex items-center justify-center p-2 rounded-full", getTypeColor())}>{getTypeIcon()}</div>
         </div>
 
-        {/* Date with subtle animation */}
-        <motion.div
-          className={`${spaceMono.className} flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3`}
-          animate={{
-            opacity: isHovered ? 0.9 : 0.7,
-            x: isHovered ? 1 : 0,
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          <motion.div
-            animate={{
-              rotate: isHovered ? [0, 5, 0] : 0,
-            }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
-          </motion.div>
-          {safeFormatDate(achievement.date, "MMMM d, yyyy")}
-        </motion.div>
-
-        {/* Expandable description */}
+        {/* Expandable description with smooth animations */}
         <div className="relative mb-4 min-h-[3rem]">
           <AnimatePresence initial={false} mode="wait">
             {isDescriptionExpanded ? (
@@ -150,26 +163,41 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
                   height: "auto",
                   opacity: 1,
                   transition: {
-                    height: { duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] },
-                    opacity: { duration: 0.25, ease: "easeInOut" },
+                    height: {
+                      duration: 0.4,
+                      ease: [0.04, 0.62, 0.23, 0.98],
+                    },
+                    opacity: {
+                      duration: 0.25,
+                      ease: "easeInOut",
+                    },
                   },
                 }}
                 exit={{
                   height: "3rem",
                   opacity: 0.8,
                   transition: {
-                    height: { duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] },
-                    opacity: { duration: 0.2, ease: "easeInOut" },
+                    height: {
+                      duration: 0.3,
+                      ease: [0.04, 0.62, 0.23, 0.98],
+                    },
+                    opacity: {
+                      duration: 0.2,
+                      ease: "easeInOut",
+                    },
                   },
                 }}
-                layout
+                className="overflow-hidden"
               >
-                <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-300 leading-relaxed`}>{achievement.description}</p>
+                <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-300 leading-relaxed`}>
+                  {achievement.description}
+                </p>
                 <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.2 }}
                   onClick={toggleDescription}
-                  className="mt-2 flex items-center text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                  whileHover={{ x: 2 }}
-                  whileTap={{ scale: 0.97 }}
+                  className="mt-2 flex items-center text-xs font-medium text-gray-500 dark:text-gray-400"
                 >
                   <span>Show less</span>
                   <ChevronUp className="ml-1 w-3 h-3" />
@@ -183,17 +211,18 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0.8 }}
                 transition={{ duration: 0.2 }}
-                layout
               >
-                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2">
+                <p
+                  className={`${archivo.className} text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2`}
+                >
                   {achievement.description}
                 </p>
                 {achievement.description.length > 100 && (
                   <motion.button
+                    initial={{ opacity: 0.8 }}
+                    animate={{ opacity: 1 }}
                     onClick={toggleDescription}
-                    className="mt-1 flex items-center text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                    whileHover={{ x: 2 }}
-                    whileTap={{ scale: 0.97 }}
+                    className="mt-1 flex items-center text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
                     <span>Read more</span>
                     <ChevronDown className="ml-1 w-3 h-3" />
@@ -204,21 +233,13 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
           </AnimatePresence>
         </div>
 
-        {/* Category badge with subtle animation */}
-        <motion.div className="flex items-center">
-          <Badge
-            variant="outline"
-            className={cn(
-              "text-xs font-normal transition-all duration-200",
-              getCategoryColor(),
-              isHovered ? "border-opacity-100" : "border-opacity-70",
-            )}
-          >
+        {/* Category badge with unique styling */}
+        <div className="flex items-center">
+          <Badge variant="outline" className={cn("text-xs font-normal", getCategoryColor())}>
             {achievement.category}
           </Badge>
-        </motion.div>
+        </div>
       </div>
     </motion.div>
   )
 }
-
