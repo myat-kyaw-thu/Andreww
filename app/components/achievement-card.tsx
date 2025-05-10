@@ -119,7 +119,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
     >
       {/* Restored top line animation with improved smoothness */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-700"
+        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-400 to-transparent dark:via-gray-400"
         initial={{ scaleX: 0.15, opacity: 0.7 }}
         animate={{
           scaleX: isHovered ? 1 : 0.15,
