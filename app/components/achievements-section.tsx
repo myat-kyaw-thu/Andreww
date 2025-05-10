@@ -1,12 +1,11 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { Space_Grotesk } from 'next/font/google';
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { AchievementCard } from "./achievement-card";
-import { Space_Grotesk } from "next/font/google"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
-
 
 // Mock data for achievements
 export const achievementsData = [
@@ -75,9 +74,6 @@ export const achievementsData = [
   },
 ]
 
-
-
-
 export function AchievementsSection() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -104,13 +100,14 @@ export function AchievementsSection() {
         />
       </motion.div>
 
-      {/* Category filters with subtle animations */}
+      {/* Category filters with simplified animations (just fade) */}
       <div className="flex flex-wrap gap-2 mb-8">
         <motion.button
-          whileHover={{ y: -1 }}
-          whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
           onClick={() => setSelectedCategory(null)}
-          className={`px-3 py-1 text-sm rounded-md transition-all ${selectedCategory === null
+          className={`px-3 py-1 text-sm rounded-md transition-colors ${selectedCategory === null
               ? "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
               : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
             }`}
@@ -118,13 +115,14 @@ export function AchievementsSection() {
           All
         </motion.button>
 
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <motion.button
             key={category}
-            whileHover={{ y: -1 }}
-            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
             onClick={() => setSelectedCategory(category)}
-            className={`px-3 py-1 text-sm rounded-md transition-all ${selectedCategory === category
+            className={`px-3 py-1 text-sm rounded-md transition-colors ${selectedCategory === category
                 ? "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
               }`}
@@ -134,15 +132,15 @@ export function AchievementsSection() {
         ))}
       </div>
 
-      {/* Achievement cards grid - 1 column on mobile, 2 columns on md and up */}
+      {/* Achievement cards grid with unique styling */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {filteredAchievements.map((achievement, index) => (
             <motion.div
               key={achievement.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
             >
               <AchievementCard achievement={achievement} />
