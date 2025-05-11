@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import ProjectCard from "./project-card"
-import { Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from 'lucide-react'
+import { motion } from "framer-motion"
+import { AlertCircle, Loader2 } from 'lucide-react'
+import { useEffect } from "react"
+import ProjectCard from "./project-card"
 
-import { Space_Grotesk, Archivo } from "next/font/google"
+import { Archivo, Space_Grotesk } from "next/font/google"
+import { useProjectStore } from "../store/project-store"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 
@@ -22,7 +22,7 @@ interface ProjectCardProps {
     project_tech_stacks: string[];
     project_link?: string;
     github_link?: string;
-    project_status: "Completed" | "In Progress"; 
+    project_status: "Completed" | "In Progress";
     personal: boolean;
   };
 }
@@ -50,42 +50,12 @@ const titleVariants = {
 }
 
 export default function ProjectsSection() {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || ''; // Your API base URL
-  
-  const [projects, setProjects] = useState<ProjectCardProps['project'][]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  
-useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setIsLoading(true)
+  const { projects, isLoading, error, fetchProjects } = useProjectStore()
 
-        // Simple fetch - no authentication needed for GET requests
-        const response = await fetch(`${API_BASE_URL}/project-index`, {
-           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects")
-        }
-
-        const data = await response.json()
-        setProjects(data)
-        setError(null)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
+  // Fetch projects on component mount if not already loaded
+  useEffect(() => {
     fetchProjects()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [fetchProjects])
 
   // Filter projects by personal/work
   const workProjects = projects.filter((project) => !project.personal)
@@ -121,14 +91,14 @@ useEffect(() => {
             <h2 className={`${spaceGrotesk.className} text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400`}>
               Work Experiences
             </h2>
-            <motion.div 
+            <motion.div
             className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.5, delay: 0.5 }}
           />
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
             {workProjects.map((project ) => (
               <ProjectCard key={project.project_id} project={project} />
@@ -147,7 +117,7 @@ useEffect(() => {
             <h2 className={`${spaceGrotesk.className} text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400`}>
               Own Portfolio
             </h2>
-             <motion.div 
+             <motion.div
               className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
