@@ -2,14 +2,16 @@
 
 import type React from "react"
 
-import { useEffect, useState, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { useProjectStore } from "../store/project-store"
 import { WordRotate } from "./WordRotate"
 
 interface PageLoaderProps {
   children: React.ReactNode
   minDuration?: number
 }
+
 const helloInLanguages = [
   "Hello", // English
   "မင်္ဂလာပါ", // Myanmar
@@ -21,39 +23,20 @@ const helloInLanguages = [
 ]
 
 export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "" // Your API base URL
-
   const [progress, setProgress] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
-  const [projectsLoaded, setProjectsLoaded] = useState(false)
   const startTimeRef = useRef<number>(Date.now())
   const animationFrameRef = useRef<number | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const greetingContainerRef = useRef<HTMLDivElement>(null)
 
-  // Fetch projects data
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/project-index`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        if (response.ok) {
-          // Projects loaded successfully
-          setProjectsLoaded(true)
-        }
-      } catch (error) {
-        console.error("Error fetching projects:", error)
-        // Even if there's an error, we'll consider loading complete
-        setProjectsLoaded(true)
-      }
-    }
+  // Get projects data and fetch function from store
+  const { fetchProjects, hasLoaded: projectsLoaded } = useProjectStore()
 
+  // Fetch projects data using the store
+  useEffect(() => {
     fetchProjects()
-  }, [API_BASE_URL])
+  }, [fetchProjects])
 
   // Handle the progress animation and timing
   useEffect(() => {
@@ -246,4 +229,3 @@ function LoadingDots() {
     </div>
   )
 }
-
