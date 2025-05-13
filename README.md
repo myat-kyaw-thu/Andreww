@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Andrew's Developer Portfolio
 
-## Getting Started
+![Portfolio Preview](./public/screenshot.png) <!-- Add your screenshot here -->
 
-First, run the development server:
+A modern developer portfolio built with Next.js 15 showcasing cutting-edge web development practices. This project demonstrates proficiency in React ecosystem tools and modern UI patterns.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Core Functionality
+- **Dynamic Project Showcase** with Zustand state management for filtered displays  
+- **Animated Transitions** using Framer Motion for smooth UI interactions  
+- **Theme System** supporting dark/light modes with `next-themes` integration  
+- **Contact Form** with Resend email API integration  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Technical Highlights
+- ⚡ **Static Site Generation** with Next.js 15 App Router  
+- 🎨 **Tailwind CSS** with custom animations and dark mode configuration  
+- 🔄 **Client-Side State Management** using Zustand stores  
+- 📧 **Type-Safe API Routes** for email functionality  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Tech Stack
 
-## Learn More
+| Category              | Technologies                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|
+| **Core Framework**    | Next.js 15.1.7 + React 19 + TypeScript 5                                    |
+| **Styling**           | Tailwind CSS 3.4.1 + Radix UI Primitives                                    |
+| **State Management**  | Zustand 5.0.4 + URL-based project filtering                                 |
+| **Form Handling**     | React Hook Form 7.54.2 + Zod validation                                    |
+| **Animations**        | Framer Motion 12.4.7 + CSS keyframes                                       |
+| **Infrastructure**    | Vercel Analytics + Resend Email API                                         |
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
