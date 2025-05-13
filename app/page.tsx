@@ -9,6 +9,7 @@ import Hero from "./components/Hero"
 import Navbar from "./components/Navbar"
 import { PageLoader } from "./components/PageLoader"
 import ProjectsSection from "./components/projects"
+import ServicesGrid from "./components/Services"
 import SkillsSection from "./components/Skills"
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
             <ProjectsSection />
           </BlurFade>
           <SkillsSection />
+          <ServicesGrid/>
           <AchievementsSection />
           <ContactSection />
           <Footer />
@@ -37,4 +39,3 @@ export default function Home() {
     </PageLoader>
   )
 }
-
