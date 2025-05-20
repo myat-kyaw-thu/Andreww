@@ -7,8 +7,7 @@ import { useEffect } from "react"
 import ProjectCard from "./project-card"
 
 import { Archivo, Space_Grotesk } from "next/font/google"
-import { useProjectStore } from "../store/project-store"
-
+import { useProjectStore } from "../store/useProjectStore"
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 
 const archivo = Archivo({ subsets: ["latin"], display: "swap" })

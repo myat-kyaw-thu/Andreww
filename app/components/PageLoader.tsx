@@ -4,7 +4,7 @@ import type React from "react"
 
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
-import { useProjectStore } from "../store/project-store"
+import { useProjectStore } from "../store/useProjectStore"
 import { WordRotate } from "./WordRotate"
 
 interface PageLoaderProps {
