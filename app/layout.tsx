@@ -1,9 +1,9 @@
-import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next';
-import { Space_Grotesk } from "next/font/google"
-import './globals.css'
-import { ThemeProvider } from './components/theme-provider'
 import CursorDot from '@/components/ui/cursor-dot';
+import { Analytics } from '@vercel/analytics/next';
+import type { Metadata } from 'next';
+import { Space_Grotesk } from "next/font/google";
+import { ThemeProvider } from './components/theme-provider';
+import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -13,26 +13,24 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: 'Myat Kyaw Thu - Software Developer | React & Laravel Specialist',
-  description:
-    'Results-oriented software developer with hands-on experience building scalable web applications in JavaScript and PHP/Laravel. Explore my portfolio featuring CMS websites, wedding systems, and the ExamPlus Mini App on KBZPay.',
+  title: 'Myat Kyaw Thu – Full Stack Developer | React & Laravel Expert',
+  description: 'Myat Kyaw Thu: Full Stack Developer specializing in React, Laravel, and JavaScript. Explore my projects and contact me for opportunities.',
   keywords: [
-    'web development portfolio',
-    'React.js projects',
-    'Laravel developer',
+    'Myat Kyaw Thu',
+    'React developer',
+    'Laravel expert',
     'JavaScript developer',
-    'REST API development',
-    'agile development process',
-    'production server management',
-    'KBZPay integration',
+    'Yangon software developer',
     'CMS websites',
+    'REST API development',
+    'KBZPay integration',
   ],
   generator: 'Next.js 15.1.7',
-  applicationName: 'Developer Portfolio',
+  applicationName: 'Myat Kyaw Thu – Developer Portfolio',
   authors: [
     {
       name: 'Myat Kyaw Thu',
-      url: 'https://www.linkedin.com/in/myat-kyaw-thu-0b8177334/', // Your LinkedIn profile
+      url: 'https://www.linkedin.com/in/myat-kyaw-thu-0b8177334/',
     },
   ],
 };
