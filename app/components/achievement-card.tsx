@@ -1,16 +1,13 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
-import { safeFormatDate } from "@/lib/date-utils"
-import { cn } from "@/lib/utils"
-import { AnimatePresence, motion } from "framer-motion"
-import { Award, Briefcase, Calendar, ChevronDown, ChevronUp, Code, Lightbulb, Medal, Trophy } from 'lucide-react'
-import { Archivo, Space_Grotesk, Space_Mono } from 'next/font/google'
-import { useState } from "react"
+import type React from "react"
+
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { ArrowRight, Calendar, X } from "lucide-react"
+import { Space_Grotesk } from "next/font/google"
+import { useRef, useState } from "react"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
-const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
-const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
 interface Achievement {
   id: number
@@ -24,222 +21,317 @@ interface Achievement {
 
 interface AchievementCardProps {
   achievement: Achievement
+  index: number
 }
 
-export function AchievementCard({ achievement }: AchievementCardProps) {
+export function AchievementCard({ achievement, index }: AchievementCardProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
-  // Get the appropriate icon based on achievement type
-  const getTypeIcon = () => {
-    switch (achievement.type.toLowerCase()) {
-      case "award":
-        return <Trophy className="w-4 h-4" />
-      case "certification":
-        return <Medal className="w-4 h-4" />
-      case "project milestone":
-        return <Code className="w-4 h-4" />
-      case "recognition":
-        return <Award className="w-4 h-4" />
-      case "innovation":
-        return <Lightbulb className="w-4 h-4" />
-      case "language proficiency":
-        return <Award className="w-4 h-4" />
-      case "project leadership":
-        return <Briefcase className="w-4 h-4" />
-      case "project achievement":
-        return <Trophy className="w-4 h-4" />
-      case "technical contribution":
-        return <Code className="w-4 h-4" />
-      default:
-        return <Briefcase className="w-4 h-4" />
+  // Subtle magnetic effect for detail button
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springConfig = { stiffness: 150, damping: 15 } // More subtle spring
+  const springX = useSpring(mouseX, springConfig)
+  const springY = useSpring(mouseY, springConfig)
+
+  // Very subtle rotation based on mouse position
+  const rotateX = useTransform(springY, [-20, 20], [2, -2])
+  const rotateY = useTransform(springX, [-20, 20], [-2, 2])
+
+  // Color system based on index for variety
+  const getHoverColor = () => {
+    const colors = [
+      "#C1A36E", // Warm gold
+      "#A67C52", // Rich bronze
+      "#8B7355", // Deep taupe
+      "#B5A490", // Soft beige
+      "#9B8B7A", // Muted brown
+      "#8E7B6B", // Warm gray
+    ]
+    return colors[index % colors.length]
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!cardRef.current || !buttonRef.current) return
+
+    const cardRect = cardRef.current.getBoundingClientRect()
+    const buttonRect = buttonRef.current.getBoundingClientRect()
+
+    // Check if mouse is within card bounds
+    const isInside =
+      e.clientX >= cardRect.left &&
+      e.clientX <= cardRect.right &&
+      e.clientY >= cardRect.top &&
+      e.clientY <= cardRect.bottom
+
+    setIsHovered(isInside)
+
+    if (isInside) {
+      // Calculate distance from button center for magnetic effect
+      const buttonCenterX = buttonRect.left + buttonRect.width / 2
+      const buttonCenterY = buttonRect.top + buttonRect.height / 2
+
+      const deltaX = e.clientX - buttonCenterX
+      const deltaY = e.clientY - buttonCenterY
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+      // Very subtle magnetic effect (reduced strength)
+      const maxDistance = 100
+      const strength = Math.max(0, 1 - distance / maxDistance)
+
+      // Reduced movement amount (0.15 instead of 0.4)
+      mouseX.set(deltaX * strength * 0.15)
+      mouseY.set(deltaY * strength * 0.15)
+    } else {
+      mouseX.set(0)
+      mouseY.set(0)
     }
   }
 
-  // Get category color based on category
-  const getCategoryColor = () => {
-    switch (achievement.category.toLowerCase()) {
-      case "design":
-        return "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800/30"
-      case "development":
-        return "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/30"
-      case "leadership":
-        return "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/30"
-      case "certification":
-        return "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800/30"
-      case "language":
-        return "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-300 dark:border-rose-800/30"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800/50 dark:text-gray-300 dark:border-gray-700"
-    }
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    mouseX.set(0)
+    mouseY.set(0)
   }
 
-  // Get type color based on type
-  const getTypeColor = () => {
-    switch (achievement.type.toLowerCase()) {
-      case "award":
-        return "bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
-      case "certification":
-        return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300"
-      case "project milestone":
-        return "bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-300"
-      case "recognition":
-        return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300"
-      case "innovation":
-        return "bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:text-rose-300"
-      case "language proficiency":
-        return "bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-300"
-      case "project leadership":
-        return "bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
-      case "project achievement":
-        return "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-300"
-      case "technical contribution":
-        return "bg-cyan-50 text-cyan-600 dark:bg-cyan-900/20 dark:text-cyan-300"
-      default:
-        return "bg-gray-50 text-gray-600 dark:bg-gray-800/50 dark:text-gray-300"
-    }
+  const formatDate = (date: Date) => {
+    return date.getFullYear().toString()
   }
 
-  // Toggle description expansion
-  const toggleDescription = () => {
-    setIsDescriptionExpanded(!isDescriptionExpanded)
+  const formatFullDate = (date: Date) => {
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
   }
+
+  const hoverColor = getHoverColor()
 
   return (
-    <motion.div
-      className="relative overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      {/* Restored top line animation with improved smoothness */}
+    <>
+      {/* Achievement Card */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-gray-400 to-transparent dark:via-gray-400"
-        initial={{ scaleX: 0.15, opacity: 0.7 }}
-        animate={{
-          scaleX: isHovered ? 1 : 0.15,
-          opacity: isHovered ? 1 : 0.7,
-          transition: {
-            scaleX: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-            opacity: { duration: 0.5, ease: "easeInOut" }
-          }
-        }}
-      />
+        ref={cardRef}
+        className="relative group cursor-pointer select-none"
+        style={{ aspectRatio: "5/3" }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Main card with luxury styling */}
+        <div className="relative h-full w-full overflow-hidden rounded-xl bg-white border border-gray-100/80">
+          {/* Subtle top accent line */}
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent"
+            animate={{
+              background: isHovered
+                ? `linear-gradient(to right, transparent, ${hoverColor}40, transparent)`
+                : "linear-gradient(to right, transparent, #D1D5DB, transparent)",
+            }}
+            transition={{ duration: 0.4 }}
+          />
 
-      {/* Background pattern with subtle animation */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-
-      <div className="relative z-10 p-5">
-        {/* Header with title and type */}
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex-1">
-            <h3 className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-gray-100 pr-4`}>
-              {achievement.title}
-            </h3>
-
-            {/* Date with calendar icon */}
-            <div className={`${spaceMono.className} flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1.5`}>
-              <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
-              {safeFormatDate(achievement.date, "MMMM d, yyyy")}
-            </div>
+          {/* Minimalist corner accent */}
+          <div className="absolute top-3 left-5">
+            <motion.div
+              className="w-1.5 h-1.5 rounded-full bg-gray-200"
+              animate={{
+                backgroundColor: isHovered ? hoverColor : "#E5E7EB",
+                scale: isHovered ? 1.2 : 1,
+              }}
+              transition={{ duration: 0.3 }}
+            />
           </div>
 
-          <div className={cn("flex items-center justify-center p-2 rounded-full", getTypeColor())}>{getTypeIcon()}</div>
-        </div>
+          {/* Category indicator */}
+          <div className="absolute top-6 right-6">
+            <motion.div
+              className={`${spaceGrotesk.className} text-[10px] font-medium tracking-normal uppercase px-2 py-1 rounded-full bg-gray-50 text-gray-400 border border-gray-100`}
+              animate={{
+                backgroundColor: isHovered ? `${hoverColor}08` : "#F9FAFB",
+                borderColor: isHovered ? `${hoverColor}20` : "#F3F4F6",
+                color: isHovered ? hoverColor : "#9CA3AF",
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              {achievement.category}
+            </motion.div>
+          </div>
 
-        {/* Expandable description with smooth animations */}
-        <div className="relative mb-4 min-h-[3rem]">
-          <AnimatePresence initial={false} mode="wait">
-            {isDescriptionExpanded ? (
+          {/* Content */}
+          <div className="relative h-full p-5 flex flex-col justify-between">
+            {/* Header */}
+            <div className="space-y-2 pt-2">
               <motion.div
-                key="expanded"
-                initial={{ height: "3rem", opacity: 0.8 }}
+                className={`${spaceGrotesk.className} text-xs font-medium tracking-wide`}
                 animate={{
-                  height: "auto",
-                  opacity: 1,
-                  transition: {
-                    height: {
-                      duration: 0.4,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    },
-                    opacity: {
-                      duration: 0.25,
-                      ease: "easeInOut",
-                    },
-                  },
+                  color: isHovered ? hoverColor : "#9CA3AF",
                 }}
-                exit={{
-                  height: "3rem",
-                  opacity: 0.8,
-                  transition: {
-                    height: {
-                      duration: 0.3,
-                      ease: [0.04, 0.62, 0.23, 0.98],
-                    },
-                    opacity: {
-                      duration: 0.2,
-                      ease: "easeInOut",
-                    },
-                  },
-                }}
-                className="overflow-hidden"
+                transition={{ duration: 0.3 }}
               >
-                <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-300 leading-relaxed`}>
-                  {achievement.description}
-                </p>
-                <motion.button
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.2 }}
-                  onClick={toggleDescription}
-                  className="mt-2 flex items-center text-xs font-medium text-gray-500 dark:text-gray-400"
-                >
-                  <span>Show less</span>
-                  <ChevronUp className="ml-1 w-3 h-3" />
-                </motion.button>
+                {formatDate(achievement.date)}
               </motion.div>
-            ) : (
-              <motion.div
-                key="collapsed"
-                className="relative"
-                initial={{ opacity: 0.8 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0.8 }}
-                transition={{ duration: 0.2 }}
-              >
-                <p
-                  className={`${archivo.className} text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2`}
-                >
-                  {achievement.description}
-                </p>
-                {achievement.description.length > 100 && (
-                  <motion.button
-                    initial={{ opacity: 0.8 }}
-                    animate={{ opacity: 1 }}
-                    onClick={toggleDescription}
-                    className="mt-1 flex items-center text-xs font-medium text-gray-500 dark:text-gray-400"
-                  >
-                    <span>Read more</span>
-                    <ChevronDown className="ml-1 w-3 h-3" />
-                  </motion.button>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
 
-        {/* Category badge with unique styling */}
-        <div className="flex items-center">
-          <Badge variant="outline" className={cn("text-xs font-normal", getCategoryColor())}>
-            {achievement.category}
-          </Badge>
+              <h3
+                className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 leading-tight tracking-tight`}
+              >
+                {achievement.title}
+              </h3>
+
+              <motion.div
+                className={`${spaceGrotesk.className} text-[10px] font-medium text-gray-400 uppercase tracking-widest`}
+                animate={{
+                  color: isHovered ? `${hoverColor}80` : "#9CA3AF",
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {achievement.type}
+              </motion.div>
+            </div>
+
+            {/* Detail button - ALWAYS visible with color change on hover */}
+            <div className="flex justify-end items-end mt-2">
+              <motion.button
+                ref={buttonRef}
+                onClick={() => setIsDialogOpen(true)}
+                className={`${spaceGrotesk.className} flex items-center gap-2 text-xs font-medium transition-colors duration-300 px-3 py-1.5 rounded-lg bg-white/80 backdrop-blur-sm border border-gray-100`}
+                style={{
+                  x: springX,
+                  y: springY,
+                  rotateX,
+                  rotateY,
+                }}
+                animate={{
+                  color: isHovered ? hoverColor : "#6B7280",
+                  borderColor: isHovered ? `${hoverColor}20` : "#F3F4F6",
+                  backgroundColor: isHovered ? `${hoverColor}05` : "rgba(255, 255, 255, 0.8)",
+                }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="tracking-wide">Detail</span>
+                <motion.div animate={{ x: isHovered ? 2 : 0 }} transition={{ duration: 0.2 }}>
+                  <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+                </motion.div>
+              </motion.button>
+            </div>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      {/* Centered Dialog Portal */}
+      <AnimatePresence>
+        {isDialogOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 bg-black/30 backdrop-blur-md z-50"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              onClick={() => setIsDialogOpen(false)}
+            />
+
+            {/* Dialog - Perfectly centered */}
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-8">
+              <motion.div
+                className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-2xl border border-gray-100 overflow-hidden"
+                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 40 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {/* Close button */}
+                <motion.button
+                  onClick={() => setIsDialogOpen(false)}
+                  className="absolute top-6 right-6 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X className="w-5 h-5" strokeWidth={1.5} />
+                </motion.button>
+
+                {/* Decorative header accent */}
+                <motion.div
+                  className="h-1 bg-gradient-to-r from-transparent via-current to-transparent"
+                  style={{ color: hoverColor }}
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                />
+
+                {/* Scrollable content */}
+                <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
+                  <div className="p-12">
+                    {/* Header */}
+                    <motion.div
+                      className="mb-10"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.1 }}
+                    >
+                      <div className={`${spaceGrotesk.className} flex items-center gap-4 text-sm font-medium mb-6`}>
+                        <Calendar className="w-4 h-4" strokeWidth={1.5} style={{ color: hoverColor }} />
+                        <span className="tracking-wide" style={{ color: hoverColor }}>
+                          {formatFullDate(achievement.date)}
+                        </span>
+                        <span className="text-gray-300">·</span>
+                        <span className="text-gray-500">{achievement.type}</span>
+                      </div>
+
+                      <h2
+                        className={`${spaceGrotesk.className} text-4xl font-medium text-gray-900 leading-tight tracking-tight mb-4`}
+                      >
+                        {achievement.title}
+                      </h2>
+
+                      <div
+                        className={`${spaceGrotesk.className} text-sm font-medium uppercase tracking-widest`}
+                        style={{ color: hoverColor }}
+                      >
+                        {achievement.category}
+                      </div>
+                    </motion.div>
+
+                    {/* Image - Better layout */}
+                    {achievement.imageUrl && (
+                      <motion.div
+                        className="mb-10 rounded-xl overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                      >
+                        <img
+                          src={achievement.imageUrl || "/placeholder.svg"}
+                          alt={achievement.title}
+                          className="w-full h-80 object-cover"
+                        />
+                      </motion.div>
+                    )}
+
+                    {/* Description */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3 }}
+                    >
+                      <p className={`${spaceGrotesk.className} text-lg text-gray-600 leading-relaxed`}>
+                        {achievement.description}
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
