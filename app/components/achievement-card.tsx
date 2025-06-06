@@ -123,7 +123,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
         onMouseLeave={handleMouseLeave}
       >
         {/* Main card with luxury styling */}
-        <div className="relative h-full w-full overflow-hidden rounded-xl bg-white border border-gray-100/80">
+        <div className="relative h-full w-full overflow-hidden rounded-xl bg-white border border-gray-100/80 dark:bg-[hsl(0,0%,3.9%)] dark:border-[hsl(0,0%,14.9%)]">
           {/* Subtle top accent line */}
           <motion.div
             className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent"
@@ -177,13 +177,13 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
               </motion.div>
 
               <h3
-                className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 leading-tight tracking-tight`}
+                className={`${spaceGrotesk.className} text-lg font-medium text-gray-900 dark:text-[hsl(0,0%,98%)] leading-tight tracking-tight`}
               >
                 {achievement.title}
               </h3>
 
               <motion.div
-                className={`${spaceGrotesk.className} text-[10px] font-medium text-gray-400 uppercase tracking-widest`}
+                className={`${spaceGrotesk.className} text-[10px] font-medium text-gray-400 uppercase tracking-widest dark:text-[hsl(0,0%,63.9%)]`}
                 animate={{
                   color: isHovered ? `${hoverColor}80` : "#9CA3AF",
                 }}

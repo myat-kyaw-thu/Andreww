@@ -80,7 +80,7 @@ const sampleAchievements = [
 ]
 export function AchievementsSection({ achievements = sampleAchievements }: AchievementsSectionProps) {
   return (
-    <section className="py-24" id="achievements">
+    <section className="py-24 bg-white dark:bg-[hsl(0,0%,3.9%)]" id="achievements">
       {/* Section Header */}
       <motion.div
         className="mb-20"
@@ -88,7 +88,7 @@ export function AchievementsSection({ achievements = sampleAchievements }: Achie
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h2 className={`${spaceGrotesk.className} text-4xl font-medium text-gray-900 mb-8 tracking-tight`}>
+        <h2 className={`${spaceGrotesk.className} text-4xl font-medium text-gray-900 dark:text-[hsl(0,0%,98%)] mb-8 tracking-tight`}>
           Achievements
         </h2>
 
@@ -129,7 +129,7 @@ export function AchievementsSection({ achievements = sampleAchievements }: Achie
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center py-24"
         >
-          <p className={`${spaceGrotesk.className} text-xl text-gray-400`}>No achievements to display.</p>
+          <p className={`${spaceGrotesk.className} text-xl text-gray-400 dark:text-[hsl(0,0%,63.9%)]`}>No achievements to display.</p>
         </motion.div>
       )}
     </section>
