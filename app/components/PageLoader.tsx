@@ -1,15 +1,13 @@
-"use client"
-
-import type React from "react"
-
-import { AnimatePresence, motion } from "framer-motion"
-import { useEffect, useRef, useState } from "react"
-import { useProjectStore } from "../store/project-store"
-import { WordRotate } from "./WordRotate"
+"use client";
+import { AnimatePresence, motion } from "framer-motion";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { useProjectStore } from "../store/project-store";
+import { WordRotate } from "./WordRotate";
 
 interface PageLoaderProps {
-  children: React.ReactNode
-  minDuration?: number
+  children: React.ReactNode;
+  minDuration?: number;
 }
 
 const helloInLanguages = [
@@ -20,69 +18,67 @@ const helloInLanguages = [
   "안녕하세요", // Korean
   "你好", // Chinese
   "Bonjour", // French
-]
+];
 
 export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
-  const [progress, setProgress] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
-  const startTimeRef = useRef<number>(Date.now())
-  const animationFrameRef = useRef<number | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const greetingContainerRef = useRef<HTMLDivElement>(null)
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const startTimeRef = useRef<number>(Date.now());
+  const animationFrameRef = useRef<number | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const greetingContainerRef = useRef<HTMLDivElement>(null);
 
   // Get projects data and fetch function from store
-  const { fetchProjects, hasLoaded: projectsLoaded } = useProjectStore()
+  const { fetchProjects, hasLoaded: projectsLoaded } = useProjectStore();
 
   // Fetch projects data using the store
   useEffect(() => {
-    fetchProjects()
-  }, [fetchProjects])
+    fetchProjects();
+  }, [fetchProjects]);
 
   // Handle the progress animation and timing
   useEffect(() => {
-    startTimeRef.current = Date.now()
-
+    startTimeRef.current = Date.now();
     const animateProgress = () => {
-      const elapsedTime = Date.now() - startTimeRef.current
+      const elapsedTime = Date.now() - startTimeRef.current;
       // Calculate progress based on elapsed time relative to minDuration
-      const newProgress = Math.min(100, (elapsedTime / minDuration) * 100)
-
-      setProgress(newProgress)
+      const newProgress = Math.min(100, (elapsedTime / minDuration) * 100);
+      setProgress(newProgress);
 
       if (newProgress < 100) {
         // Continue animation if we haven't reached 100%
-        animationFrameRef.current = requestAnimationFrame(animateProgress)
+        animationFrameRef.current = requestAnimationFrame(animateProgress);
       } else if (projectsLoaded) {
         // If we've reached 100% and projects are loaded, complete the loading
-        if (timeoutRef.current) clearTimeout(timeoutRef.current)
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
-          setIsLoading(false)
-        }, 500) // Small delay for smooth transition
+          setIsLoading(false);
+        }, 500); // Small delay for smooth transition
       }
-    }
+    };
 
     // Start the animation
-    animationFrameRef.current = requestAnimationFrame(animateProgress)
+    animationFrameRef.current = requestAnimationFrame(animateProgress);
 
     return () => {
       if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
+        cancelAnimationFrame(animationFrameRef.current);
       }
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+        clearTimeout(timeoutRef.current);
       }
-    }
-  }, [minDuration, projectsLoaded])
+    };
+  }, [minDuration, projectsLoaded]);
 
   // Check if both conditions are met: minimum time passed and projects loaded
   useEffect(() => {
     if (progress >= 100 && projectsLoaded) {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
-        setIsLoading(false)
-      }, 500) // Small delay for smooth transition
+        setIsLoading(false);
+      }, 500); // Small delay for smooth transition
     }
-  }, [progress, projectsLoaded])
+  }, [progress, projectsLoaded]);
 
   return (
     <>
@@ -92,7 +88,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-gray-950"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-cream-50 dark:bg-gray-950"
           >
             <div className="relative flex flex-col items-center">
               {/* Animated circles - adjusted for mobile */}
@@ -107,7 +103,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                   }}
-                  className="w-[220px] sm:w-[300px] h-[220px] sm:h-[300px] rounded-full bg-blue-100 dark:bg-blue-900/20 absolute -translate-x-1/2 -translate-y-1/2"
+                  className="w-[220px] sm:w-[300px] h-[220px] sm:h-[300px] rounded-full bg-cream-50 dark:bg-gray-900/20 absolute -translate-x-1/2 -translate-y-1/2"
                 />
                 <motion.div
                   animate={{
@@ -119,7 +115,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
                     repeat: Number.POSITIVE_INFINITY,
                     ease: "easeInOut",
                   }}
-                  className="w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] rounded-full bg-purple-100 dark:bg-purple-900/10 absolute -translate-x-1/2 -translate-y-1/2"
+                  className="w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] rounded-full bg-cream-200 dark:bg-gray-800/10 absolute -translate-x-1/2 -translate-y-1/2"
                 />
               </div>
 
@@ -154,9 +150,9 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
 
                 {/* Progress bar */}
                 <div className="w-[240px] sm:w-[280px] md:w-[400px] relative mt-6 sm:mt-8">
-                  <div className="h-1.5 sm:h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                  <div className="h-1.5 sm:h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-gray-800 dark:bg-gray-200 rounded-full"
+                      className="h-full bg-gray-800 dark:bg-gray-100 rounded-full"
                       animate={{ width: `${progress}%` }}
                       initial={{ width: "0%" }}
                       transition={{
@@ -165,7 +161,6 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
                       }}
                     />
                   </div>
-
                   {/* Percentage counter */}
                   <motion.div
                     className="absolute -right-2 -top-6 sm:-top-8 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -201,7 +196,7 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }
 
 // Animated loading dots
@@ -227,5 +222,5 @@ function LoadingDots() {
         ))}
       </span>
     </div>
-  )
+  );
 }
