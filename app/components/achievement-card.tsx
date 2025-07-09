@@ -27,7 +27,6 @@ interface AchievementCardProps {
 
 export function AchievementCard({ achievement, index }: AchievementCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -46,45 +45,22 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
 
   // Enhanced color system with better dark mode support
   const getThemeColors = () => {
-    const colorSets = [
-      {
-        light: "#C1A36E",
-        dark: "#D4B886",
-        accent: "#F5E6D3",
-        darkAccent: "#2A2520",
-      },
-      {
-        light: "#A67C52",
-        dark: "#C19A6B",
-        accent: "#E8D5C4",
-        darkAccent: "#252018",
-      },
-      {
-        light: "#8B7355",
-        dark: "#A68B6F",
-        accent: "#DDD4C7",
-        darkAccent: "#201E1A",
-      },
-      {
-        light: "#B5A490",
-        dark: "#CDB9A5",
-        accent: "#F0EBE4",
-        darkAccent: "#2B2722",
-      },
-      {
-        light: "#9B8B7A",
-        dark: "#B5A394",
-        accent: "#E6DDD4",
-        darkAccent: "#24211E",
-      },
-      {
-        light: "#8E7B6B",
-        dark: "#A8947F",
-        accent: "#DDD2C7",
-        darkAccent: "#211E1B",
-      },
-    ];
-    return colorSets[index % colorSets.length];
+    const original = {
+      light: "#C1A36E",        // Original gold
+      dark: "#D4B886",         // Original beige-gold
+      accent: "#F5E6D3",       // Original off-white
+      darkAccent: "#2A2520",   // Original dark brown
+    };
+    const updated = {
+      light: "#E9DCC6",        // Faded gold (new)
+      dark: "#EDE0C8",         // Pale beige-gold (new)
+      accent: "#FAF5EF",       // Soft off-white (new)
+      darkAccent: "#48423B",   // Softer faded brown (new)
+    };
+    if (typeof window !== 'undefined' && document.documentElement.classList.contains('dark')) {
+      return updated;
+    }
+    return original;
   };
 
   // Get category icon
@@ -110,8 +86,6 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
       e.clientY >= cardRect.top &&
       e.clientY <= cardRect.bottom;
 
-    setIsHovered(isInside);
-
     if (isInside) {
       const buttonCenterX = buttonRect.left + buttonRect.width / 2;
       const buttonCenterY = buttonRect.top + buttonRect.height / 2;
@@ -132,7 +106,6 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -159,10 +132,8 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
         className="relative group cursor-pointer select-none"
         style={{ aspectRatio: "5/3" }}
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={() => { }}
         onMouseLeave={handleMouseLeave}
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
       >
         {/* Enhanced card with glassmorphism effect */}
         <motion.div
@@ -183,7 +154,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
             className="absolute inset-0 opacity-0 bg-gradient-to-br from-transparent via-transparent to-current"
             style={{ color: `${colors.light}10` }}
             animate={{
-              opacity: isHovered ? 1 : 0,
+              opacity: 0,
             }}
             transition={{ duration: 0.4 }}
           />
@@ -193,10 +164,8 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
             className="absolute top-0 left-0 right-0 h-[2px]"
             initial={{ scaleX: 0 }}
             animate={{
-              scaleX: isHovered ? 1 : 0.3,
-              background: isHovered
-                ? `linear-gradient(to right, transparent, ${colors.light}, transparent)`
-                : `linear-gradient(to right, transparent, ${colors.light}40, transparent)`,
+              scaleX: 0.3,
+              background: `linear-gradient(to right, transparent, ${colors.light}40, transparent)`,
             }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           />
@@ -206,7 +175,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
             <motion.div
               className="relative"
               animate={{
-                scale: isHovered ? 1.2 : 1,
+                scale: 1,
               }}
               transition={{ duration: 0.3 }}
             >
@@ -214,9 +183,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                 className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: colors.light }}
                 animate={{
-                  boxShadow: isHovered
-                    ? `0 0 20px ${colors.light}40, 0 0 40px ${colors.light}20`
-                    : `0 0 0px ${colors.light}00`,
+                  boxShadow: `0 0 0px ${colors.light}00`,
                 }}
                 transition={{ duration: 0.4 }}
               />
@@ -225,12 +192,12 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                 className="absolute inset-0 rounded-full border-2 opacity-0"
                 style={{ borderColor: colors.light }}
                 animate={{
-                  scale: isHovered ? [1, 1.5, 2] : 1,
-                  opacity: isHovered ? [0.5, 0.2, 0] : 0,
+                  scale: 1,
+                  opacity: 0,
                 }}
                 transition={{
                   duration: 1.5,
-                  repeat: isHovered ? Number.POSITIVE_INFINITY : 0,
+                  repeat: 0,
                   ease: "easeOut",
                 }}
               />
@@ -247,19 +214,18 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                 "bg-slate-100/80 dark:bg-slate-800/80",
                 "border border-slate-200/50 dark:border-slate-700/50",
                 "text-slate-600 dark:text-slate-400",
+                // Remove shadow
               )}
               animate={{
-                backgroundColor: isHovered ? `${colors.light}15` : "rgb(241 245 249 / 0.8)", // slate-100/80 fallback
-                borderColor: isHovered ? `${colors.light}30` : "rgb(226 232 240 / 0.5)",
-                color: isHovered ? colors.light : undefined,
+                backgroundColor: `${colors.light}15`,
+                borderColor: `${colors.light}30`,
+                color: colors.light,
+                boxShadow: 'none',
               }}
               transition={{ duration: 0.3 }}
-              whileHover={{ scale: 1.05 }}
             >
               <motion.div
-                animate={{
-                  color: isHovered ? colors.light : undefined,
-                }}
+                animate={{ color: colors.light }}
                 transition={{ duration: 0.3 }}
               >
                 {getCategoryIcon()}
@@ -274,9 +240,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
             <div className="space-y-3 pt-2">
               <motion.div
                 className={cn(spaceGrotesk.className, "text-xs font-medium tracking-wide")}
-                animate={{
-                  color: isHovered ? colors.light : undefined,
-                }}
+                animate={{ color: colors.light }}
                 transition={{ duration: 0.3 }}
               >
                 {formatDate(achievement.date)}
@@ -299,7 +263,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                   "text-slate-500 dark:text-slate-400",
                 )}
                 animate={{
-                  color: isHovered ? `${colors.light}80` : undefined,
+                  color: undefined,
                 }}
                 transition={{ duration: 0.3 }}
               >
@@ -320,6 +284,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                   "border border-slate-200/50 dark:border-slate-700/50",
                   "text-slate-700 dark:text-slate-300",
                   "transition-all duration-300",
+                  // Remove shadow
                 )}
                 style={{
                   x: springX,
@@ -327,20 +292,25 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                   rotateX,
                   rotateY,
                 }}
-                animate={{
-                  color: isHovered ? colors.light : undefined,
-                  borderColor: isHovered ? `${colors.light}30` : undefined,
-                  backgroundColor: isHovered ? `${colors.light}08` : undefined,
-                  boxShadow: isHovered
-                    ? `0 8px 32px ${colors.light}20, 0 4px 16px ${colors.light}10`
-                    : "0 4px 16px rgb(0 0 0 / 0.1)",
-                }}
+                animate={
+                  typeof window !== 'undefined' && document.documentElement.classList.contains('dark')
+                    ? {
+                      color: colors.light,
+                      borderColor: `${colors.light}30`,
+                      backgroundColor: `${colors.light}08`,
+                      boxShadow: 'none',
+                    }
+                    : {
+                      color: colors.light,
+                      borderColor: `${colors.light}30`,
+                      backgroundColor: `${colors.light}08`,
+                      boxShadow: 'none',
+                    }
+                }
                 transition={{ duration: 0.3 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
                 <span className="tracking-wide">Detail</span>
-                <motion.div animate={{ x: isHovered ? 3 : 0 }} transition={{ duration: 0.2, ease: "easeOut" }}>
+                <motion.div animate={{ x: 3 }} transition={{ duration: 0.2, ease: "easeOut" }}>
                   <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                 </motion.div>
               </motion.button>
