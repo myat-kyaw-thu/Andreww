@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Space_Grotesk } from "next/font/google"
-import { AchievementCard } from "./achievement-card"
+import { motion } from "framer-motion";
+import { Space_Grotesk } from "next/font/google";
+import { AchievementCard } from "./achievement-card";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
 interface Achievement {
-  id: number
-  title: string
-  type: string
-  date: Date
-  description: string
-  category: string
-  imageUrl?: string
+  id: number;
+  title: string;
+  type: string;
+  date: Date;
+  description: string;
+  category: string;
+  imageUrl?: string;
 }
 
 interface AchievementsSectionProps {
-  achievements: Achievement[]
+  achievements: Achievement[];
 }
 const sampleAchievements = [
   {
@@ -58,15 +58,7 @@ const sampleAchievements = [
       "Developed an AI-powered design tool that increased team productivity by 40% and was adopted company-wide across all design teams. The tool now serves over 500+ designers globally and has processed 10M+ design iterations.",
     category: "Innovation",
   },
-  {
-    id: 5,
-    title: "Open Source Contribution",
-    type: "Recognition",
-    date: new Date("2023-01-12"),
-    description:
-      "Major contributor to popular React component library with over 50k GitHub stars. Implemented accessibility features and performance optimizations that improved bundle size by 30%.",
-    category: "Development",
-  },
+
   {
     id: 6,
     title: "UX Design Excellence",
@@ -77,10 +69,10 @@ const sampleAchievements = [
     category: "Design",
     imageUrl: "/placeholder.svg?height=400&width=600",
   },
-]
+];
 export function AchievementsSection({ achievements = sampleAchievements }: AchievementsSectionProps) {
   return (
-    <section className="py-24 bg-white dark:bg-[hsl(0,0%,3.9%)]" id="achievements">
+    <section className="py-24" id="achievements">
       {/* Section Header */}
       <motion.div
         className="mb-20"
@@ -104,7 +96,7 @@ export function AchievementsSection({ achievements = sampleAchievements }: Achie
       </motion.div>
 
       {/* Achievement Cards Grid - Fixed 2 columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {achievements.map((achievement, index) => (
           <motion.div
             key={achievement.id}
@@ -133,7 +125,7 @@ export function AchievementsSection({ achievements = sampleAchievements }: Achie
         </motion.div>
       )}
     </section>
-  )
+  );
 }
 
 // Sample data for demonstration
