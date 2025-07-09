@@ -65,14 +65,36 @@ const sampleAchievements = [
   },
   {
     id: 6,
-    title: "UX Design Excellence",
-    type: "Award",
-    date: new Date("2022-12-18"),
-    description:
-      "Created user experience design for mobile application that achieved 4.9 star rating and 2M+ downloads in first quarter. Design system was adopted across 5 product lines.",
-    category: "Design",
-    imageUrl: "/placeholder.svg?height=400&width=600",
+    title: "High-Velocity Feature Delivery",
+    type: "Achievement",
+    date: new Date("2025-03-20"),
+    description: "Delivered ShweMin's critical Invoice Module and Pricing Import/Export tools within accelerated timelines as sole developer, completing 70+ tasks across full stack while maintaining zero backlog.",
+    category: "Development",
   },
+  {
+    id: 7,
+    title: "Emergency Timeline Recovery",
+    type: "Achievement",
+    date: new Date("2025-02-28"),
+    description: "Successfully built and deployed ExamPlus Coupon Module in just 4 days after timeline was halved due to MerryMarry reprioritization, delivering both projects on schedule with zero production incidents.",
+    category: "Project Management",
+  },
+  {
+    id: 8,
+    title: "Production System Stabilization",
+    type: "Achievement",
+    date: new Date("2025-06-01"),
+    description: "Resolved critical production database and API issues in live healthcare systems through direct environment debugging, reducing system downtime by 40% and establishing new incident response protocols.",
+    category: "DevOps",
+  },
+  {
+    id: 9,
+    title: "Cross-Functional Leadership",
+    type: "Achievement",
+    date: new Date("2025-05-30"),
+    description: "Mentored junior developer through CNI project onboarding while simultaneously leading frontend development, resulting in 30% faster feature delivery and knowledge transfer documentation.",
+    category: "Leadership",
+  }
 ];
 export function AchievementsSection({ achievements = sampleAchievements }: AchievementsSectionProps) {
   return (
