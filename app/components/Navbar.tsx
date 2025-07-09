@@ -1,104 +1,104 @@
-"use client"
+"use client";
 
-import { useTheme } from "next-themes"
-import { motion, useScroll, useMotionValueEvent, useSpring } from "framer-motion"
-import { useState, useEffect, useRef } from "react"
-import { Moon, Sun, Clock, Home, Award } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
+import { Award, Clock, Home, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 
-import { Archivo } from "next/font/google"
+import { Archivo } from "next/font/google";
 
-const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 export default function Navbar() {
-  const [activeSection, setActiveSection] = useState("top")
-  const [mounted, setMounted] = useState(false)
-  const [time, setTime] = useState<string>("")
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [hoverStyle, setHoverStyle] = useState({})
-  const navRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const { scrollY } = useScroll()
-  const { theme, setTheme } = useTheme()
+  const [activeSection, setActiveSection] = useState("top");
+  const [mounted, setMounted] = useState(false);
+  const [time, setTime] = useState<string>("");
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoverStyle, setHoverStyle] = useState({});
+  const navRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const { scrollY } = useScroll();
+  const { theme, setTheme } = useTheme();
 
   // Scroll indicator
-  const { scrollYProgress } = useScroll()
+  const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
-  })
+  });
 
   // Handle active section detection
   useMotionValueEvent(scrollY, "change", () => {
-    const sections = ["top", "achievements"]
+    const sections = ["top", "achievements"];
     const currentSection = sections.find((section) => {
-      const element = document.getElementById(section)
-      if (!element) return false
-      const rect = element.getBoundingClientRect()
-      return rect.top <= 100 && rect.bottom >= 100
-    })
+      const element = document.getElementById(section);
+      if (!element) return false;
+      const rect = element.getBoundingClientRect();
+      return rect.top <= 100 && rect.bottom >= 100;
+    });
     if (currentSection) {
-      setActiveSection(currentSection)
+      setActiveSection(currentSection);
     }
-  })
+  });
 
   // Update hover effect
   useEffect(() => {
     if (hoveredIndex !== null) {
-      const hoveredElement = navRefs.current[hoveredIndex]
+      const hoveredElement = navRefs.current[hoveredIndex];
       if (hoveredElement) {
-        const { offsetLeft, offsetWidth } = hoveredElement
+        const { offsetLeft, offsetWidth } = hoveredElement;
         setHoverStyle({
           left: `${offsetLeft}px`,
           width: `${offsetWidth}px`,
-        })
+        });
       }
     }
-  }, [hoveredIndex])
+  }, [hoveredIndex]);
 
   // Update clock
   useEffect(() => {
     const updateTime = () => {
       // This is already safe across browsers - no change needed
-      const now = new Date()
+      const now = new Date();
       setTime(
         now.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
           hour12: true,
         }),
-      )
-    }
+      );
+    };
 
-    updateTime()
-    const interval = setInterval(updateTime, 1000)
-    setMounted(true)
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    setMounted(true);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   // Smooth scroll function
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
+    const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
         block: "start",
-      })
-      setActiveSection(sectionId)
+      });
+      setActiveSection(sectionId);
     }
-  }
+  };
 
-  if (!mounted) return null
+  if (!mounted) return null;
 
   const navItems = [
     { id: "top", label: "Home", icon: <Home className="w-4 h-4" /> },
     { id: "achievements", label: "Achievements", icon: <Award className="w-4 h-4" /> },
-  ]
+  ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none pb-6 px-4">
+    <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none pb-6 px-4">
       <div className="max-w-xl mx-auto">
         <nav className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20 pointer-events-auto overflow-hidden">
           {/* Scroll indicator border */}
@@ -121,7 +121,7 @@ export default function Navbar() {
                 <button
                   key={item.id}
                   ref={(el) => {
-                    navRefs.current[index] = el
+                    navRefs.current[index] = el;
                   }}
                   onClick={() => scrollToSection(item.id)}
                   onMouseEnter={() => setHoveredIndex(index)}
@@ -179,6 +179,6 @@ export default function Navbar() {
         </nav>
       </div>
     </div>
-  )
+  );
 }
 
