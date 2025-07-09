@@ -130,7 +130,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
       <motion.div
         ref={cardRef}
         className="relative group cursor-pointer select-none"
-        style={{ aspectRatio: "5/3" }}
+
         onMouseMove={handleMouseMove}
         onMouseEnter={() => { }}
         onMouseLeave={handleMouseLeave}
@@ -138,7 +138,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
         {/* Enhanced card with glassmorphism effect */}
         <motion.div
           className={cn(
-            "relative h-full w-full overflow-hidden rounded-2xl",
+            "relative  w-full overflow-hidden rounded-2xl",
             "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl",
             "border border-slate-200/50 dark:border-slate-800/50",
             "shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20",
@@ -235,7 +235,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
           </div>
 
           {/* Content */}
-          <div className="relative h-full p-6 flex flex-col justify-between">
+          <div className="relative  p-6 flex flex-col justify-between">
             {/* Header */}
             <div className="space-y-3 pt-2">
               <motion.div
@@ -426,7 +426,7 @@ export function AchievementCard({ achievement, index }: AchievementCardProps) {
                             alt={achievement.title}
                             fill
                             className={cn(
-                              "object-cover transition-all duration-700",
+                              "object-fill transition-all duration-700",
                               imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-105",
                             )}
                             onLoad={() => setImageLoaded(true)}
