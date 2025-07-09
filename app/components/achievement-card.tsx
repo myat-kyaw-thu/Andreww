@@ -32,51 +32,41 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Enhanced magnetic effect for detail button
+  // Simplified magnetic effect - only for desktop
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springConfig = { stiffness: 200, damping: 20 };
+  const springConfig = { stiffness: 150, damping: 25 };
   const springX = useSpring(mouseX, springConfig);
   const springY = useSpring(mouseY, springConfig);
 
-  // Subtle 3D rotation effect
-  const rotateX = useTransform(springY, [-30, 30], [3, -3]);
-  const rotateY = useTransform(springX, [-30, 30], [-3, 3]);
+  // Reduced rotation effect
+  const rotateX = useTransform(springY, [-20, 20], [1, -1]);
+  const rotateY = useTransform(springX, [-20, 20], [-1, 1]);
 
-  // Enhanced color system with better dark mode support
-  const getThemeColors = () => {
-    const original = {
-      light: "#C1A36E",        // Original gold
-      dark: "#D4B886",         // Original beige-gold
-      accent: "#F5E6D3",       // Original off-white
-      darkAccent: "#2A2520",   // Original dark brown
-    };
-    const updated = {
-      light: "#E9DCC6",        // Faded gold (new)
-      dark: "#EDE0C8",         // Pale beige-gold (new)
-      accent: "#FAF5EF",       // Soft off-white (new)
-      darkAccent: "#48423B",   // Softer faded brown (new)
-    };
-    if (typeof window !== 'undefined' && document.documentElement.classList.contains('dark')) {
-      return updated;
-    }
-    return original;
-  };
+  // Simplified color system
+  const getThemeColors = () => ({
+    light: "#C1A36E",
+    dark: "#D4B886",
+    accent: "#F5E6D3",
+    darkAccent: "#2A2520",
+  });
 
   // Get category icon
   const getCategoryIcon = () => {
     const iconMap: Record<string, React.ReactNode> = {
-      award: <Award className="w-4 h-4" strokeWidth={1.5} />,
-      trophy: <Trophy className="w-4 h-4" strokeWidth={1.5} />,
-      achievement: <Star className="w-4 h-4" strokeWidth={1.5} />,
-      milestone: <Zap className="w-4 h-4" strokeWidth={1.5} />,
+      award: <Award className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />,
+      trophy: <Trophy className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />,
+      achievement: <Star className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />,
+      milestone: <Zap className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />,
     };
-    return iconMap[achievement.category.toLowerCase()] || <Award className="w-4 h-4" strokeWidth={1.5} />;
+    return iconMap[achievement.category.toLowerCase()] || <Award className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />;
   };
 
+  // Simplified mouse handling - only on desktop
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current || !buttonRef.current) return;
+    if (window.innerWidth < 768) return; // Skip on mobile
 
+    if (!cardRef.current || !buttonRef.current) return;
     const cardRect = cardRef.current.getBoundingClientRect();
     const buttonRect = buttonRef.current.getBoundingClientRect();
 
@@ -89,16 +79,14 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
     if (isInside) {
       const buttonCenterX = buttonRect.left + buttonRect.width / 2;
       const buttonCenterY = buttonRect.top + buttonRect.height / 2;
-
       const deltaX = e.clientX - buttonCenterX;
       const deltaY = e.clientY - buttonCenterY;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-      const maxDistance = 120;
+      const maxDistance = 80;
       const strength = Math.max(0, 1 - distance / maxDistance);
 
-      mouseX.set(deltaX * strength * 0.2);
-      mouseY.set(deltaY * strength * 0.2);
+      mouseX.set(deltaX * strength * 0.1);
+      mouseY.set(deltaY * strength * 0.1);
     } else {
       mouseX.set(0);
       mouseY.set(0);
@@ -130,343 +118,242 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
       <motion.div
         ref={cardRef}
         className="relative group cursor-pointer select-none"
-
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => { }}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Enhanced card with glassmorphism effect */}
+        {/* Simplified card */}
         <motion.div
           className={cn(
-            "relative  w-full overflow-hidden rounded-2xl",
-            "bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl",
+            "relative w-full overflow-hidden rounded-xl sm:rounded-2xl",
+            "bg-white/90 dark:bg-slate-900/90",
             "border border-slate-200/50 dark:border-slate-800/50",
-            "shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20",
+            "shadow-md shadow-slate-200/20 dark:shadow-slate-900/20",
           )}
           style={{
-            rotateX,
-            rotateY,
+            rotateX: window.innerWidth >= 768 ? rotateX : 0,
+            rotateY: window.innerWidth >= 768 ? rotateY : 0,
           }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2 }}
         >
-          {/* Animated gradient overlay */}
-          <motion.div
-            className="absolute inset-0 opacity-0 bg-gradient-to-br from-transparent via-transparent to-current"
-            style={{ color: `${colors.light}10` }}
-            animate={{
-              opacity: 0,
-            }}
-            transition={{ duration: 0.4 }}
-          />
+          {/* Top accent line */}
+          <div className="absolute top-0 left-0 right-0 h-[1px] opacity-30" style={{ backgroundColor: colors.light }} />
 
-          {/* Top accent line with gradient */}
-          <motion.div
-            className="absolute top-0 left-0 right-0 h-[2px]"
-            initial={{ scaleX: 0 }}
-            animate={{
-              scaleX: 0.3,
-              background: `linear-gradient(to right, transparent, ${colors.light}40, transparent)`,
-            }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          />
-
-          {/* Enhanced corner accent with pulsing effect */}
-          <div className="absolute top-4 left-6">
-            <motion.div
-              className="relative"
-              animate={{
-                scale: 1,
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="w-2 h-2 rounded-full"
-                style={{ backgroundColor: colors.light }}
-                animate={{
-                  boxShadow: `0 0 0px ${colors.light}00`,
-                }}
-                transition={{ duration: 0.4 }}
-              />
-              {/* Pulsing ring */}
-              <motion.div
-                className="absolute inset-0 rounded-full border-2 opacity-0"
-                style={{ borderColor: colors.light }}
-                animate={{
-                  scale: 1,
-                  opacity: 0,
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: 0,
-                  ease: "easeOut",
-                }}
-              />
-            </motion.div>
+          {/* Corner accent */}
+          <div className="absolute top-2 sm:top-4 left-3 sm:left-6">
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full" style={{ backgroundColor: colors.light }} />
           </div>
 
-          {/* Enhanced category indicator */}
-          <div className="absolute top-5 right-6">
-            <motion.div
+          {/* Category indicator */}
+          <div className="absolute top-2 sm:top-5 right-3 sm:right-6">
+            <div
               className={cn(
                 spaceGrotesk.className,
-                "flex items-center gap-2 text-[10px] font-medium tracking-normal uppercase",
-                "px-3 py-1.5 rounded-full backdrop-blur-sm",
+                "flex items-center gap-1 sm:gap-2 text-[8px] sm:text-[10px] font-medium tracking-normal uppercase",
+                "px-2 py-1 sm:px-3 sm:py-1.5 rounded-full",
                 "bg-slate-100/80 dark:bg-slate-800/80",
                 "border border-slate-200/50 dark:border-slate-700/50",
-                "text-slate-600 dark:text-slate-400",
-                // Remove shadow
               )}
-              animate={{
+              style={{
                 backgroundColor: `${colors.light}15`,
                 borderColor: `${colors.light}30`,
                 color: colors.light,
-                boxShadow: 'none',
               }}
-              transition={{ duration: 0.3 }}
             >
-              <motion.div
-                animate={{ color: colors.light }}
-                transition={{ duration: 0.3 }}
-              >
-                {getCategoryIcon()}
-              </motion.div>
-              {achievement.category}
-            </motion.div>
+              {getCategoryIcon()}
+              <span className="hidden sm:inline">{achievement.category}</span>
+            </div>
           </div>
 
           {/* Content */}
-          <div className="relative  p-6 flex flex-col justify-between">
+          <div className="relative p-3 sm:p-6 flex flex-col justify-between">
             {/* Header */}
-            <div className="space-y-3 pt-2">
-              <motion.div
-                className={cn(spaceGrotesk.className, "text-xs font-medium tracking-wide")}
-                animate={{ color: colors.light }}
-                transition={{ duration: 0.3 }}
+            <div className="space-y-1.5 sm:space-y-3 pt-1 sm:pt-2">
+              <div
+                className={cn(spaceGrotesk.className, "text-[10px] sm:text-xs font-medium tracking-wide")}
+                style={{ color: colors.light }}
               >
                 {formatDate(achievement.date)}
-              </motion.div>
-
+              </div>
               <h3
                 className={cn(
                   spaceGrotesk.className,
-                  "text-lg font-medium leading-tight tracking-tight",
+                  "text-sm sm:text-lg font-medium leading-tight tracking-tight",
                   "text-slate-900 dark:text-slate-100",
                 )}
               >
                 {achievement.title}
               </h3>
-
-              <motion.div
+              <div
                 className={cn(
                   spaceGrotesk.className,
-                  "text-[10px] font-medium uppercase tracking-widest",
+                  "text-[8px] sm:text-[10px] font-medium uppercase tracking-widest",
                   "text-slate-500 dark:text-slate-400",
                 )}
-                animate={{
-                  color: undefined,
-                }}
-                transition={{ duration: 0.3 }}
               >
                 {achievement.type}
-              </motion.div>
+              </div>
             </div>
 
-            {/* Enhanced detail button */}
-            <div className="flex justify-end items-end mt-4">
+            {/* Detail button */}
+            <div className="flex justify-end items-end mt-2 sm:mt-4">
               <motion.button
                 ref={buttonRef}
                 onClick={() => setIsDialogOpen(true)}
                 className={cn(
                   spaceGrotesk.className,
-                  "flex items-center gap-2 text-xs font-medium",
-                  "px-4 py-2 rounded-xl backdrop-blur-sm",
+                  "flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs font-medium",
+                  "px-2 py-1 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl",
                   "bg-white/80 dark:bg-slate-800/80",
                   "border border-slate-200/50 dark:border-slate-700/50",
-                  "text-slate-700 dark:text-slate-300",
-                  "transition-all duration-300",
-                  // Remove shadow
+                  "transition-colors duration-200",
                 )}
                 style={{
-                  x: springX,
-                  y: springY,
-                  rotateX,
-                  rotateY,
+                  x: window.innerWidth >= 768 ? springX : 0,
+                  y: window.innerWidth >= 768 ? springY : 0,
+                  color: colors.light,
+                  borderColor: `${colors.light}30`,
+                  backgroundColor: `${colors.light}08`,
                 }}
-                animate={
-                  typeof window !== 'undefined' && document.documentElement.classList.contains('dark')
-                    ? {
-                      color: colors.light,
-                      borderColor: `${colors.light}30`,
-                      backgroundColor: `${colors.light}08`,
-                      boxShadow: 'none',
-                    }
-                    : {
-                      color: colors.light,
-                      borderColor: `${colors.light}30`,
-                      backgroundColor: `${colors.light}08`,
-                      boxShadow: 'none',
-                    }
-                }
-                transition={{ duration: 0.3 }}
               >
                 <span className="tracking-wide">Detail</span>
-                <motion.div animate={{ x: 3 }} transition={{ duration: 0.2, ease: "easeOut" }}>
-                  <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
-                </motion.div>
+                <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} />
               </motion.button>
             </div>
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Enhanced Dialog Portal */}
+      {/* Optimized Dialog */}
       <AnimatePresence>
         {isDialogOpen && (
           <>
-            {/* Enhanced backdrop */}
+            {/* Simplified backdrop */}
             <motion.div
-              className="fixed inset-0 bg-black/40 backdrop-blur-md z-50"
+              className="fixed inset-0 bg-black/50 z-50"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setIsDialogOpen(false)}
             />
 
-            {/* Enhanced dialog */}
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-8">
+            {/* Optimized dialog */}
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-8">
               <motion.div
                 className={cn(
-                  "relative w-full max-w-4xl max-h-[90vh]",
-                  "bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl",
+                  "relative w-full max-w-sm sm:max-w-4xl max-h-[95vh] sm:max-h-[90vh]",
+                  "bg-white/95 dark:bg-slate-900/95",
                   "border border-slate-200/50 dark:border-slate-800/50",
-                  "rounded-3xl overflow-hidden",
-                  "shadow-2xl shadow-slate-900/20",
+                  "rounded-2xl sm:rounded-3xl overflow-hidden",
+                  "shadow-xl shadow-slate-900/20",
                 )}
-                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 40 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                {/* Enhanced close button */}
-                <motion.button
+                {/* Close button */}
+                <button
                   onClick={() => setIsDialogOpen(false)}
                   className={cn(
-                    "absolute top-6 right-6 z-10 flex items-center justify-center",
-                    "w-12 h-12 rounded-full backdrop-blur-sm",
+                    "absolute top-3 right-3 sm:top-6 sm:right-6 z-10 flex items-center justify-center",
+                    "w-8 h-8 sm:w-12 sm:h-12 rounded-full",
                     "bg-slate-100/80 dark:bg-slate-800/80",
                     "border border-slate-200/50 dark:border-slate-700/50",
                     "text-slate-600 dark:text-slate-400",
                     "hover:bg-slate-200/80 dark:hover:bg-slate-700/80",
-                    "transition-all duration-200",
+                    "transition-colors duration-200",
                   )}
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
                 >
-                  <X className="w-5 h-5" strokeWidth={1.5} />
-                </motion.button>
+                  <X className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={1.5} />
+                </button>
 
-                {/* Enhanced header accent */}
-                <motion.div
-                  className="h-1 bg-gradient-to-r from-transparent via-current to-transparent"
-                  style={{ color: colors.light }}
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                />
+                {/* Header accent */}
+                <div className="h-0.5 sm:h-1" style={{ backgroundColor: colors.light }} />
 
                 {/* Scrollable content */}
-                <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
-                  <div className="p-12">
-                    {/* Enhanced header */}
-                    <motion.div
-                      className="mb-12"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.1 }}
-                    >
-                      <div className={cn(spaceGrotesk.className, "flex items-center gap-4 text-sm font-medium mb-6")}>
-                        <Calendar className="w-4 h-4" strokeWidth={1.5} style={{ color: colors.light }} />
+                <div className="overflow-y-auto max-h-[calc(95vh-2rem)] sm:max-h-[calc(90vh-4rem)]">
+                  <div className="p-4 sm:p-12">
+                    {/* Header */}
+                    <div className="mb-6 sm:mb-12">
+                      <div
+                        className={cn(
+                          spaceGrotesk.className,
+                          "flex items-center gap-2 sm:gap-4 text-xs sm:text-sm font-medium mb-3 sm:mb-6",
+                        )}
+                      >
+                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4" strokeWidth={1.5} style={{ color: colors.light }} />
                         <span className="tracking-wide" style={{ color: colors.light }}>
                           {formatFullDate(achievement.date)}
                         </span>
                         <span className="text-slate-300 dark:text-slate-600">·</span>
                         <span className="text-slate-500 dark:text-slate-400">{achievement.type}</span>
                       </div>
-
                       <h2
                         className={cn(
                           spaceGrotesk.className,
-                          "text-4xl font-medium leading-tight tracking-tight mb-4",
+                          "text-xl sm:text-4xl font-medium leading-tight tracking-tight mb-2 sm:mb-4",
                           "text-slate-900 dark:text-slate-100",
                         )}
                       >
                         {achievement.title}
                       </h2>
-
                       <div
-                        className={cn(spaceGrotesk.className, "text-sm font-medium uppercase tracking-widest")}
+                        className={cn(
+                          spaceGrotesk.className,
+                          "text-xs sm:text-sm font-medium uppercase tracking-widest",
+                        )}
                         style={{ color: colors.light }}
                       >
                         {achievement.category}
                       </div>
-                    </motion.div>
+                    </div>
 
-                    {/* Enhanced image with Next.js Image */}
+                    {/* Image */}
                     {achievement.imageUrl && (
-                      <motion.div
-                        className="mb-12 rounded-2xl overflow-hidden relative"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                      >
-                        <div className="relative w-full h-96 bg-slate-100 dark:bg-slate-800">
+                      <div className="mb-6 sm:mb-12 rounded-xl sm:rounded-2xl overflow-hidden relative">
+                        <div className="relative w-full h-48 sm:h-96 bg-slate-100 dark:bg-slate-800">
                           <Image
                             src={achievement.imageUrl || "/placeholder.svg"}
                             alt={achievement.title}
                             fill
                             className={cn(
-                              "object-fill transition-all duration-700",
-                              imageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-105",
+                              "object-cover transition-opacity duration-300",
+                              imageLoaded ? "opacity-100" : "opacity-0",
                             )}
                             onLoad={() => setImageLoaded(true)}
                             onError={() => setImageError(true)}
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                            priority
+                            sizes="(max-width: 640px) 100vw, (max-width: 1200px) 80vw, 70vw"
                           />
                           {/* Loading skeleton */}
                           {!imageLoaded && !imageError && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-pulse" />
+                            <div className="absolute inset-0 bg-slate-200 dark:bg-slate-700 animate-pulse" />
                           )}
                           {/* Error fallback */}
                           {imageError && (
                             <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-800">
                               <div className="text-center">
-                                <Award className="w-12 h-12 mx-auto mb-2 text-slate-400" />
-                                <p className="text-sm text-slate-500">Image not available</p>
+                                <Award className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-2 text-slate-400" />
+                                <p className="text-xs sm:text-sm text-slate-500">Image not available</p>
                               </div>
                             </div>
                           )}
                         </div>
-                      </motion.div>
+                      </div>
                     )}
 
-                    {/* Enhanced description */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.3 }}
-                    >
+                    {/* Description */}
+                    <div>
                       <p
                         className={cn(
                           spaceGrotesk.className,
-                          "text-lg leading-relaxed",
+                          "text-sm sm:text-lg leading-relaxed",
                           "text-slate-600 dark:text-slate-300",
                         )}
                       >
                         {achievement.description}
                       </p>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
