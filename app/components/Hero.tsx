@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Code2, FileText, Github, Linkedin, Mail } from "lucide-react"
-import { useTheme } from "next-themes"
-import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google"
-import Image from "next/image"
-import Link from "next/link"
-import React from "react"
-import { LineShadowText } from "./LineShadowText"
+import { motion } from "framer-motion";
+import { Code2, FileText, Github, Linkedin, Mail } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import { LineShadowText } from "./LineShadowText";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
-const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
-const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" });
+const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 const Hero = () => {
-  const theme = useTheme()
-  const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black"
+  const theme = useTheme();
+  const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black";
 
   const techStack = [
     { name: "React", color: "text-[#61DAFB]", url: "https://reactjs.org/" },
@@ -23,7 +23,7 @@ const Hero = () => {
     { name: "Vue.js", color: "text-[#4FC08D]", url: "https://vuejs.org/" },
     { name: "Express.js", color: "text-[#000000] dark:text-[#FFFFFF]", url: "https://expressjs.com/" },
     { name: "Laravel", color: "text-[#FF2D20]", url: "https://laravel.com/" },
-  ]
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -33,7 +33,7 @@ const Hero = () => {
         staggerChildren: 0.15,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -45,7 +45,7 @@ const Hero = () => {
         ease: "easeOut",
       },
     },
-  }
+  };
 
   const socialVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -57,7 +57,7 @@ const Hero = () => {
         delayChildren: 0.6,
       },
     },
-  }
+  };
 
   const socialItemVariants = {
     hidden: { opacity: 0, y: 10 },
@@ -74,7 +74,7 @@ const Hero = () => {
         duration: 0.2,
       },
     },
-  }
+  };
 
   return (
     <motion.section
@@ -226,18 +226,18 @@ const Hero = () => {
 
             <motion.div variants={socialItemVariants} whileHover="hover">
               <a
-                href="/myatkyawthu.pdf"
-                download="myatkyawthu.pdf"
+                href="/Myat Kyaw Thu.pdf"
+                download="Myat Kyaw Thu.pdf"
                 className="text-neutral-900 dark:text-neutral-200 hover:text-[#4285F4] transition-colors duration-300 flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 aria-label="Download Resume"
                 onClick={(e) => {
-                  e.preventDefault()
-                  const link = document.createElement("a")
-                  link.href = "/myatkyawthu.pdf"
-                  link.download = "myatkyawthu.pdf"
-                  document.body.appendChild(link)
-                  link.click()
-                  document.body.removeChild(link)
+                  e.preventDefault();
+                  const link = document.createElement("a");
+                  link.href = "/Myat Kyaw Thu.pdf";
+                  link.download = "Myat Kyaw Thu.pdf";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
               >
                 <FileText size={22} />
@@ -247,7 +247,7 @@ const Hero = () => {
         </div>
       </div>
     </motion.section>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

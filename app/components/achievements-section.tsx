@@ -19,7 +19,7 @@ interface Achievement {
 interface AchievementsSectionProps {
   achievements: Achievement[];
 }
-const sampleAchievements = [
+export const sampleAchievements = [
   {
     id: 1,
     title: "Legacy Front End Developer Certification",
@@ -65,20 +65,20 @@ const sampleAchievements = [
   },
   {
     id: 6,
-    title: "High-Velocity Feature Delivery",
+    title: "High-Velocity Feature Delivery (ShweMin)",
     type: "Achievement",
     date: new Date("2025-03-20"),
     description: "Delivered ShweMin's critical Invoice Module and Pricing Import/Export tools within accelerated timelines as sole developer, completing 70+ tasks across full stack while maintaining zero backlog.",
     category: "Development",
   },
-  {
-    id: 7,
-    title: "Emergency Timeline Recovery",
-    type: "Achievement",
-    date: new Date("2025-02-28"),
-    description: "Successfully built and deployed ExamPlus Coupon Module in just 4 days after timeline was halved due to MerryMarry reprioritization, delivering both projects on schedule with zero production incidents.",
-    category: "Project Management",
-  },
+  // {
+  //   id: 7,
+  //   title: "Emergency Timeline Recovery",
+  //   type: "Achievement",
+  //   date: new Date("2025-02-28"),
+  //   description: "Successfully built and deployed ExamPlus Coupon Module in just 4 days after timeline was halved due to MerryMarry reprioritization, delivering both projects on schedule with zero production incidents.",
+  //   category: "Project Management",
+  // },
   {
     id: 8,
     title: "Production System Stabilization",
