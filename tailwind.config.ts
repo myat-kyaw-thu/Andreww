@@ -1,6 +1,6 @@
+import typography from "@tailwindcss/typography";
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
-import typography from "@tailwindcss/typography";
 
 const config: Config = {
   darkMode: ["class"],
@@ -63,7 +63,13 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Add gray color palette
+        // Add your custom color palette
+        cream: {
+          50: "#FDFFF6", // Your lightest color
+          100: "#FEFFE3", // Your middle color
+          200: "#FFFDDO", // Your darkest color (note: this might need adjustment as it's not a valid hex)
+        },
+        // Keep gray color palette
         gray: {
           50: "#f9fafb",
           100: "#f3f4f6",
