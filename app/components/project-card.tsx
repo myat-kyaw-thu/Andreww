@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
+import type React from "react";
+import { useState } from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { AnimatePresence, motion } from "framer-motion"
-import { Github, LinkIcon, X } from 'lucide-react'
-import Image from "next/image"
-import Link from "next/link"
+import { Badge } from "@/components/ui/badge";
+import { AnimatePresence, motion } from "framer-motion";
+import { Github, LinkIcon, X } from 'lucide-react';
+import Image from "next/image";
+import Link from "next/link";
 
-import { Archivo, Space_Grotesk, Space_Mono } from 'next/font/google'
+import { Archivo, Space_Grotesk, Space_Mono } from 'next/font/google';
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
-const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
-const archivo = Archivo({ subsets: ["latin"], display: "swap" })
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
+const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" });
+const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 interface ProjectCardProps {
   project: {
-    project_id: string
-    project_title: string
-    project_subtitle: string
-    project_cover_img: string
-    project_tech_stacks: string[]
-    project_link?: string
-    github_link?: string
-    project_status: "Completed" | "In Progress"
-    personal: boolean
-  }
+    project_id: string;
+    project_title: string;
+    project_subtitle: string;
+    project_cover_img: string;
+    project_tech_stacks: string[];
+    project_link?: string;
+    github_link?: string;
+    project_status: "Completed" | "In Progress";
+    personal: boolean;
+  };
 }
 
 // Tech stack color mapping
-const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
+const techStackColors: { [key: string]: { color: string; bgColor: string; }; } = {
   // Frontend
   React: { color: "#61DAFB", bgColor: "rgba(97, 218, 251, 0.1)" },
   "Next.js": { color: "#000000", bgColor: "rgba(0, 0, 0, 0.05)" },
@@ -90,32 +90,32 @@ const techStackColors: { [key: string]: { color: string; bgColor: string } } = {
 
   // Default color for unknown tech stacks
   default: { color: "#718096", bgColor: "rgba(113, 128, 150, 0.1)" },
-}
+};
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-  let techStacks = []
+  let techStacks = [];
   try {
     techStacks = Array.isArray(project.project_tech_stacks)
       ? project.project_tech_stacks // It's already an array
-      : JSON.parse(project.project_tech_stacks) // Parse the string if it is not
+      : JSON.parse(project.project_tech_stacks); // Parse the string if it is not
   } catch (error) {
-    console.error("Failed to parse tech stack:", error)
+    console.error("Failed to parse tech stack:", error);
   }
 
-  const [showAllTech, setShowAllTech] = useState(false)
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [showAllTech, setShowAllTech] = useState(false);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   // Toggle showing all tech stacks
   const toggleTechStack = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setShowAllTech(!showAllTech)
-  }
+    e.stopPropagation();
+    setShowAllTech(!showAllTech);
+  };
 
   // Toggle description expansion
   const toggleDescription = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setIsDescriptionExpanded(!isDescriptionExpanded)
-  }
+    e.stopPropagation();
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
 
   return (
     <motion.div
@@ -144,11 +144,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <div className="absolute top-3 right-3 z-10">
           <Badge
             variant={project.project_status === "Completed" ? "default" : "secondary"}
-            className={`text-xs font-medium pointer-events-none ${
-              project.project_status === "Completed"
+            className={`text-xs font-medium pointer-events-none ${project.project_status === "Completed"
                 ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
                 : "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-            }`}
+              }`}
           >
             {project.project_status}
           </Badge>
@@ -258,7 +257,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <AnimatePresence>
               {/* Show first 4 tech stacks or all if expanded */}
               {(showAllTech ? techStacks : techStacks.slice(0, 4)).map((tech: string, index: number) => {
-                const techColor = techStackColors[tech] || techStackColors.default
+                const techColor = techStackColors[tech] || techStackColors.default;
 
                 return (
                   <motion.div
@@ -296,7 +295,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                       {tech}
                     </Badge>
                   </motion.div>
-                )
+                );
               })}
 
               {/* Show +X badge if there are more tech stacks and not showing all */}
@@ -358,12 +357,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {/* Links section with improved styling */}
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
           <div className="flex gap-3">
-            <Link
+            {/* <Link
               href={`/projects/${project.project_id}`}
               className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
             >
               <span className="font-medium group-hover:underline">Details</span>
-            </Link>
+            </Link> */}
             {project.project_link && project.project_link !== "" && (
               <Link
                 href={project.project_link}
@@ -390,5 +389,5 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
