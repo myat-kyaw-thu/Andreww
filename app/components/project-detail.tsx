@@ -1,21 +1,22 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Globe, Users } from "lucide-react"
-import dynamic from "next/dynamic"
-import Image from "next/image"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, ArrowUpRight, ChevronLeft, ChevronRight, Globe, Users } from "lucide-react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 // Dynamically import the Mermaid component with no SSR to avoid hydration issues
-const MermaidChart = dynamic(() => import("./mermaid-component"), { ssr: false })
+const MermaidChart = dynamic(() => import("./mermaid-component"), { ssr: false });
 
 // This would typically come from an API or database
 async function getProjectById(id: string) {
+  console.log("Fetching project data for ID:", id);
   // Mock data for demonstration
   return {
     "project_id": "shwe-min-lab-admin",
@@ -199,92 +200,92 @@ K2 --> K3[Set Access Levels]
         "member_role": "UI/UX Designer"
       }
     ]
-  }
+  };
 }
 
-export default function ProjectDetailsPage({ params }: { params: { id: string } }) {
+export default function ProjectDetailsPage({ params }: { params: { id: string; }; }) {
   interface Project {
-    project_id: string
-    project_title: string
-    project_subtitle: string
-    project_images: string[]
-    project_tech_stacks: string[]
-    project_link: string
-    project_status: string
-    personal: boolean
-    project_description: string
+    project_id: string;
+    project_title: string;
+    project_subtitle: string;
+    project_images: string[];
+    project_tech_stacks: string[];
+    project_link: string;
+    project_status: string;
+    personal: boolean;
+    project_description: string;
     project_features: {
-      feature_id: number
-      feature_name: string
-      feature_description: string
-    }[]
+      feature_id: number;
+      feature_name: string;
+      feature_description: string;
+    }[];
     technical_specifications: {
       frontend: {
-        frameworks: string
-        libraries: string
-      }
+        frameworks: string;
+        libraries: string;
+      };
       backend: {
-        frameworks: string
-        libraries: string
-      }
+        frameworks: string;
+        libraries: string;
+      };
       database: {
-        type: string
-        system: string
-      }
-      programming_languages: string[]
-      testing_frameworks: string[]
-    }
+        type: string;
+        system: string;
+      };
+      programming_languages: string[];
+      testing_frameworks: string[];
+    };
     project_goals: {
-      goal_id: number
-      goal_name: string
-      goal_description: string
-    }[]
+      goal_id: number;
+      goal_name: string;
+      goal_description: string;
+    }[];
     project_flowchart: {
-      mermaid_code: string
-      description: string
-    }
+      mermaid_code: string;
+      description: string;
+    };
     team_members: {
-      member_id: number
-      member_name: string
-      member_role: string
-    }[]
+      member_id: number;
+      member_name: string;
+      member_role: string;
+    }[];
   }
-  const [project, setProject] = useState<Project>()
-  const [loading, setLoading] = useState(true)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const thumbnailsWrapperRef = useRef<HTMLDivElement>(null)
-  const visibleThumbnails = 3
-  const thumbnailHeight = 150 + 16 // Height + gap
+  const [project, setProject] = useState<Project>();
+  const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const thumbnailsWrapperRef = useRef<HTMLDivElement>(null);
+  const visibleThumbnails = 3;
+  const thumbnailHeight = 150 + 16; // Height + gap
 
   useEffect(() => {
     async function loadProject() {
       try {
-        const projectData = await getProjectById(params.id)
+        const projectData = await getProjectById(params.id);
 
         // Preload images to prevent layout shifts
         if (projectData.project_images && projectData.project_images.length > 0) {
           await Promise.all(
             projectData.project_images.map((src: string) => {
               return new Promise((resolve) => {
-                const img = document.createElement("img")
-                img.src = src
-                img.onload = resolve
-                img.onerror = resolve // Continue even if image fails to load
-              })
+                const img = document.createElement("img");
+                img.src = src;
+                img.onload = resolve;
+                img.onerror = resolve; // Continue even if image fails to load
+              });
             }),
-          )
+          );
         }
 
-        setProject(projectData)
+        setProject(projectData);
       } catch (error) {
-        console.error("Failed to load project:", error)
+        console.error("Failed to load project:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    loadProject()
-  }, [params.id])
+    loadProject();
+  }, [params.id]);
 
   useEffect(() => {
     // Update thumbnail scroll position when current image changes
@@ -292,47 +293,47 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
       const maxVisibleIndex = Math.min(
         project.project_images.length - visibleThumbnails,
         Math.max(0, currentImageIndex - 1),
-      )
-      thumbnailsWrapperRef.current.style.transform = `translateY(-${maxVisibleIndex * thumbnailHeight}px)`
+      );
+      thumbnailsWrapperRef.current.style.transform = `translateY(-${maxVisibleIndex * thumbnailHeight}px)`;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentImageIndex, project?.project_images])
+  }, [currentImageIndex, project?.project_images]);
 
   const nextImage = () => {
     if (project?.project_images) {
-      setCurrentImageIndex((prev) => (prev + 1) % project.project_images.length)
+      setCurrentImageIndex((prev) => (prev + 1) % project.project_images.length);
     }
-  }
+  };
 
   const prevImage = () => {
     if (project?.project_images) {
-      setCurrentImageIndex((prev) => (prev - 1 + project.project_images.length) % project.project_images.length)
+      setCurrentImageIndex((prev) => (prev - 1 + project.project_images.length) % project.project_images.length);
     }
-  }
+  };
 
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") {
-        prevImage()
+        prevImage();
       } else if (e.key === "ArrowRight") {
-        nextImage()
+        nextImage();
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
+      window.removeEventListener("keydown", handleKeyDown);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project?.project_images])
+  }, [project?.project_images]);
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-12 max-w-6xl">Loading...</div>
+    return <div className="container mx-auto px-4 py-12 max-w-6xl">Loading...</div>;
   }
 
   if (!project) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -384,9 +385,8 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   {project.project_images.map((image: string, index: number) => (
                     <div
                       key={index}
-                      className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-                        index === currentImageIndex ? "opacity-100" : "opacity-0"
-                      }`}
+                      className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${index === currentImageIndex ? "opacity-100" : "opacity-0"
+                        }`}
                     >
                       <Image
                         src={image || "/placeholder.svg"}
@@ -436,11 +436,10 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                     {project.project_images.map((image: string, index: number) => (
                       <div
                         key={index}
-                        className={`h-[150px] transition-all duration-300 overflow-hidden rounded-md ${
-                          index === currentImageIndex
-                            ? "shadow-[inset_0_0_0_2px] shadow-primary"
-                            : "hover:shadow-[inset_0_0_0_1px] hover:shadow-gray-300 dark:hover:shadow-gray-600"
-                        }`}
+                        className={`h-[150px] transition-all duration-300 overflow-hidden rounded-md ${index === currentImageIndex
+                          ? "shadow-[inset_0_0_0_2px] shadow-primary"
+                          : "hover:shadow-[inset_0_0_0_1px] hover:shadow-gray-300 dark:hover:shadow-gray-600"
+                          }`}
                         onClick={() => setCurrentImageIndex(index)}
                       >
                         <div className="relative w-full h-full">
@@ -462,9 +461,8 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
                   {project.project_images.map((_: string, index: number) => (
                     <div
                       key={index}
-                      className={`w-2 h-2 rounded-full cursor-pointer transition-all duration-300 ${
-                        index === currentImageIndex ? "bg-primary" : "bg-gray-300 dark:bg-gray-600"
-                      }`}
+                      className={`w-2 h-2 rounded-full cursor-pointer transition-all duration-300 ${index === currentImageIndex ? "bg-primary" : "bg-gray-300 dark:bg-gray-600"
+                        }`}
                       onClick={() => setCurrentImageIndex(index)}
                     />
                   ))}
@@ -732,5 +730,5 @@ export default function ProjectDetailsPage({ params }: { params: { id: string } 
         </div>
       </div>
     </div>
-  )
+  );
 }

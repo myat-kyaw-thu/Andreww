@@ -25,7 +25,7 @@ interface AchievementCardProps {
   index: number;
 }
 
-export function AchievementCard({ achievement, index }: AchievementCardProps) {
+export function AchievementCard({ achievement }: AchievementCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
