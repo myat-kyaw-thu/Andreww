@@ -1,16 +1,15 @@
-"use client"
+"use client";
 
-import AboutSection from "./components/About"
-import { AchievementsSection } from "./components/achievements-section"
-import { BlurFade } from "./components/BlurFade"
-import ContactSection from "./components/ContactSeciton"
-import Footer from "./components/Footer"
-import Hero from "./components/Hero"
-import Navbar from "./components/Navbar"
-import { PageLoader } from "./components/PageLoader"
-import ProjectsSection from "./components/projects"
-import ServicesGrid from "./components/Services"
-import SkillsSection from "./components/Skills"
+import AboutSection from "./components/About";
+import { AchievementsSection, sampleAchievements } from "./components/achievements-section";
+import { BlurFade } from "./components/BlurFade";
+import ContactSection from "./components/ContactSeciton";
+import Footer from "./components/Footer";
+import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
+import { PageLoader } from "./components/PageLoader";
+import ProjectsSection from "./components/projects";
+import SkillsSection from "./components/Skills";
 
 export default function Home() {
 
@@ -29,13 +28,13 @@ export default function Home() {
             <ProjectsSection />
           </BlurFade>
           <SkillsSection />
-          <ServicesGrid/>
-          <AchievementsSection />
+          {/* <ServicesGrid /> */}
+          <AchievementsSection achievements={sampleAchievements} />
           <ContactSection />
           <Footer />
         </main>
         <Navbar />
       </div>
     </PageLoader>
-  )
+  );
 }
