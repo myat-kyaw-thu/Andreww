@@ -131,7 +131,7 @@ export default function ProjectsIndex() {
 
       const response = await fetch(`${API_BASE_URL}/project-index`, {
         method: "POST",
-        headers: { "x-api-key": API_KEY || "vEG15KfWn+uHufs7WYn+2DPocBE/lZ7n6h9dryozRqk=" },
+        headers: { "x-api-key": API_KEY || "" },
         body: formData,
       });
 
