@@ -1,15 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState,  useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -18,24 +15,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { AlertCircle, Edit, ExternalLink, Github,  Plus, Trash2, Upload } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { AlertCircle, Edit, ExternalLink, Github, Plus, Trash2, Upload } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface Project {
-  id?: string
-  project_id: string
-  project_title: string
-  project_subtitle: string
-  project_cover_img: string
-  project_tech_stacks: string[]
-  project_link: string
-  github_link?: string
-  project_status: "Planning" | "In Progress" | "Completed" | "On Hold"
-  personal: boolean
+  id?: string;
+  project_id: string;
+  project_title: string;
+  project_subtitle: string;
+  project_cover_img: string;
+  project_tech_stacks: string[];
+  project_link: string;
+  github_link?: string;
+  project_status: "Planning" | "In Progress" | "Completed" | "On Hold";
+  personal: boolean;
 }
 
 const emptyProject: Project = {
@@ -48,23 +48,23 @@ const emptyProject: Project = {
   github_link: "",
   project_status: "Planning",
   personal: false,
-}
+};
 
 export default function ProjectsIndex() {
-  const API_KEY = process.env.ADMIN_TOKEN
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api"
+  const API_KEY = process.env.ADMIN_TOKEN;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 
-  const [projects, setProjects] = useState<Project[]>([])
-  const [currentProject, setCurrentProject] = useState<Project>(emptyProject)
-  const [isEditing, setIsEditing] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [token, setToken] = useState("")
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string>("")
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProject, setCurrentProject] = useState<Project>(emptyProject);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const verifyToken = async (tokenToVerify: string) => {
     try {
@@ -74,200 +74,200 @@ export default function ProjectsIndex() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${tokenToVerify}`,
         },
-      })
+      });
 
       if (response.ok) {
-        setIsAuthenticated(true)
-        fetchProjects()
+        setIsAuthenticated(true);
+        fetchProjects();
       } else {
-        setIsAuthenticated(false)
-        setError("Invalid authentication token")
+        setIsAuthenticated(false);
+        setError("Invalid authentication token");
       }
     } catch {
-      setError("Authentication failed")
-      setIsAuthenticated(false)
+      setError("Authentication failed");
+      setIsAuthenticated(false);
     }
-  }
+  };
 
   const handleLogin = () => {
     if (!token.trim()) {
-      setError("Please enter an admin token")
-      return
+      setError("Please enter an admin token");
+      return;
     }
-    verifyToken(token)
-  }
+    verifyToken(token);
+  };
 
   const fetchProjects = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/project-index`)
-      if (!response.ok) throw new Error("Failed to fetch projects")
+      const response = await fetch(`${API_BASE_URL}/project-index`);
+      if (!response.ok) throw new Error("Failed to fetch projects");
 
-      const data = await response.json()
-      setProjects(data.map(formatProjectFromApi))
-      setError(null)
-    } catch  {
-      setError("Failed to load projects")
+      const data = await response.json();
+      setProjects(data.map(formatProjectFromApi));
+      setError(null);
+    } catch {
+      setError("Failed to load projects");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleCreateProject = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       formData.append(
         "data",
         JSON.stringify({
           ...currentProject,
           project_tech_stacks: currentProject.project_tech_stacks,
         }),
-      )
+      );
 
       if (imageFile) {
-        formData.append("image", imageFile)
+        formData.append("image", imageFile);
       }
 
       const response = await fetch(`${API_BASE_URL}/project-index`, {
         method: "POST",
-        headers: { "x-api-key": API_KEY || "" },
+        headers: { "x-api-key": API_KEY || "vEG15KfWn+uHufs7WYn+2DPocBE/lZ7n6h9dryozRqk=" },
         body: formData,
-      })
+      });
 
       if (!response.ok) {
-        if (response.status === 401) throw new Error("Authentication failed. Invalid API key.")
-        if (response.status === 413) throw new Error("Image file is too large (max 10MB).")
-        throw new Error("Failed to create project")
+        if (response.status === 401) throw new Error("Authentication failed. Invalid API key.");
+        if (response.status === 413) throw new Error("Image file is too large (max 10MB).");
+        throw new Error("Failed to create project");
       }
 
-      const newProject = await response.json()
-      setProjects([...projects, newProject])
-      resetForm()
-      setError(null)
+      const newProject = await response.json();
+      setProjects([...projects, newProject]);
+      resetForm();
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create project")
+      setError(err instanceof Error ? err.message : "Failed to create project");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleUpdateProject = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const formData = new FormData()
+      const formData = new FormData();
       formData.append(
         "data",
         JSON.stringify({
           ...currentProject,
           project_tech_stacks: currentProject.project_tech_stacks,
         }),
-      )
+      );
 
       if (imageFile) {
-        formData.append("image", imageFile)
+        formData.append("image", imageFile);
       }
 
       const response = await fetch(`${API_BASE_URL}/project-index/${currentProject.id}`, {
         method: "PUT",
         headers: { "x-api-key": API_KEY || "" },
         body: formData,
-      })
+      });
 
       if (!response.ok) {
-        if (response.status === 401) throw new Error("Authentication failed. Invalid API key.")
-        if (response.status === 413) throw new Error("Image file is too large (max 10MB).")
-        throw new Error("Failed to update project")
+        if (response.status === 401) throw new Error("Authentication failed. Invalid API key.");
+        if (response.status === 413) throw new Error("Image file is too large (max 10MB).");
+        throw new Error("Failed to update project");
       }
 
-      const updatedProject = await response.json()
-      setProjects(projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)))
-      resetForm()
-      setError(null)
+      const updatedProject = await response.json();
+      setProjects(projects.map((p) => (p.id === updatedProject.id ? updatedProject : p)));
+      resetForm();
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update project")
+      setError(err instanceof Error ? err.message : "Failed to update project");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleDeleteProject = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this project?")) return
-    setIsLoading(true)
+    if (!confirm("Are you sure you want to delete this project?")) return;
+    setIsLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/project-index/${id}`, {
         method: "DELETE",
         headers: { "x-api-key": API_KEY || "" },
-      })
+      });
 
-      if (!response.ok) throw new Error(response.status === 401 ? 
-        "Authentication failed. Invalid API key." : "Failed to delete project")
+      if (!response.ok) throw new Error(response.status === 401 ?
+        "Authentication failed. Invalid API key." : "Failed to delete project");
 
-      setProjects(projects.filter((p) => p.id !== id))
-      setError(null)
+      setProjects(projects.filter((p) => p.id !== id));
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete project")
+      setError(err instanceof Error ? err.message : "Failed to delete project");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const formatProjectFromApi = (project: Project): Project => ({
     ...project,
     project_tech_stacks: typeof project.project_tech_stacks === "string" ?
       JSON.parse(project.project_tech_stacks) : project.project_tech_stacks,
-  })
+  });
 
   const handleEditProject = (project: Project) => {
-    setCurrentProject(project)
-    setImagePreview(project.project_cover_img)
-    setIsEditing(true)
-    setIsDialogOpen(true)
-  }
+    setCurrentProject(project);
+    setImagePreview(project.project_cover_img);
+    setIsEditing(true);
+    setIsDialogOpen(true);
+  };
 
   const resetForm = () => {
-    setCurrentProject(emptyProject)
-    setImageFile(null)
-    setImagePreview("")
-    setIsEditing(false)
-    setIsDialogOpen(false)
-  }
+    setCurrentProject(emptyProject);
+    setImageFile(null);
+    setImagePreview("");
+    setIsEditing(false);
+    setIsDialogOpen(false);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setCurrentProject(prev => ({
       ...prev,
       [name]: value === "" ? (name === "github_link" ? undefined : "") : value,
-    }))
-  }
+    }));
+  };
 
   const handleTechStackChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const techStacks = e.target.value.split(",").map(item => item.trim())
-    setCurrentProject({ ...currentProject, project_tech_stacks: techStacks })
-  }
+    const techStacks = e.target.value.split(",").map(item => item.trim());
+    setCurrentProject({ ...currentProject, project_tech_stacks: techStacks });
+  };
 
   const handleStatusChange = (value: string) => {
     setCurrentProject({
       ...currentProject,
       project_status: value as "Planning" | "In Progress" | "Completed" | "On Hold",
-    })
-  }
+    });
+  };
 
   const handlePersonalChange = (checked: boolean) => {
-    setCurrentProject({ ...currentProject, personal: checked })
-  }
+    setCurrentProject({ ...currentProject, personal: checked });
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      const file = e.target.files[0]
-      setImageFile(file)
-      const reader = new FileReader()
-      reader.onloadend = () => setImagePreview(reader.result as string)
-      reader.readAsDataURL(file)
+      const file = e.target.files[0];
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result as string);
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
-  const triggerFileInput = () => fileInputRef.current?.click()
+  const triggerFileInput = () => fileInputRef.current?.click();
 
   if (!isAuthenticated) {
     return (
@@ -305,7 +305,7 @@ export default function ProjectsIndex() {
           </CardFooter>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -532,5 +532,5 @@ export default function ProjectsIndex() {
         </Table>
       </div>
     </div>
-  )
+  );
 }
