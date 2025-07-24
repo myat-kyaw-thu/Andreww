@@ -28,7 +28,7 @@ interface ProjectState {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 const STORAGE_KEY = "project-storage";
 const TIMESTAMP_KEY = "project-storage-timestamp";
-const EXPIRE_MS = 24 * 60 * 60 * 1000; // 1 day
+const EXPIRE_MS = 24 * 60 * 60 * 1000;
 
 function isExpired() {
   const ts = localStorage.getItem(TIMESTAMP_KEY);
