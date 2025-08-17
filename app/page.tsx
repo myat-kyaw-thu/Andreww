@@ -31,14 +31,13 @@ export default function Home() {
               <ProjectsSection />
             </BlurFade>
             <SkillsSection />
-            {/* <ServicesGrid /> */}
             <AchievementsSection achievements={sampleAchievements} />
             <ContactSection />
             <Footer />
           </main>
           <Navbar />
         </div>
-      // </PageLoader>
+      </PageLoader>
     </div>
 
   );
