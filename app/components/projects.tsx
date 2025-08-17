@@ -3,9 +3,10 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { motion } from "framer-motion";
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { useEffect } from "react";
-import ProjectCard from "./project-card";
+import { useEffect, useState } from "react";
+import { ProjectCard } from './project-card';
 
+import { Button } from '@/components/ui/button';
 import { Archivo, Space_Grotesk } from "next/font/google";
 import { useProjectStore } from "../store/project-store";
 
@@ -52,6 +53,10 @@ const titleVariants = {
 export default function ProjectsSection() {
   const { projects, isLoading, error, fetchProjects } = useProjectStore();
 
+  // State for managing visible projects count
+  const [visibleWorkProjects, setVisibleWorkProjects] = useState(4);
+  const [visiblePersonalProjects, setVisiblePersonalProjects] = useState(4);
+
   // Fetch projects on component mount if not already loaded
   useEffect(() => {
     fetchProjects();
@@ -60,6 +65,15 @@ export default function ProjectsSection() {
   // Filter projects by personal/work
   const workProjects = projects.filter((project) => !project.personal);
   const personalProjects = projects.filter((project) => project.personal);
+
+  // Load more functions
+  const loadMoreWorkProjects = () => {
+    setVisibleWorkProjects(prev => prev + 2);
+  };
+
+  const loadMorePersonalProjects = () => {
+    setVisiblePersonalProjects(prev => prev + 2);
+  };
 
   if (isLoading) {
     return (
@@ -99,11 +113,39 @@ export default function ProjectsSection() {
             />
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {workProjects.map((project) => (
-              <ProjectCard key={project.project_id} project={project} />
+          <div className="space-y-12">
+            {workProjects.slice(0, visibleWorkProjects).map((project) => (
+              <ProjectCard
+                key={project.project_id}
+                title={project.project_title}
+                description={project.project_subtitle}
+                image={project.project_cover_img}
+                techStack={project.project_tech_stacks}
+                status={project.project_status}
+                type="Work"
+                demoUrl={project.project_link}
+                githubUrl={project.github_link}
+              />
             ))}
           </div>
+
+          {/* Load More Button for Work Projects */}
+          {visibleWorkProjects < workProjects.length && (
+            <motion.div
+              className="flex justify-center mt-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button
+                onClick={loadMoreWorkProjects}
+                variant="outline"
+                className="px-6 py-2 text-sm font-medium"
+              >
+                Load More Work Projects ({workProjects.length - visibleWorkProjects} remaining)
+              </Button>
+            </motion.div>
+          )}
         </div>
       )}
 
@@ -124,11 +166,39 @@ export default function ProjectsSection() {
               transition={{ duration: 1.5, delay: 0.5 }}
             />
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {personalProjects.map((project) => (
-              <ProjectCard key={project.project_id} project={project} />
+          <div className="space-y-12">
+            {personalProjects.slice(0, visiblePersonalProjects).map((project) => (
+              <ProjectCard
+                key={project.project_id}
+                title={project.project_title}
+                description={project.project_subtitle}
+                image={project.project_cover_img}
+                techStack={project.project_tech_stacks}
+                status={project.project_status}
+                type="Personal"
+                demoUrl={project.project_link}
+                githubUrl={project.github_link}
+              />
             ))}
           </div>
+
+          {/* Load More Button for Personal Projects */}
+          {visiblePersonalProjects < personalProjects.length && (
+            <motion.div
+              className="flex justify-center mt-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button
+                onClick={loadMorePersonalProjects}
+                variant="outline"
+                className="px-6 py-2 text-sm font-medium"
+              >
+                Load More Personal Projects ({personalProjects.length - visiblePersonalProjects} remaining)
+              </Button>
+            </motion.div>
+          )}
         </div>
       )}
 

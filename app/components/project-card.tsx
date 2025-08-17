@@ -1,393 +1,365 @@
 "use client";
-
-import type React from "react";
-import { useState } from "react";
-
-import { Badge } from "@/components/ui/badge";
 import { AnimatePresence, motion } from "framer-motion";
-import { Github, LinkIcon, X } from 'lucide-react';
+import { Calendar, ChevronDown, ChevronUp, ExternalLink, Eye, Github, Tag } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
+import { ImageViewer } from "./image-viewer";
 
-import { Archivo, Space_Grotesk, Space_Mono } from 'next/font/google';
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" });
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 interface ProjectCardProps {
-  project: {
-    project_id: string;
-    project_title: string;
-    project_subtitle: string;
-    project_cover_img: string;
-    project_tech_stacks: string[];
-    project_link?: string;
-    github_link?: string;
-    project_status: "Completed" | "In Progress";
-    personal: boolean;
-  };
+  title: string;
+  description: string;
+  image: string;
+  techStack: string[] | string;
+  status: "Completed" | "In Progress";
+  type: "Personal" | "Work";
+  demoUrl?: string;
+  githubUrl?: string;
 }
 
-// Tech stack color mapping
-const techStackColors: { [key: string]: { color: string; bgColor: string; }; } = {
+const techStackColors: Record<string, { bg: string; text: string; border: string; }> = {
   // Frontend
-  React: { color: "#61DAFB", bgColor: "rgba(97, 218, 251, 0.1)" },
-  "Next.js": { color: "#000000", bgColor: "rgba(0, 0, 0, 0.05)" },
-  Vue: { color: "#4FC08D", bgColor: "rgba(79, 192, 141, 0.1)" },
-  Pinia: { color: "#FFE873", bgColor: "rgba(255, 232, 115, 0.1)" },
-  Angular: { color: "#DD0031", bgColor: "rgba(221, 0, 49, 0.1)" },
-  Svelte: { color: "#FF3E00", bgColor: "rgba(255, 62, 0, 0.1)" },
-  TailwindCSS: { color: "#06B6D4", bgColor: "rgba(6, 182, 212, 0.1)" },
-  Bootstrap: { color: "#7952B3", bgColor: "rgba(121, 82, 179, 0.1)" },
-  ShadcnUI: { color: "#18181B", bgColor: "rgba(24, 24, 27, 0.1)" },
-  "Framer-Motion": { color: "#0055FF", bgColor: "rgba(0, 85, 255, 0.1)" },
-  GSAP: { color: "#88CE02", bgColor: "rgba(136, 206, 2, 0.1)" },
+  React: { bg: "bg-blue-50 dark:bg-blue-950/30", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-800" },
+  "Next.js": { bg: "bg-gray-50 dark:bg-gray-900/50", text: "text-gray-700 dark:text-gray-300", border: "border-gray-200 dark:border-gray-700" },
+  Vue: { bg: "bg-emerald-50 dark:bg-emerald-950/30", text: "text-emerald-700 dark:text-emerald-300", border: "border-emerald-200 dark:border-emerald-800" },
+  TailwindCSS: { bg: "bg-cyan-50 dark:bg-cyan-950/30", text: "text-cyan-700 dark:text-cyan-300", border: "border-cyan-200 dark:border-cyan-800" },
+  Bootstrap: { bg: "bg-purple-50 dark:bg-purple-950/30", text: "text-purple-700 dark:text-purple-300", border: "border-purple-200 dark:border-purple-800" },
 
   // Backend
-  "Node.js": { color: "#339933", bgColor: "rgba(51, 153, 51, 0.1)" },
-  Express: { color: "#000000", bgColor: "rgba(0, 0, 0, 0.05)" },
-  NestJS: { color: "#E0234E", bgColor: "rgba(224, 35, 78, 0.1)" },
-  Django: { color: "#092E20", bgColor: "rgba(9, 46, 32, 0.1)" },
-  Laravel: { color: "#FF2D20", bgColor: "rgba(255, 45, 32, 0.1)" },
-  Spring: { color: "#6DB33F", bgColor: "rgba(109, 179, 63, 0.1)" },
-  FastAPI: { color: "#009688", bgColor: "rgba(0, 150, 136, 0.1)" },
-  Bun: { color: "#FBF0DF", bgColor: "rgba(251, 240, 223, 0.25)" },
+  "Node.js": { bg: "bg-green-50 dark:bg-green-950/30", text: "text-green-700 dark:text-green-300", border: "border-green-200 dark:border-green-800" },
+  Express: { bg: "bg-slate-50 dark:bg-slate-900/50", text: "text-slate-700 dark:text-slate-300", border: "border-slate-200 dark:border-slate-700" },
+  Laravel: { bg: "bg-red-50 dark:bg-red-950/30", text: "text-red-700 dark:text-red-300", border: "border-red-200 dark:border-red-800" },
 
   // Languages
-  TypeScript: { color: "#3178C6", bgColor: "rgba(49, 120, 198, 0.1)" },
-  JavaScript: { color: "#F7DF1E", bgColor: "rgba(247, 223, 30, 0.1)" },
-  Python: { color: "#3776AB", bgColor: "rgba(55, 118, 171, 0.1)" },
-  PHP: { color: "#777BB4", bgColor: "rgba(119, 123, 180, 0.1)" },
-  Java: { color: "#007396", bgColor: "rgba(0, 115, 150, 0.1)" },
-  Go: { color: "#00ADD8", bgColor: "rgba(0, 173, 216, 0.1)" },
-  Rust: { color: "#000000", bgColor: "rgba(183, 65, 14, 0.1)" },
-  Swift: { color: "#F05138", bgColor: "rgba(240, 81, 56, 0.1)" },
+  TypeScript: { bg: "bg-blue-50 dark:bg-blue-950/30", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-800" },
+  JavaScript: { bg: "bg-yellow-50 dark:bg-yellow-950/30", text: "text-yellow-700 dark:text-yellow-300", border: "border-yellow-200 dark:border-yellow-800" },
+  Python: { bg: "bg-blue-50 dark:bg-blue-950/30", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-800" },
+  PHP: { bg: "bg-indigo-50 dark:bg-indigo-950/30", text: "text-indigo-700 dark:text-indigo-300", border: "border-indigo-200 dark:border-indigo-800" },
 
   // Databases
-  MongoDB: { color: "#47A248", bgColor: "rgba(71, 162, 72, 0.1)" },
-  MySQL: { color: "#4479A1", bgColor: "rgba(68, 121, 161, 0.1)" },
-  PostgreSQL: { color: "#4169E1", bgColor: "rgba(65, 105, 225, 0.1)" },
-  SQLite: { color: "#003B57", bgColor: "rgba(0, 59, 87, 0.1)" },
-  Redis: { color: "#DC382D", bgColor: "rgba(220, 56, 45, 0.1)" },
-  Prisma: { color: "#2D3748", bgColor: "rgba(45, 55, 72, 0.1)" },
+  MongoDB: { bg: "bg-green-50 dark:bg-green-950/30", text: "text-green-700 dark:text-green-300", border: "border-green-200 dark:border-green-800" },
+  MySQL: { bg: "bg-blue-50 dark:bg-blue-950/30", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-800" },
+  PostgreSQL: { bg: "bg-blue-50 dark:bg-blue-950/30", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-800" },
+  Prisma: { bg: "bg-slate-50 dark:bg-slate-900/50", text: "text-slate-700 dark:text-slate-300", border: "border-slate-200 dark:border-slate-700" },
 
-  // Tools & Infrastructure
-  Docker: { color: "#2496ED", bgColor: "rgba(36, 150, 237, 0.1)" },
-  Kubernetes: { color: "#326CE5", bgColor: "rgba(50, 108, 229, 0.1)" },
-  Firebase: { color: "#FFCA28", bgColor: "rgba(255, 202, 40, 0.1)" },
-  AWS: { color: "#FF9900", bgColor: "rgba(255, 153, 0, 0.1)" },
-  Vercel: { color: "#000000", bgColor: "rgba(0, 0, 0, 0.05)" },
-
-  // Libraries & Frameworks
-  Zod: { color: "#3068D4", bgColor: "rgba(48, 104, 212, 0.1)" },
-  Redux: { color: "#764ABC", bgColor: "rgba(118, 74, 188, 0.1)" },
-  GraphQL: { color: "#E10098", bgColor: "rgba(225, 0, 152, 0.1)" },
-  Webpack: { color: "#8DD6F9", bgColor: "rgba(141, 214, 249, 0.1)" },
-
-  // Payment
-  Stripe: { color: "#635BFF", bgColor: "rgba(99, 91, 255, 0.1)" },
-
-  // Default color for unknown tech stacks
-  default: { color: "#718096", bgColor: "rgba(113, 128, 150, 0.1)" },
+  // Tools
+  Docker: { bg: "bg-blue-50 dark:bg-blue-950/30", text: "text-blue-700 dark:text-blue-300", border: "border-blue-200 dark:border-blue-800" },
+  AWS: { bg: "bg-orange-50 dark:bg-orange-950/30", text: "text-orange-700 dark:text-orange-300", border: "border-orange-200 dark:border-orange-800" },
+  Vercel: { bg: "bg-gray-50 dark:bg-gray-900/50", text: "text-gray-700 dark:text-gray-300", border: "border-gray-200 dark:border-gray-700" },
 };
 
-export default function ProjectCard({ project }: ProjectCardProps) {
-  let techStacks = [];
+export function ProjectCard({
+  title,
+  description,
+  image,
+  techStack,
+  status,
+  type,
+  demoUrl,
+  githubUrl,
+}: ProjectCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showAllTech, setShowAllTech] = useState(false);
+  const [imageViewerOpen, setImageViewerOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  let parsedTechStack: string[] = [];
   try {
-    techStacks = Array.isArray(project.project_tech_stacks)
-      ? project.project_tech_stacks // It's already an array
-      : JSON.parse(project.project_tech_stacks); // Parse the string if it is not
+    if (Array.isArray(techStack)) {
+      parsedTechStack = techStack;
+    } else if (typeof techStack === "string") {
+      try {
+        parsedTechStack = JSON.parse(techStack);
+      } catch {
+        parsedTechStack = techStack.split(",").map((tech) => tech.trim());
+      }
+    }
   } catch (error) {
-    console.error("Failed to parse tech stack:", error);
+    console.error("Error parsing tech stack:", error);
+    parsedTechStack = [];
   }
 
-  const [showAllTech, setShowAllTech] = useState(false);
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-
-  // Toggle showing all tech stacks
-  const toggleTechStack = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowAllTech(!showAllTech);
-  };
-
-  // Toggle description expansion
-  const toggleDescription = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsDescriptionExpanded(!isDescriptionExpanded);
-  };
+  const visibleTechStack = showAllTech ? parsedTechStack : parsedTechStack.slice(0, 6);
+  const hasMoreTech = parsedTechStack.length > 6;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex flex-col bg-white dark:bg-gray-950 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 transition-colors duration-200 shadow-sm"
-    >
-      {/* Project Image with optimized size */}
-      <div className="w-full h-[140px] relative overflow-hidden">
-        <div className="w-full h-full">
-          <Image
-            src={project.project_cover_img || "/placeholder.svg"}
-            alt={project.project_title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority={false}
-          />
-        </div>
-
-        {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent" />
-
-        {/* Status badge with improved positioning and styling */}
-        <div className="absolute top-3 right-3 z-10">
-          <Badge
-            variant={project.project_status === "Completed" ? "default" : "secondary"}
-            className={`text-xs font-medium pointer-events-none ${project.project_status === "Completed"
-                ? "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300"
-                : "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-              }`}
+    <>
+      <motion.article
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: 0.6,
+          type: "spring",
+          stiffness: 100,
+          damping: 20,
+        }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        className="group w-full max-w-2xl mx-auto"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
+          {/* Image Section */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.7,
+              delay: 0.1,
+              type: "spring",
+              stiffness: 120,
+              damping: 25,
+            }}
+            className="relative aspect-[4/3] w-full cursor-pointer"
+            onClick={() => setImageViewerOpen(true)}
           >
-            {project.project_status}
-          </Badge>
-        </div>
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-muted animate-pulse flex items-center justify-center rounded-lg">
+                <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+              </div>
+            )}
 
-        {/* Project type indicator - using same style for both personal and work */}
-        <div className="absolute top-3 left-3 z-10">
-          <div className="h-5 pl-1.5 pr-2 flex items-center gap-1 rounded-sm border-l-2 border-gray-400 bg-gray-50/80 dark:bg-gray-800/50 backdrop-blur-sm">
-            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-              {project.personal ? "Personal" : "Work"}
-            </span>
-          </div>
-        </div>
-      </div>
+            <Image
+              src={image || "/placeholder.svg"}
+              alt={title}
+              fill
+              className="object-cover rounded-lg transition-all duration-500 ease-out"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+              onLoad={() => setImageLoaded(true)}
+            />
 
-      {/* Project Details */}
-      <div className="p-4 flex flex-col justify-between flex-1">
-        <div className="space-y-3">
-          {/* Title */}
-          <h3
-            className={`${spaceGrotesk.className} text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-1`}
-          >
-            {project.project_title}
-          </h3>
+            {/* Subtle hover overlay */}
+            <motion.div
+              className="absolute inset-0 bg-black/0 rounded-lg transition-colors duration-300"
+              animate={{ backgroundColor: isHovered ? "rgba(0,0,0,0.05)" : "rgba(0,0,0,0)" }}
+            />
 
-          {/* Expandable subtitle with enhanced smooth animations */}
-          <div className="relative">
-            <AnimatePresence initial={false} mode="wait">
-              {isDescriptionExpanded ? (
+            {/* Floating Eye button on hover */}
+            <AnimatePresence>
+              {isHovered && (
                 <motion.div
-                  key="expanded"
-                  initial={{ height: "2.5rem", opacity: 0.8 }}
-                  animate={{
-                    height: "auto",
-                    opacity: 1,
-                    transition: {
-                      height: {
-                        duration: 0.4,
-                        ease: [0.04, 0.62, 0.23, 0.98]
-                      },
-                      opacity: {
-                        duration: 0.25,
-                        ease: "easeInOut"
-                      }
-                    }
-                  }}
-                  exit={{
-                    height: "2.5rem",
-                    opacity: 0.8,
-                    transition: {
-                      height: {
-                        duration: 0.3,
-                        ease: [0.04, 0.62, 0.23, 0.98]
-                      },
-                      opacity: {
-                        duration: 0.2,
-                        ease: "easeInOut"
-                      }
-                    }
-                  }}
-                  className="overflow-hidden"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-2 right-2"
                 >
-                  <p className={`${archivo.className} text-sm text-gray-600 dark:text-gray-400 leading-relaxed`}>
-                    {project.project_subtitle}
-                  </p>
                   <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.2 }}
-                    onClick={toggleDescription}
-                    className="mt-1 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 inline-flex items-center"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setImageViewerOpen(true);
+                    }}
+                    className="p-1.5 bg-background/90 dark:bg-background/80 backdrop-blur-sm rounded-full border border-border/50 hover:bg-background transition-colors shadow-lg"
                   >
-                    <span className="underline">show less</span>
+                    <Eye size={14} className="text-foreground" />
                   </motion.button>
                 </motion.div>
-              ) : (
-                <motion.div
-                  key="collapsed"
-                  className="relative min-h-[2.5rem]"
+              )}
+            </AnimatePresence>
+
+            {/* Status and Type badges */}
+            <div className="absolute top-2 left-2 flex gap-1">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className={`${archivo.className} flex items-center gap-0.5 px-1.5 py-0.5 bg-background/90 dark:bg-background/80 backdrop-blur-sm rounded-full border border-border/50 text-xs font-medium text-foreground`}
+              >
+                <Tag size={10} />
+                {type}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className={`${archivo.className} flex items-center gap-0.5 px-1.5 py-0.5 backdrop-blur-sm rounded-full border text-xs font-medium ${status === "Completed"
+                  ? "bg-green-50/90 dark:bg-green-950/80 text-green-700 dark:text-green-300 border-green-200/50 dark:border-green-800/50"
+                  : "bg-blue-50/90 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border-blue-200/50 dark:border-blue-800/50"
+                  }`}
+              >
+                <Calendar size={10} />
+                {status}
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Content Section */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.7,
+              delay: 0.2,
+              type: "spring",
+              stiffness: 120,
+              damping: 25,
+            }}
+            className="space-y-4"
+          >
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, type: "spring", stiffness: 150 }}
+              className={`${spaceGrotesk.className} text-lg lg:text-xl font-semibold text-foreground leading-tight`}
+            >
+              {title}
+            </motion.h2>
+
+            {/* Description */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 150 }}
+              className="space-y-2"
+            >
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={isExpanded ? 'expanded' : 'collapsed'}
                   initial={{ opacity: 0.8 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0.8 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className={`${archivo.className} text-foreground/70 leading-relaxed ${!isExpanded ? "line-clamp-3" : ""}`}
                 >
-                  <p
-                    className={`${archivo.className} text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed`}
-                  >
-                    {project.project_subtitle}
-                  </p>
-                  {project.project_subtitle.length > 80 && (
-                    <motion.button
-                      initial={{ opacity: 0.8 }}
-                      animate={{ opacity: 1 }}
-                      onClick={toggleDescription}
-                      className="absolute bottom-0 right-0 text-xs font-medium bg-gradient-to-l from-white dark:from-gray-950 pl-5 inline-flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                    >
-                      <span className="underline">...more</span>
-                    </motion.button>
+                  {description}
+                </motion.p>
+              </AnimatePresence>
+
+              {description.length > 150 && (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground transition-colors"
+                >
+                  {isExpanded ? (
+                    <>
+                      Show less <ChevronUp size={14} />
+                    </>
+                  ) : (
+                    <>
+                      Show more <ChevronDown size={14} />
+                    </>
                   )}
-                </motion.div>
+                </motion.button>
               )}
-            </AnimatePresence>
-          </div>
+            </motion.div>
 
-          {/* Tech Stack Badges with enhanced animations */}
-          <div className="flex flex-wrap gap-1.5 pt-1 relative min-h-[28px]">
-            <AnimatePresence>
-              {/* Show first 4 tech stacks or all if expanded */}
-              {(showAllTech ? techStacks : techStacks.slice(0, 4)).map((tech: string, index: number) => {
-                const techColor = techStackColors[tech] || techStackColors.default;
-
-                return (
-                  <motion.div
-                    key={tech}
-                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      scale: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 30,
-                        delay: 0.03 * index
-                      }
-                    }}
-                    exit={{
-                      opacity: 0,
-                      scale: 0.9,
-                      transition: {
-                        duration: 0.15,
-                        ease: "easeOut"
-                      }
-                    }}
-                  >
-                    <Badge
-                      variant="outline"
-                      className={`${spaceMono.className} px-1.5 py-0.5 text-[10px] font-medium transition-colors duration-200`}
-                      style={{
-                        backgroundColor: techColor.bgColor,
-                        color: techColor.color,
-                        borderColor: `${techColor.color}30`,
-                      }}
-                    >
-                      {tech}
-                    </Badge>
-                  </motion.div>
-                );
-              })}
-
-              {/* Show +X badge if there are more tech stacks and not showing all */}
-              {!showAllTech && techStacks.length > 4 && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 30,
-                      delay: 0.15
-                    }
-                  }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                >
-                  <Badge
-                    variant="outline"
-                    className="px-1.5 py-0.5 text-[10px] font-medium cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    onClick={toggleTechStack}
-                  >
-                    +{techStacks.length - 4}
-                  </Badge>
-                </motion.div>
-              )}
-
-              {/* Show close button when showing all tech stacks */}
-              {showAllTech && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 30,
-                      delay: 0.2
-                    }
-                  }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="absolute -top-2 -right-2"
-                >
-                  <button
-                    onClick={toggleTechStack}
-                    className="p-1 rounded-full bg-gray-100 dark:bg-gray-800 transition-colors"
-                    aria-label="Close tech stack list"
-                  >
-                    <X className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* Links section with improved styling */}
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
-          <div className="flex gap-3">
-            {/* <Link
-              href={`/projects/${project.project_id}`}
-              className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
-            >
-              <span className="font-medium group-hover:underline">Details</span>
-            </Link> */}
-            {project.project_link && project.project_link !== "" && (
-              <Link
-                href={project.project_link}
-                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
-                target="_blank"
-                rel="noopener noreferrer"
+            {/* Tech Stack */}
+            {parsedTechStack.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, type: "spring", stiffness: 150 }}
+                className="space-y-2"
               >
-                <LinkIcon className="w-3.5 h-3.5" />
-                <span className="font-medium group-hover:underline">Demo</span>
-              </Link>
+                <div className="flex flex-wrap gap-1.5">
+                  <AnimatePresence>
+                    {visibleTechStack.map((tech, index) => {
+                      const colors = techStackColors[tech] || {
+                        bg: "bg-muted/50 dark:bg-muted/30",
+                        text: "text-muted-foreground",
+                        border: "border-border/50"
+                      };
+                      return (
+                        <motion.span
+                          key={tech}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          whileHover={{ scale: 1.05, y: -1 }}
+                          transition={{
+                            delay: 0.7 + index * 0.05,
+                            type: "spring",
+                            stiffness: 200,
+                            damping: 20,
+                          }}
+                          className={`${spaceMono.className} px-2 py-0.5 text-xs font-medium rounded-full border ${colors.bg} ${colors.text} ${colors.border} cursor-default`}
+                        >
+                          {tech}
+                        </motion.span>
+                      );
+                    })}
+                  </AnimatePresence>
+                </div>
+
+                {hasMoreTech && (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowAllTech(!showAllTech)}
+                    className="flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground transition-colors"
+                  >
+                    {showAllTech ? (
+                      <>
+                        Show less <ChevronUp size={14} />
+                      </>
+                    ) : (
+                      <>
+                        Show all ({parsedTechStack.length}) <ChevronDown size={14} />
+                      </>
+                    )}
+                  </motion.button>
+                )}
+              </motion.div>
             )}
-            {project.github_link && project.github_link && (
-              <Link
-                href={project.github_link}
-                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-all group"
-                target="_blank"
-                rel="noopener noreferrer"
+
+            {/* Links */}
+            {(demoUrl || githubUrl) && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, type: "spring", stiffness: 150 }}
+                className="flex gap-3 pt-1"
               >
-                <Github className="w-3.5 h-3.5" />
-                <span className="font-medium group-hover:underline">Source</span>
-              </Link>
+                {demoUrl && (
+                  <motion.a
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    href={demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground hover:text-foreground/80 border border-border rounded-lg hover:border-border/80 transition-all duration-200"
+                  >
+                    <ExternalLink size={14} />
+                    Live Demo
+                  </motion.a>
+                )}
+                {githubUrl && (
+                  <motion.a
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground hover:text-foreground/80 border border-border rounded-lg hover:border-border/80 transition-all duration-200"
+                  >
+                    <Github size={14} />
+                    Source Code
+                  </motion.a>
+                )}
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         </div>
-      </div>
-    </motion.div>
+      </motion.article>
+
+      <ImageViewer
+        src={image || "/placeholder.svg"}
+        alt={title}
+        isOpen={imageViewerOpen}
+        onClose={() => setImageViewerOpen(false)}
+      />
+    </>
   );
 }
