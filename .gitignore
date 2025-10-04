@@ -11,6 +11,7 @@
 !.yarn/versions
 
 .kiro
+.vscode
 
 # testing
 /coverage
