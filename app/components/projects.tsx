@@ -132,18 +132,46 @@ export default function ProjectsSection() {
           {/* Load More Button for Work Projects */}
           {visibleWorkProjects < workProjects.length && (
             <motion.div
-              className="flex justify-center mt-6"
+              className="flex flex-col items-center gap-4 mt-12"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5 }}
             >
-              <Button
-                onClick={loadMoreWorkProjects}
-                variant="outline"
-                className="px-6 py-2 text-sm font-medium"
-              >
-                Load More Work Projects ({workProjects.length - visibleWorkProjects} remaining)
-              </Button>
+              {/* Decorative divider */}
+              <motion.div 
+                className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-border to-transparent"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+              
+              <div className="relative">
+                <Button
+                  onClick={loadMoreWorkProjects}
+                  size="lg"
+                  className="relative px-8 py-6 text-base font-semibold bg-foreground text-background hover:bg-foreground/90 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <span className="flex items-center gap-2">
+                    Load More Work Projects
+                    <span className="px-2 py-0.5 text-xs bg-background/20 rounded-full">
+                      +{workProjects.length - visibleWorkProjects}
+                    </span>
+                  </span>
+                </Button>
+                
+                {/* Glow effect */}
+                <motion.div
+                  className="absolute inset-0 -z-10 bg-foreground/20 blur-xl rounded-lg"
+                  animate={{
+                    opacity: [0.5, 0.8, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              </div>
             </motion.div>
           )}
         </div>
@@ -185,18 +213,50 @@ export default function ProjectsSection() {
           {/* Load More Button for Personal Projects */}
           {visiblePersonalProjects < personalProjects.length && (
             <motion.div
-              className="flex justify-center mt-6"
+              className="flex flex-col items-center gap-4 mt-12"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.5 }}
             >
-              <Button
-                onClick={loadMorePersonalProjects}
-                variant="outline"
-                className="px-6 py-2 text-sm font-medium"
-              >
-                Load More Personal Projects ({personalProjects.length - visiblePersonalProjects} remaining)
-              </Button>
+              {/* Decorative divider */}
+              <motion.div 
+                className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-border to-transparent"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+              
+              <div className="relative">
+                <Button
+                  onClick={loadMorePersonalProjects}
+                  size="lg"
+                  className="relative px-8 py-6 text-base font-semibold bg-foreground text-background hover:bg-foreground/90 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <span className="flex items-center gap-2">
+                    Load More Personal Projects
+                    <span className="px-2 py-0.5 text-xs bg-background/20 rounded-full">
+                      +{personalProjects.length - visiblePersonalProjects}
+                    </span>
+                  </span>
+                </Button>
+                
+                {/* Glow effect */}
+                <motion.div
+                  className="absolute inset-0 -z-10 bg-foreground/20 blur-xl rounded-lg"
+                  animate={{
+                    opacity: [0.5, 0.8, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              </div>
+
+              <p className={`${archivo.className} text-sm text-muted-foreground text-center`}>
+                {personalProjects.length - visiblePersonalProjects} more personal {personalProjects.length - visiblePersonalProjects === 1 ? 'project' : 'projects'} to explore
+              </p>
             </motion.div>
           )}
         </div>
