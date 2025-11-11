@@ -1,22 +1,41 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Download, X, ZoomIn, ZoomOut } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, X, ZoomIn, ZoomOut } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ImageViewerProps {
+  images: string[]; // Array of image URLs
+  initialIndex?: number; // Starting image index
+  alt: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+// Backwards compatibility: single image support
+interface SingleImageViewerProps {
   src: string;
   alt: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
+export function ImageViewer(props: ImageViewerProps | SingleImageViewerProps) {
+  const { alt, isOpen, onClose } = props;
+  
+  // Handle backwards compatibility
+  const imageArray = 'images' in props ? props.images : [props.src];
+  const startIndex = 'initialIndex' in props ? props.initialIndex ?? 0 : 0;
+
+  const [currentIndex, setCurrentIndex] = useState(startIndex);
   const [isZoomed, setIsZoomed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const currentSrc = imageArray[currentIndex];
+  const hasMultipleImages = imageArray.length > 1;
 
   useEffect(() => {
     setMounted(true);
@@ -24,14 +43,22 @@ export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
   }, []);
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    setCurrentIndex(startIndex);
+  }, [startIndex, isOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
+      } else if (e.key === 'ArrowLeft' && hasMultipleImages) {
+        handlePrevious();
+      } else if (e.key === 'ArrowRight' && hasMultipleImages) {
+        handleNext();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
       setImageLoaded(false);
     } else {
@@ -40,19 +67,29 @@ export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, currentIndex, hasMultipleImages]);
+
+  const handleNext = () => {
+    setImageLoaded(false);
+    setCurrentIndex((prev: number) => (prev + 1) % imageArray.length);
+  };
+
+  const handlePrevious = () => {
+    setImageLoaded(false);
+    setCurrentIndex((prev: number) => (prev - 1 + imageArray.length) % imageArray.length);
+  };
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(src);
+      const response = await fetch(currentSrc);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = alt || 'image';
+      link.download = `${alt}-${currentIndex + 1}` || 'image';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -99,14 +136,21 @@ export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
             className="absolute top-0 left-0 right-0 z-[99999] p-2 md:p-4 bg-gradient-to-b from-background/80 to-transparent dark:from-background/90"
           >
             <div className="flex items-center justify-between max-w-4xl mx-auto">
-              <motion.h3
-                className="text-sm md:text-lg font-medium text-foreground truncate max-w-[150px] md:max-w-md"
+              <motion.div
+                className="flex items-center gap-2"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                {alt}
-              </motion.h3>
+                <h3 className="text-sm md:text-lg font-medium text-foreground truncate max-w-[150px] md:max-w-md">
+                  {alt}
+                </h3>
+                {hasMultipleImages && (
+                  <span className="text-xs md:text-sm text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                    {currentIndex + 1} / {imageArray.length}
+                  </span>
+                )}
+              </motion.div>
 
               <div className="flex items-center gap-1 md:gap-2">
                 <motion.button
@@ -154,8 +198,44 @@ export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
             </div>
           </motion.div>
 
+          {/* Navigation buttons */}
+          {hasMultipleImages && (
+            <>
+              <motion.button
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ delay: 0.2 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrevious();
+                }}
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-[99999] p-2 md:p-3 rounded-full bg-background/80 dark:bg-background/90 border border-border hover:bg-accent hover:text-accent-foreground transition-all duration-200 backdrop-blur-sm shadow-lg"
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={20} className="md:w-6 md:h-6" />
+              </motion.button>
+
+              <motion.button
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ delay: 0.2 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNext();
+                }}
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-[99999] p-2 md:p-3 rounded-full bg-background/80 dark:bg-background/90 border border-border hover:bg-accent hover:text-accent-foreground transition-all duration-200 backdrop-blur-sm shadow-lg"
+                aria-label="Next image"
+              >
+                <ChevronRight size={20} className="md:w-6 md:h-6" />
+              </motion.button>
+            </>
+          )}
+
           {/* Image container */}
           <motion.div
+            key={currentIndex}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{
               opacity: imageLoaded ? 1 : 0,
@@ -179,8 +259,8 @@ export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
           >
             <div className="relative rounded-lg md:rounded-xl overflow-hidden shadow-2xl border border-border/50 bg-card">
               <Image
-                src={src || "/placeholder.svg"}
-                alt={alt}
+                src={currentSrc || "/placeholder.svg"}
+                alt={`${alt} - ${currentIndex + 1}`}
                 width={1200}
                 height={800}
                 className="w-auto h-auto max-w-full max-h-full object-contain"
@@ -205,9 +285,21 @@ export function ImageViewer({ src, alt, isOpen, onClose }: ImageViewerProps) {
             <div className="flex items-center justify-center">
               <div className="px-2 md:px-4 py-1 md:py-2 rounded-lg bg-background/80 dark:bg-background/90 border border-border backdrop-blur-sm">
                 <p className="text-xs md:text-sm text-muted-foreground text-center">
-                  <span className="hidden md:inline">Press <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded border">ESC</kbd> to close • </span>
+                  <span className="hidden md:inline">
+                    <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded border">ESC</kbd> to close
+                    {hasMultipleImages && (
+                      <>
+                        {' • '}
+                        <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded border">←</kbd>
+                        {' '}
+                        <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded border">→</kbd>
+                        {' '}to navigate
+                      </>
+                    )}
+                    {' • '}
+                  </span>
                   <span className="md:hidden">Tap to close • </span>
-                  Click image to {isZoomed ? 'zoom out' : 'zoom in'}
+                  Click to {isZoomed ? 'zoom out' : 'zoom in'}
                 </p>
               </div>
             </div>
