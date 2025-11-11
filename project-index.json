@@ -1,0 +1,304 @@
+[
+    {
+        "id": "de16746f-c70b-458f-a407-200642db32e2",
+        "project_id": "saas-landing",
+        "project_title": "Light SaaS-Landing Page",
+        "project_subtitle": "A sleek SaaS landing page built with Next.js, React, Tailwind CSS, and Framer Motion. It features smooth animations, a responsive design, and a modern UI, ideal for showcasing SaaS products with engaging user interactions and optimized performance.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741850970/project_covers/rxqqzxcaopw8mvdu7esl.png"],
+        "project_tech_stacks": [
+            "TypeScript",
+            "Next.js",
+            "React",
+            "Framer-Motion",
+            "TailwindCSS"
+        ],
+        "project_link": "",
+        "github_link": "https://github.com/myat-kyaw-thu/SaaS-LangingPage",
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-03-09T08:36:04.145Z",
+        "updatedAt": "2025-03-13T07:29:31.516Z"
+    },
+    {
+        "id": "95d4fb10-0191-46cf-aee2-29d20188b4a0",
+        "project_id": "exam-admin",
+        "project_title": "ExamPlus Admin Dashboard",
+        "project_subtitle": "The Exam Plus admin dashboard allows admins to manage exam question sets, sections, and student registrations. It integrates with the Exam Plus Mini App and Next.js panel, supports exam restarts, and handles pricing labels for the KBZ Mini App. It streamlines exam management for both admins and students.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851049/project_covers/cxayxz0oiqwizrzxu7xr.png"],
+        "project_tech_stacks": [
+            "Php",
+            "Laravel",
+            "Filament",
+            "LiveWire"
+        ],
+        "project_link": "",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-11T15:48:24.559Z",
+        "updatedAt": "2025-03-13T13:48:37.192Z"
+    },
+    
+    {
+        "id": "c9f73af8-8ba9-4acf-b5a2-8ca60326dbf2",
+        "project_id": "exam-plus",
+        "project_title": "Exam Plus (NextJs Pannel)",
+        "project_subtitle": "The website \"Exam Plus\" offers an online platform for students to log in and access their exam experiences. It includes student login options and registration codes for seamless access to exams and educational content.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741850992/project_covers/yp6gezcrvu22jb5982tk.png"],
+        "project_tech_stacks": [
+            "TypeScript",
+            "ShadcnUI",
+            "Next.js",
+            "React",
+            "Framer-Motion",
+            "Zustand"
+        ],
+        "project_link": "https://users.examplusmyanmar.com/",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-11T15:35:47.794Z",
+        "updatedAt": "2025-03-13T07:29:52.585Z"
+    },
+    {
+        "id": "3e6da0e7-7718-4c14-91c2-ca8500262682",
+        "project_id": "popo-portfolio",
+        "project_title": "Aesthetic Portfolio",
+        "project_subtitle": "I developed a professional portfolio website for Po Po Thae Khine, a recent accounting graduate, to showcase her qualifications and expertise. The site features sections on her education, certifications (including HSK 2 and NLA FAA Levels 1 & 2), skills in critical thinking and wealth management, and practical experience as a Financial Assistant. It also provides contact information and options to download her CV, effectively presenting her credentials to potential employers.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851128/project_covers/a5s1iohtv1iftunuaptw.png"],
+        "project_tech_stacks": [
+            "TypeScript",
+            "ShadcnUi",
+            "Next.js",
+            "React",
+            "GSAP",
+            "Framer-Motion"
+        ],
+        "project_link": "https://popothaekhine.vercel.app/",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-03-09T07:41:17.874Z",
+        "updatedAt": "2025-03-13T07:32:09.301Z"
+    },
+    {
+        "id": "e2888ee2-4e2c-48f1-b49d-4f78e47153b1",
+        "project_id": "kbz-mini-app",
+        "project_title": "Exam Plus (KBZMiniApp)",
+        "project_subtitle": "The \"Exam Plus Mini App\" offers an online platform for students to log in and access their exam experiences.I It has One-Time and Packages type for purchasing Exam, When you want to try it, You have to install KBZAPP and Create Account,",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851553/project_covers/rifzue7kgavkrtpc4xqo.jpg"],
+        "project_tech_stacks": [
+            "VueJs",
+            "JavaScript",
+            "Pinia",
+            "ShadcnUI"
+        ],
+        "project_link": "",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-11T15:41:29.809Z",
+        "updatedAt": "2025-03-13T07:39:13.788Z"
+    },
+    {
+        "id": "dc0e43af-6316-47fd-91fd-7d3d716ed3d9",
+        "project_id": "user-portal",
+        "project_title": "Exam User Portal",
+        "project_subtitle": "The User Portal dashboard manages exam packages, connects to the backend with the exam panel, and handles pricing labels for KBZ payments. It also allows users to check their transaction history, providing a seamless experience for exam access and payment management.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851059/project_covers/hxeinq182j6lrnad6vbn.png"],
+        "project_tech_stacks": [
+            "Php",
+            "Laravel",
+            "Filament",
+            "LiveWire"
+        ],
+        "project_link": "",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-11T15:50:36.311Z",
+        "updatedAt": "2025-03-13T13:48:27.502Z"
+    },
+    {
+        "id": "b1315301-5099-4dc4-9b01-883f430daa64",
+        "project_id": "siam-lotus",
+        "project_title": "SiamLotus (Fully CMS Website)",
+        "project_subtitle": "Siam Lotus Myanmar's website features a comprehensive booking system, allowing users to easily schedule spa services online. It also includes a fully integrated CMS (Content Management System) for seamless content management, enabling easy updates to the website's offerings. The site is designed to provide a user-friendly experience, showcasing the spa’s services, products, and promotions.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851069/project_covers/e8a6lzsggx7hvthcvwan.png"],
+        "project_tech_stacks": [
+            "Php",
+            "Blade",
+            "Laravel",
+            "Filament",
+            "TailwindCSS"
+        ],
+        "project_link": "https://siamlotusmm.com/",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-11T15:54:03.605Z",
+        "updatedAt": "2025-03-13T07:31:09.772Z"
+    },
+    {
+        "id": "77684d19-6c48-475d-9c1e-d0dbca391438",
+        "project_id": "andrew-portfolio",
+        "project_title": "Andrew's Portfolio (Frontend)",
+        "project_subtitle": "A personal portfolio showcasing my skills in React, Next.js, TypeScript, and animation libraries like GSAP and Framer Motion. The project highlights interactive UI elements, clean design, and responsive layouts, reflecting my expertise in building modern, dynamic web applications.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851026/project_covers/s8i4wzt7mlcqtvqqir2b.png"],
+        "project_tech_stacks": [
+            "Framer-Motion",
+            "Next.js",
+            "Typescript",
+            "Lucide-React",
+            "TailwindCSS",
+            "ZOD"
+        ],
+        "project_link": "",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-03-09T08:17:44.935Z",
+        "updatedAt": "2025-03-13T13:38:18.392Z"
+    },
+    {
+        "id": "0c353e58-6715-44c5-ad04-d34352b49c9c",
+        "project_id": "zentry-clone",
+        "project_title": "Zentry Landing Page ",
+        "project_subtitle": "A clone of Zentry.com to practice advanced UI interactions.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851103/project_covers/v8euzveqpe4bstnhg9a2.png"],
+        "project_tech_stacks": [
+            "React.js",
+            "GSAP",
+            "TailwindCSS",
+            "JavaScript"
+        ],
+        "project_link": "",
+        "github_link": "https://github.com/myat-kyaw-thu/zentry__",
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-03-09T08:02:13.786Z",
+        "updatedAt": "2025-03-13T07:31:44.679Z"
+    },
+    {
+        "id": "eadd65b9-978f-4947-b865-23e8b36a794c",
+        "project_id": "shwe-min",
+        "project_title": "Shwe Min Admin Dashboard (Frontend)",
+        "project_subtitle": "Shwe Min Lab System is a streamlined laboratory management platform designed to handle the end-to-end workflow of blood test processing. It facilitates test booking, sample pickup, automated status tracking, and lab result management. The system ensures seamless coordination between patients, riders, and lab technicians, optimizing efficiency with features like barcode scanning, automated notifications, and real-time updates. By integrating delivery tracking and a structured history module, it enhances transparency and accessibility for both patients and healthcare providers.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741869925/project_covers/yuqkxiyyp2obkorcsmfu.jpg"],
+        "project_tech_stacks": [
+            "Vue.js",
+            "TailwindCSS",
+            "ShadcnUi",
+            "Firebase",
+            "Pinia",
+            "Typescript"
+        ],
+        "project_link": "",
+        "github_link": null,
+        "project_status": "In Progress",
+        "personal": false,
+        "createdAt": "2025-03-13T12:45:27.063Z",
+        "updatedAt": "2025-03-13T12:45:27.063Z"
+    },
+    {
+        "id": "5ea8ac5f-558b-452e-adef-a1d461ce0dc3",
+        "project_id": "mss-landing",
+        "project_title": "Minn Shin Saw Landing",
+        "project_subtitle": "This project involves the development of a professional landing page to serve as the portfolio for our company, highlighting our expertise and services. The landing page will be designed with smooth animations and fully implement the UI design, adhering to the original specifications without any modifications or adjustments. The goal is to create an engaging, visually appealing, and seamless user experience that reflects our brand identity and effectively showcases our work.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741866962/project_covers/l0gdiviiitawhggpqerj.png"],
+        "project_tech_stacks": [
+            "Html",
+            "Css",
+            "GSAP",
+            "TailwindCSS"
+        ],
+        "project_link": "https://www.minnshinsaw.com/",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-13T11:56:03.055Z",
+        "updatedAt": "2025-03-13T12:45:43.046Z"
+    },
+    {
+        "id": "1899430e-9645-467d-a52d-c02cf87693a9",
+        "project_id": "kmts-dubai",
+        "project_title": "KMTS-Dubai Landing Page",
+        "project_subtitle": "KMTS LLC, based in Dubai, specializes in supporting Southeast Asia's property and services industry. Their team comprises local and international experts committed to excellence, offering services like HVAC system inspections, plumbing overhauls, facade cleaning, and restoration. They also provide tailored training programs to enhance industry skills. Their core values—integrity, leadership, excellence, innovation, passion, and teamwork—drive their mission to exceed client expectations through innovative solutions and collaborative approaches.",
+        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741870092/project_covers/x1wip98uzawwrqrzm8e5.png"],
+        "project_tech_stacks": [
+            "Laravel",
+            "Filament",
+            "Php",
+            "TailwindCSS",
+            "Alphine.js"
+        ],
+        "project_link": "https://www.kmtsdubai.com/",
+        "github_link": null,
+        "project_status": "Completed",
+        "personal": false,
+        "createdAt": "2025-03-13T12:48:12.798Z",
+        "updatedAt": "2025-03-13T12:48:12.798Z"
+    },
+    {
+        "id": "eb3f46d0-7987-476a-8958-60036dba149c",
+        "project_id": "yin-pwint-mel",
+        "project_title": "Yin Pwint Mel - Blogging Platform",
+        "project_subtitle": "Yin Pwint Mel is a modern blogging platform where voices matter and stories connect us. Built with Next.js 16 and powered by Supabase, it provides a rich text editing experience using Lexical editor. Whether you're sharing a personal journey, exploring new ideas, or simply expressing what's on your mind, this is your platform to be heard. Features include real-time content management, authentication, and a beautiful, responsive interface designed for writers and readers alike.",
+        "project_cover_img": ["/not-found.jpg"],
+        "project_tech_stacks": [
+            "Next.js",
+            "React",
+            "TypeScript",
+            "Supabase",
+            "Lexical",
+            "TailwindCSS",
+            "Radix UI",
+            "TanStack Query"
+        ],
+        "project_link": "https://yin-pwint-mel.vercel.app",
+        "github_link": "https://github.com/myat-kyaw-thu/Yin-Pwint-Mel",
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-01-15T10:30:00.000Z",
+        "updatedAt": "2025-01-15T10:30:00.000Z"
+    },
+    {
+        "id": "721e5792-0fbf-4e58-aa92-493e5d91b96c",
+        "project_id": "mcp-connect",
+        "project_title": "MCP Connect - NPM Package",
+        "project_subtitle": "A lightweight, production-ready Model Context Protocol (MCP) server package for exposing Node.js functions to Claude Desktop and other AI agents via JSON-RPC 2.0 over STDIO. This NPM package simplifies the integration of custom tools and functions into AI workflows, enabling seamless communication between your Node.js applications and AI assistants. Perfect for developers building AI-powered tools, automation scripts, or extending Claude's capabilities with custom functionality.",
+        "project_cover_img": ["/not-found.jpg"],
+        "project_tech_stacks": [
+            "Node.js",
+            "JavaScript",
+            "JSON-RPC",
+            "MCP Protocol"
+        ],
+        "project_link": "https://www.npmjs.com/package/@myatkyawthu/mcp-connect",
+        "github_link": "https://github.com/myat-kyaw-thu/MCP_Integration_Package-NPM",
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-01-10T14:20:00.000Z",
+        "updatedAt": "2025-01-10T14:20:00.000Z"
+    },
+    {
+        "id": "fe999435-449c-4f52-82ba-75973ef5c52d",
+        "project_id": "laravel-api-visibility",
+        "project_title": "Laravel API Visibility - Composer Package",
+        "project_subtitle": "A developer-focused Laravel package that provides automatic API route documentation and live previewing of JSON/Markdown responses. Designed as a lightweight, expressive alternative to Swagger, it focuses on Developer Experience (DX), speed, and readability. The package automatically scans your Laravel routes, generates beautiful documentation, and allows you to test endpoints directly from the browser. Perfect for teams who want quick, maintainable API docs without the overhead of complex documentation tools.",
+        "project_cover_img": ["/not-found.jpg"],
+        "project_tech_stacks": [
+            "PHP",
+            "Laravel",
+            "Composer",
+            "Blade",
+            "TailwindCSS"
+        ],
+        "project_link": "",
+        "github_link": "https://github.com/myat-kyaw-thu/Composer-API-Docs-Package",
+        "project_status": "Completed",
+        "personal": true,
+        "createdAt": "2025-01-05T09:15:00.000Z",
+        "updatedAt": "2025-01-05T09:15:00.000Z"
+    }
+]
