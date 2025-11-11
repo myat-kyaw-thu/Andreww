@@ -14,7 +14,7 @@ const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 interface ProjectCardProps {
   title: string;
   description: string;
-  image: string;
+  image: string | string[]; // Support both single image and array
   techStack: string[] | string;
   status: "Completed" | "In Progress";
   type: "Personal" | "Work";
@@ -68,6 +68,10 @@ export function ProjectCard({
   const [imageViewerOpen, setImageViewerOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Handle image as string or array
+  const imageArray = Array.isArray(image) ? image : [image];
+  const coverImage = imageArray[0] || "/placeholder.svg";
 
   let parsedTechStack: string[] = [];
   try {
@@ -125,7 +129,7 @@ export function ProjectCard({
             )}
 
             <Image
-              src={image || "/placeholder.svg"}
+              src={coverImage}
               alt={title}
               fill
               className="object-cover rounded-lg transition-all duration-500 ease-out"
@@ -355,7 +359,7 @@ export function ProjectCard({
       </motion.article>
 
       <ImageViewer
-        src={image || "/placeholder.svg"}
+        images={imageArray}
         alt={title}
         isOpen={imageViewerOpen}
         onClose={() => setImageViewerOpen(false)}
