@@ -29,7 +29,8 @@ export function PageLoader({ children, minDuration = 4000 }: PageLoaderProps) {
   const greetingContainerRef = useRef<HTMLDivElement>(null);
 
   // Get projects data and fetch function from store
-  const { fetchProjects, hasLoaded: projectsLoaded } = useProjectStore();
+  const { fetchProjects, projects, isLoading: projectsLoading } = useProjectStore();
+  const projectsLoaded = projects.length > 0 && !projectsLoading;
 
   // Fetch projects data using the store
   useEffect(() => {
