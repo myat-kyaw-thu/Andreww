@@ -127,7 +127,6 @@
         "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851069/project_covers/e8a6lzsggx7hvthcvwan.png"],
         "project_tech_stacks": [
             "Php",
-            "Blade",
             "Laravel",
             "Filament",
             "TailwindCSS"
@@ -243,14 +242,13 @@
         "id": "eb3f46d0-7987-476a-8958-60036dba149c",
         "project_id": "yin-pwint-mel",
         "project_title": "Yin Pwint Mel - Blogging Platform",
-        "project_subtitle": "Yin Pwint Mel is a modern blogging platform where voices matter and stories connect us. Built with Next.js 16 and powered by Supabase, it provides a rich text editing experience using Lexical editor. Whether you're sharing a personal journey, exploring new ideas, or simply expressing what's on your mind, this is your platform to be heard. Features include real-time content management, authentication, and a beautiful, responsive interface designed for writers and readers alike.",
+        "project_subtitle": "Yin Pwint Mel is a modern blogging platform where voices matter and stories connect us. Built with Next.js 16 and powered by Supabase, it provides a rich text editing experience using editor. Whether you're sharing a personal journey, exploring new ideas, or simply expressing what's on your mind, this is your platform to be heard. Features include real-time content management, authentication, and a beautiful, responsive interface designed for writers and readers alike.",
         "project_cover_img": ["/not-found.jpg"],
         "project_tech_stacks": [
             "Next.js",
             "React",
             "TypeScript",
             "Supabase",
-            "Lexical",
             "TailwindCSS",
             "Radix UI",
             "TanStack Query"
