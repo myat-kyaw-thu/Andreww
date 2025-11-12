@@ -14,20 +14,6 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
-// interface ProjectCardProps {
-//   project: {
-//     project_id: string;
-//     project_title: string;
-//     project_subtitle: string;
-//     project_cover_img: string;
-//     project_tech_stacks: string[];
-//     project_link?: string;
-//     github_link?: string;
-//     project_status: "Completed" | "In Progress";
-//     personal: boolean;
-//   };
-// }
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
