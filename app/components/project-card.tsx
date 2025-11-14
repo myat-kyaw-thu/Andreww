@@ -3,17 +3,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Calendar, ChevronDown, ChevronUp, ExternalLink, Eye, Tag } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { ImageViewer } from "./image-viewer";
-import { FaReact, FaVuejs, FaNodeJs, FaLaravel, FaPython, FaPhp, FaDocker, FaAws, FaHtml5, FaCss3Alt } from "react-icons/fa";
-import { SiNextdotjs, SiTailwindcss, SiTypescript, SiJavascript, SiExpress, SiMongodb, SiMysql, SiPostgresql, SiPrisma, SiVercel, SiFramer, SiSupabase, SiFirebase, SiRedis, SiStripe, SiZod, SiRadixui, SiReactquery, SiComposer } from "react-icons/si";
-import { TbBrandReactNative } from "react-icons/tb";
 import { BiLogoPostgresql } from "react-icons/bi";
+import { FaAws, FaCss3Alt, FaDocker, FaHtml5, FaLaravel, FaNodeJs, FaPhp, FaPython, FaReact, FaVuejs } from "react-icons/fa";
 import { RiVuejsFill } from "react-icons/ri";
+import { SiComposer, SiExpress, SiFirebase, SiFramer, SiJavascript, SiMongodb, SiMysql, SiNextdotjs, SiPrisma, SiRadixui, SiReactquery, SiRedis, SiStripe, SiSupabase, SiTailwindcss, SiTypescript, SiVercel, SiZod } from "react-icons/si";
+import { TbBrandReactNative } from "react-icons/tb";
+import { ImageViewer } from "./image-viewer";
 
-import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google";
+import { Archivo, Space_Grotesk } from "next/font/google";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
-const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" });
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 interface ProjectCardProps {
@@ -28,8 +27,8 @@ interface ProjectCardProps {
 }
 
 // Tech stack icons and colors mapping
-type TechConfig = { 
-  icon?: React.ElementType; 
+type TechConfig = {
+  icon?: React.ElementType;
   customIcon?: string; // Path to custom icon
   color: string;
 };
@@ -42,13 +41,13 @@ const techStackConfig: Record<string, TechConfig> = {
   "NextJs": { icon: SiNextdotjs, color: "#000000" },
   "Vue.js": { icon: FaVuejs, color: "#4FC08D" },
   "VueJs": { icon: FaVuejs, color: "#4FC08D" },
-  
+
   // Styling
   "TailwindCSS": { icon: SiTailwindcss, color: "#06B6D4" },
   "Tailwind": { icon: SiTailwindcss, color: "#06B6D4" },
   "Css": { icon: FaCss3Alt, color: "#1572B6" },
   "Html": { icon: FaHtml5, color: "#E34F26" },
-  
+
   // Languages
   "TypeScript": { icon: SiTypescript, color: "#3178C6" },
   "Typescript": { icon: SiTypescript, color: "#3178C6" },
@@ -56,13 +55,13 @@ const techStackConfig: Record<string, TechConfig> = {
   "PHP": { icon: FaPhp, color: "#777BB4" },
   "Php": { icon: FaPhp, color: "#777BB4" },
   "Python": { icon: FaPython, color: "#3776AB" },
-  
+
   // Backend
   "Node.js": { icon: FaNodeJs, color: "#339933" },
   "Express": { icon: SiExpress, color: "#000000" },
   "Express.js": { icon: SiExpress, color: "#000000" },
   "Laravel": { icon: FaLaravel, color: "#FF2D20" },
-  
+
   // Databases
   "MongoDB": { icon: SiMongodb, color: "#47A248" },
   "MySQL": { icon: SiMysql, color: "#4479A1" },
@@ -72,30 +71,30 @@ const techStackConfig: Record<string, TechConfig> = {
   "Firebase": { icon: SiFirebase, color: "#FFCA28" },
   "Redis": { icon: SiRedis, color: "#DC382D" },
   "Neon": { icon: BiLogoPostgresql, color: "#00E599" },
-  
+
   // Animation & UI
   "Framer-Motion": { icon: SiFramer, color: "#0055FF" },
   "GSAP": { icon: FaReact, color: "#88CE02" },
   "Radix UI": { icon: SiRadixui, color: "#161618" },
   "ShadcnUI": { icon: SiRadixui, color: "#000000" },
   "ShadcnUi": { icon: SiRadixui, color: "#000000" },
-  
+
   // State Management
   "Zustand": { icon: TbBrandReactNative, color: "#443E38" },
   "Pinia": { icon: RiVuejsFill, color: "#FFD859" },
-  
+
   // Tools & Services
   "Docker": { icon: FaDocker, color: "#2496ED" },
   "AWS": { icon: FaAws, color: "#FF9900" },
   "Vercel": { icon: SiVercel, color: "#000000" },
   "Stripe": { icon: SiStripe, color: "#008CDD" },
   "Composer": { icon: SiComposer, color: "#885630" },
-  
+
   // Validation & Query
   "Zod": { icon: SiZod, color: "#3E67B1" },
   "ZOD": { icon: SiZod, color: "#3E67B1" },
   "TanStack Query": { icon: SiReactquery, color: "#FF4154" },
-  
+
   // Others
   "Lucide-React": { icon: FaReact, color: "#61DAFB" },
   "JSON-RPC": { customIcon: "/icons/json-rpc-logo-3.png", color: "#F7DF1E" },
@@ -328,7 +327,7 @@ export function ProjectCard({
                       const Icon = config?.icon;
                       const customIcon = config?.customIcon;
                       const iconColor = config?.color || "#6B7280";
-                      
+
                       return (
                         <motion.div
                           key={tech}

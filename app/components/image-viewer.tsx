@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Download, X, ZoomIn, ZoomOut } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ImageViewerProps {
@@ -24,7 +24,7 @@ interface SingleImageViewerProps {
 
 export function ImageViewer(props: ImageViewerProps | SingleImageViewerProps) {
   const { alt, isOpen, onClose } = props;
-  
+
   // Handle backwards compatibility
   const imageArray = 'images' in props ? props.images : [props.src];
   const startIndex = 'initialIndex' in props ? props.initialIndex ?? 0 : 0;
@@ -45,6 +45,16 @@ export function ImageViewer(props: ImageViewerProps | SingleImageViewerProps) {
   useEffect(() => {
     setCurrentIndex(startIndex);
   }, [startIndex, isOpen]);
+
+  const handleNext = useCallback(() => {
+    setImageLoaded(false);
+    setCurrentIndex((prev: number) => (prev + 1) % imageArray.length);
+  }, [imageArray.length]);
+
+  const handlePrevious = useCallback(() => {
+    setImageLoaded(false);
+    setCurrentIndex((prev: number) => (prev - 1 + imageArray.length) % imageArray.length);
+  }, [imageArray.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -70,17 +80,7 @@ export function ImageViewer(props: ImageViewerProps | SingleImageViewerProps) {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, onClose, currentIndex, hasMultipleImages]);
-
-  const handleNext = () => {
-    setImageLoaded(false);
-    setCurrentIndex((prev: number) => (prev + 1) % imageArray.length);
-  };
-
-  const handlePrevious = () => {
-    setImageLoaded(false);
-    setCurrentIndex((prev: number) => (prev - 1 + imageArray.length) % imageArray.length);
-  };
+  }, [isOpen, onClose, hasMultipleImages, handleNext, handlePrevious]);
 
   const handleDownload = async () => {
     try {
