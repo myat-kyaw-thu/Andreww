@@ -1,16 +1,16 @@
-import CursorDot from '@/components/ui/cursor-dot';
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import { Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from './components/theme-provider';
 import './globals.css';
+import { CustomCursor } from './components/CustomCursor';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
   // You can use specific weights if needed
   // weight: ['300', '400', '500', '600', '700']
-})
+});
 
 export const metadata: Metadata = {
   title: 'Myat Kyaw Thu – Full Stack Developer | React & Laravel Expert',
@@ -40,11 +40,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-       <link rel="icon" href="/profile2.png" className="rounded-full" />
+      <link rel="icon" href="/profile2.png" className="rounded-full" />
       <body className={spaceGrotesk.className}>
         <ThemeProvider
           attribute="class"
@@ -52,11 +52,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-           <CursorDot />
+          <CustomCursor />
           {children}
-           <Analytics />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
