@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from './components/theme-provider';
 import './globals.css';
-import { CustomCursor } from './components/CustomCursor';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -52,7 +51,6 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <CustomCursor />
           {children}
           <Analytics />
         </ThemeProvider>
