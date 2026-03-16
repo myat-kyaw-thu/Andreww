@@ -61,27 +61,6 @@
         "updatedAt": "2025-03-13T07:29:52.585Z"
     },
     {
-        "id": "3e6da0e7-7718-4c14-91c2-ca8500262682",
-        "project_id": "popo-portfolio",
-        "project_title": "Aesthetic Portfolio",
-        "project_subtitle": "I developed a professional portfolio website for Po Po Thae Khine, a recent accounting graduate, to showcase her qualifications and expertise. The site features sections on her education, certifications (including HSK 2 and NLA FAA Levels 1 & 2), skills in critical thinking and wealth management, and practical experience as a Financial Assistant. It also provides contact information and options to download her CV, effectively presenting her credentials to potential employers.",
-        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851128/project_covers/a5s1iohtv1iftunuaptw.png"],
-        "project_tech_stacks": [
-            "TypeScript",
-            "ShadcnUi",
-            "Next.js",
-            "React",
-            "GSAP",
-            "Framer-Motion"
-        ],
-        "project_link": "https://popothaekhine.vercel.app/",
-        "github_link": null,
-        "project_status": "Completed",
-        "personal": true,
-        "createdAt": "2025-03-09T07:41:17.874Z",
-        "updatedAt": "2025-03-13T07:32:09.301Z"
-    },
-    {
         "id": "e2888ee2-4e2c-48f1-b49d-4f78e47153b1",
         "project_id": "kbz-mini-app",
         "project_title": "Exam Plus (KBZMiniApp)",

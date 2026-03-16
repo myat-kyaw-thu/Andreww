@@ -123,10 +123,10 @@ const Hero = () => {
             <h1 className={`${spaceMono.className} text-lg leading-none tracking-tighter sm:text-xl md:text-2xl`}>
               Hey, I am
               <LineShadowText
-                className={`${spaceGrotesk.className} block italic font-bold text-5xl md:text-6xl mt-1`}
+                className={`${spaceGrotesk.className} block italic font-bold text-3xl md:text-4xl mt-1`}
                 shadowColor={shadowColor}
               >
-                Andrew
+                Myat Kyaw Thu
               </LineShadowText>
             </h1>
           </motion.div>
