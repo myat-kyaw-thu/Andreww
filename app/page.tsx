@@ -10,52 +10,6 @@ import Navbar from './components/Navbar';
 import { PageLoader } from './components/PageLoader';
 import ProjectsSection from './components/projects';
 import SkillsSection from './components/Skills';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Myat Kyaw Thu - Full Stack Developer | Portfolio',
-  description: 'Full Stack Developer based in Yangon, Myanmar. Specializing in React, Next.js, Vue.js, Express.js, and Laravel. Crafting digital experiences with modern web technologies.',
-  keywords: ['Myat Kyaw Thu', 'Full Stack Developer', 'React', 'Next.js', 'Vue.js', 'Express.js', 'Laravel', 'Web Developer', 'Myanmar'],
-  authors: [{ name: 'Myat Kyaw Thu' }],
-  creator: 'Myat Kyaw Thu',
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://myatkyawthu.com',
-    siteName: 'Myat Kyaw Thu - Full Stack Developer',
-    title: 'Myat Kyaw Thu - Full Stack Developer | Portfolio',
-    description: 'Full Stack Developer based in Yangon, Myanmar. Specializing in React, Next.js, Vue.js, Express.js, and Laravel.',
-    images: [
-      {
-        url: 'https://myatkyawthu.com/profile2.png',
-        width: 1200,
-        height: 630,
-        alt: 'Myat Kyaw Thu - Full Stack Developer',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Myat Kyaw Thu - Full Stack Developer',
-    description: 'Full Stack Developer based in Yangon, Myanmar. Specializing in React, Next.js, Vue.js, Express.js, and Laravel.',
-    images: ['https://myatkyawthu.com/profile2.png'],
-    creator: '@myatkyawthu',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-snippet': -1,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-    },
-  },
-  alternates: {
-    canonical: 'https://myatkyawthu.com',
-  },
-};
 
 export default function Home() {
 
