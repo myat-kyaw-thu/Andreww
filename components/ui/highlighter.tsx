@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import type React from "react"
 import { useInView } from "motion/react"
+import type React from "react"
+import { useEffect, useRef, useState } from "react"
 import { annotate } from "rough-notation"
 import { type RoughAnnotation } from "rough-notation/lib/model"
 
@@ -85,7 +85,7 @@ export function Highlighter({
       const annotationConfig = {
         type: action,
         color: finalColor,
-        strokeWidth,
+        strokeWidth: 2,
         animationDuration,
         iterations,
         padding,
@@ -131,9 +131,7 @@ export function Highlighter({
             const pathElement = path as SVGElement
             pathElement.style.transition = `all 600ms ${BLOOM_TIMING}`
             pathElement.style.opacity = "1"
-            if (strokeWidth > 1) {
-              pathElement.setAttribute("stroke-width", String(strokeWidth))
-            }
+            pathElement.style.strokeWidth = "5"
           })
         }
 

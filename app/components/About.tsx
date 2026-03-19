@@ -1,12 +1,12 @@
 
 "use client"
 
-import { SparklesText } from "./SparkleText"
 import { Highlighter } from "@/components/ui/highlighter"
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+import { SparklesText } from "./SparkleText"
 
-import { Space_Grotesk, Archivo } from "next/font/google"
+import { Archivo, Space_Grotesk } from "next/font/google"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 const archivo = Archivo({ subsets: ["latin"], display: "swap" })
@@ -51,18 +51,18 @@ export default function AboutSection() {
   }
 
   return (
-    <motion.section 
+    <motion.section
       className="w-full max-w-2xl space-y-8 my-10"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
     >
-      <motion.div 
+      <motion.div
         className="space-y-2"
       >
         <SparklesText text="About" className={spaceGrotesk.className}/>
-        <motion.div 
+        <motion.div
           className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -77,7 +77,7 @@ export default function AboutSection() {
         <motion.p variants={textVariants} transition={{ delay: 0.7 }}>
           Results-driven Software Engineer with{" "}
           {showHighlights ? (
-            <Highlighter action="highlight" colorMode="custom" color="#61DAFB" intensity="subtle" isView={false}>
+            <Highlighter action="underline" colorMode="custom" color="#505ae6" intensity="subtle" isView={false}>
               2+ years of experience
             </Highlighter>
           ) : (
@@ -89,9 +89,7 @@ export default function AboutSection() {
         <motion.p variants={textVariants} transition={{ delay: 0.8 }}>
           Proven track record in optimizing workflows, enhancing system efficiency, and delivering production-ready applications ahead of schedule. Demonstrates{" "}
           {showHighlights ? (
-            <Highlighter action="highlight" colorMode="custom" color="#10b981" intensity="subtle" isView={false}>
-              strong technical leadership
-            </Highlighter>
+            <span>strong technical leadership</span>
           ) : (
             <span>strong technical leadership</span>
           )}
@@ -99,9 +97,17 @@ export default function AboutSection() {
         </motion.p>
 
         <motion.p variants={textVariants} transition={{ delay: 0.9 }}>
-          Committed to ownership at every stage of the development lifecycle, from conceptualization to deployment. Proficient with{" "}
+          Committed to{" "}
           {showHighlights ? (
-            <Highlighter action="underline" colorMode="custom" color="#61DAFB" intensity="moderate" strokeWidth={2.5} isView={false}>
+            <Highlighter action="underline" colorMode="custom" color="#505ae6" intensity="subtle" isView={false}>
+              ownership
+            </Highlighter>
+          ) : (
+            <span>ownership</span>
+          )}
+          {" "}at every stage of the development lifecycle, from conceptualization to deployment. Proficient with{" "}
+          {showHighlights ? (
+            <Highlighter action="underline" colorMode="custom" color="#505ae6" intensity="subtle" isView={false}>
               React, Vue.js, Laravel, and Node.js
             </Highlighter>
           ) : (

@@ -1,12 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Code2, FileText, Github, Linkedin, Mail } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { SiExpress, SiLaravel, SiNextdotjs, SiReact, SiVuedotjs } from "react-icons/si";
 import { LineShadowText } from "./LineShadowText";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
@@ -15,17 +16,21 @@ const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 const Hero = () => {
   const theme = useTheme();
-  const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black";
+  const [shadowColor, setShadowColor] = useState("black");
+
+  useEffect(() => {
+    setShadowColor(theme.resolvedTheme === "dark" ? "white" : "black");
+  }, [theme.resolvedTheme]);
 
   const techStack = [
-    { name: "React", color: "text-[#61DAFB]", url: "https://reactjs.org/" },
-    { name: "Next.js", color: "text-black dark:text-white", url: "https://nextjs.org/" },
-    { name: "Vue.js", color: "text-[#4FC08D]", url: "https://vuejs.org/" },
-    { name: "Express.js", color: "text-[#000000] dark:text-[#FFFFFF]", url: "https://expressjs.com/" },
-    { name: "Laravel", color: "text-[#FF2D20]", url: "https://laravel.com/" },
+    { name: "React", color: "#61DAFB", icon: SiReact, url: "https://reactjs.org/" },
+    { name: "Next.js", color: "#000000", icon: SiNextdotjs, url: "https://nextjs.org/" },
+    { name: "Vue.js", color: "#4FC08D", icon: SiVuedotjs, url: "https://vuejs.org/" },
+    { name: "Express.js", color: "#90C53F", icon: SiExpress, url: "https://expressjs.com/" },
+    { name: "Laravel", color: "#FF2D20", icon: SiLaravel, url: "https://laravel.com/" },
   ];
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -35,7 +40,7 @@ const Hero = () => {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -47,7 +52,7 @@ const Hero = () => {
     },
   };
 
-  const socialVariants = {
+  const socialVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
@@ -59,7 +64,7 @@ const Hero = () => {
     },
   };
 
-  const socialItemVariants = {
+  const socialItemVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
@@ -157,20 +162,44 @@ const Hero = () => {
               Crafting digital experiences with{" "}
               {techStack.map((tech, index) => (
                 <React.Fragment key={tech.name}>
-                  <Link
-                    href={tech.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`underline italic font-medium ${spaceGrotesk.className} ${tech.color} hover:opacity-70 transition-opacity duration-300 relative group`}
+                  <motion.span
+                    className="relative inline-block"
                   >
-                    <span>{tech.name}</span>
                     <motion.span
-                      className={`absolute bottom-0 left-0 w-full h-0.5 ${tech.color.replace("text-", "bg-")} origin-left opacity-60`}
-                      initial={{ scaleX: 0 }}
-                      whileHover={{ scaleX: 1 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </Link>
+                      initial={{ color: "rgb(82, 82, 91)" }}
+                      whileHover={{ color: tech.color }}
+                      transition={{ duration: 0.2 }}
+                      style={{ display: "inline" }}
+                    >
+                      <Link
+                        href={tech.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline italic font-medium hover:opacity-70 transition-opacity duration-300 relative group"
+                      >
+                        <span>{tech.name}</span>
+                        <motion.span
+                          className="absolute bottom-0 left-0 w-full h-0.5 origin-left opacity-60"
+                          style={{ backgroundColor: tech.color }}
+                          initial={{ scaleX: 0 }}
+                          whileHover={{ scaleX: 1 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </Link>
+                    </motion.span>
+                    <motion.span
+                      className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white dark:bg-slate-900 rounded-lg p-2 shadow-lg border border-gray-200 dark:border-slate-700 pointer-events-none"
+                      style={{ display: "inline-block" }}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileHover={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {React.createElement(tech.icon, {
+                        size: 24,
+                        style: { color: tech.color },
+                      })}
+                    </motion.span>
+                  </motion.span>
                   {index < techStack.length - 1 && ", "}
                   {index === techStack.length - 2 && "and "}
                 </React.Fragment>
