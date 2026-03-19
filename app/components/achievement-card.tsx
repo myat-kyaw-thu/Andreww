@@ -6,7 +6,7 @@ import { ArrowRight, Award, Calendar, Star, Trophy, X, Zap } from "lucide-react"
 import { Space_Grotesk } from "next/font/google";
 import Image from "next/image";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
@@ -29,21 +29,29 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Simplified magnetic effect - only for desktop
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const springConfig = { stiffness: 150, damping: 25 };
   const springX = useSpring(mouseX, springConfig);
   const springY = useSpring(mouseY, springConfig);
 
-  // Reduced rotation effect
   const rotateX = useTransform(springY, [-20, 20], [1, -1]);
   const rotateY = useTransform(springX, [-20, 20], [-1, 1]);
 
-  // Simplified color system
   const getThemeColors = () => ({
     light: "#C1A36E",
     dark: "#D4B886",
@@ -64,7 +72,7 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
 
   // Simplified mouse handling - only on desktop
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (window.innerWidth < 768) return; // Skip on mobile
+    if (!isDesktop) return; // Skip on mobile
 
     if (!cardRef.current || !buttonRef.current) return;
     const cardRect = cardRef.current.getBoundingClientRect();
@@ -130,8 +138,8 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
             "shadow-md shadow-slate-200/20 dark:shadow-slate-900/20",
           )}
           style={{
-            rotateX: window.innerWidth >= 768 ? rotateX : 0,
-            rotateY: window.innerWidth >= 768 ? rotateY : 0,
+            rotateX: isDesktop ? rotateX : 0,
+            rotateY: isDesktop ? rotateY : 0,
           }}
           transition={{ duration: 0.2 }}
         >
@@ -208,8 +216,8 @@ export function AchievementCard({ achievement }: AchievementCardProps) {
                   "transition-colors duration-200",
                 )}
                 style={{
-                  x: window.innerWidth >= 768 ? springX : 0,
-                  y: window.innerWidth >= 768 ? springY : 0,
+                  x: isDesktop ? springX : 0,
+                  y: isDesktop ? springY : 0,
                   color: colors.light,
                   borderColor: `${colors.light}30`,
                   backgroundColor: `${colors.light}08`,

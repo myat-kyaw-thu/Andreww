@@ -158,7 +158,7 @@ export function ProjectCard({
         }}
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
-        className="group w-full max-w-2xl mx-auto"
+        className="group w-full max-w-4xl"
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
           {/* Image Section */}

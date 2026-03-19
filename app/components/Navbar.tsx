@@ -1,17 +1,19 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { motion, useMotionValueEvent, useScroll, useSpring, AnimatePresence } from "framer-motion";
+import { Award, Clock, Home } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
-import { Award, Clock, Home, Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
-
 import { Archivo } from "next/font/google";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [activeSection, setActiveSection] = useState("top");
   const [mounted, setMounted] = useState(false);
   const [time, setTime] = useState<string>("");
@@ -19,9 +21,6 @@ export default function Navbar() {
   const [hoverStyle, setHoverStyle] = useState({});
   const navRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const { scrollY } = useScroll();
-  const { theme, setTheme } = useTheme();
-
-  // Scroll indicator
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -29,8 +28,15 @@ export default function Navbar() {
     restDelta: 0.001,
   });
 
-  // Handle active section detection
+  // Handle active section detection based on pathname and scroll
   useMotionValueEvent(scrollY, "change", () => {
+    // If on projects page, don't update active section based on scroll
+    if (pathname === "/projects") {
+      setActiveSection("projects");
+      return;
+    }
+
+    // On home page, detect sections by scroll position
     const sections = ["top", "achievements"];
     const currentSection = sections.find((section) => {
       const element = document.getElementById(section);
@@ -78,26 +84,94 @@ export default function Navbar() {
     return () => clearInterval(interval);
   }, []);
 
-  // Smooth scroll function
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      setActiveSection(sectionId);
+  // Smooth scroll function with idempotency and loading state
+  const scrollToSection = (sectionId: string, href?: string) => {
+    // If href is provided and it's a route (starts with /)
+    if (href && href.startsWith("/")) {
+      // Only navigate if we're not already on that page
+      const normalizedPathname = pathname === "" ? "/" : pathname;
+      const normalizedHref = href;
+      
+      if (normalizedPathname !== normalizedHref) {
+        startTransition(() => {
+          router.push(href);
+        });
+      }
+      // If already on the page, do nothing (idempotent)
+      return;
+    }
+
+    // For home button (href === "#"), navigate to home only if not already there
+    if (href === "#") {
+      const normalizedPathname = pathname === "" ? "/" : pathname;
+      if (normalizedPathname !== "/") {
+        startTransition(() => {
+          router.push("/");
+        });
+      } else {
+        // If already on home, scroll to top
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setActiveSection("top");
+      }
+      return;
+    }
+
+    // For anchor links, only scroll if we're on the home page
+    const normalizedPathname = pathname === "" ? "/" : pathname;
+    if (normalizedPathname === "/") {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        setActiveSection(sectionId);
+      }
     }
   };
 
   if (!mounted) return null;
 
   const navItems = [
-    { id: "top", label: "Home", icon: <Home className="w-4 h-4" /> },
-    { id: "achievements", label: "Achievements", icon: <Award className="w-4 h-4" /> },
+    { id: "top", label: "Home", icon: <Home className="w-4 h-4" />, href: "#" },
+    { id: "achievements", label: "Achievements", icon: <Award className="w-4 h-4" />, href: "#achievements" },
+    { id: "projects", label: "Projects", icon: <Award className="w-4 h-4" />, href: "/projects" },
   ];
 
   return (
+    <>
+      {/* Loading Overlay - Shows during navigation */}
+      <AnimatePresence>
+        {isPending && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-white/50 dark:bg-slate-950/50 backdrop-blur-sm pointer-events-none"
+          >
+            <div className="flex gap-2">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-2 h-2 rounded-full bg-slate-900 dark:bg-white"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: i * 0.2,
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Navbar */}
     <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none pb-6 px-4">
       <div className="max-w-xl mx-auto">
         <nav className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-lg shadow-slate-200/20 dark:shadow-slate-900/20 pointer-events-auto overflow-hidden">
@@ -123,7 +197,7 @@ export default function Navbar() {
                   ref={(el) => {
                     navRefs.current[index] = el;
                   }}
-                  onClick={() => scrollToSection(item.id)}
+                  onClick={() => scrollToSection(item.id, item.href)}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className={cn(
@@ -153,32 +227,15 @@ export default function Navbar() {
               </motion.div>
 
               {/* Theme Toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                <motion.div
-                  initial={false}
-                  animate={{
-                    rotate: theme === "dark" ? 0 : 360,
-                  }}
-                  transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-                >
-                  {theme === "dark" ? (
-                    <Moon className="h-[1.2rem] w-[1.2rem] rotate-90 transition-all dark:rotate-0" />
-                  ) : (
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 transition-all dark:-rotate-90" />
-                  )}
-                </motion.div>
-                <span className="sr-only">Toggle theme</span>
-              </Button>
+              <AnimatedThemeToggler
+                className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 p-2 transition-colors"
+              />
             </div>
           </div>
         </nav>
       </div>
     </div>
+    </>
   );
 }
 

@@ -1,44 +1,27 @@
 
 "use client"
 
-import { useState } from "react";
 import { SparklesText } from "./SparkleText"
-import { motion, AnimatePresence } from "framer-motion"
+import { Highlighter } from "@/components/ui/highlighter"
+import { motion } from "framer-motion"
+import { useState, useEffect } from "react"
 
-import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+import { Space_Grotesk, Archivo } from "next/font/google"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
-const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
 const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
-
-const LanguageHighlight = ({ children, color }: { children: React.ReactNode; color: string; onHoverStart: () => void; onHoverEnd: () => void }) => {
-  const [isHovered, setIsHovered] = useState(false)
-
-  return (
-    <motion.span
-      className="relative inline-block font-semibold"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      {children}
-      <AnimatePresence>
-        {isHovered && (
-          <motion.span
-            className={`${spaceMono.className} absolute bottom-0 left-0 w-full h-0.5`}
-            style={{ backgroundColor: color }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            exit={{ scaleX: 0 }}
-            transition={{ duration: 0.3 }}
-          />
-        )}
-      </AnimatePresence>
-    </motion.span>
-  )
-}
 export default function AboutSection() {
-  const [hoveredLanguage, setHoveredLanguage] = useState<string | null>(null)
+  const [showHighlights, setShowHighlights] = useState(false)
+
+  useEffect(() => {
+    // Wait for text animations to complete before showing highlights
+    const timer = setTimeout(() => {
+      setShowHighlights(true)
+    }, 1500) // After all text animations finish
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -60,25 +43,13 @@ export default function AboutSection() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
         damping: 15,
       },
     },
   }
 
-  const glitchEffect = {
-    hidden: {
-      opacity: 0,
-      x: 3,
-      transition: { duration: 0.1 },
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.1 },
-    },
-  }
   return (
     <motion.section 
       className="w-full max-w-2xl space-y-8 my-10"
@@ -95,72 +66,49 @@ export default function AboutSection() {
           className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         />
       </motion.div>
 
        <motion.div
-        className={`${archivo.className}  dark:text-slate-300 leading-relaxed text-base space-y-4`}
+        className={`${archivo.className} dark:text-slate-300 leading-relaxed text-base space-y-4`}
         variants={containerVariants}
       >
-        <motion.p variants={textVariants}>
-          As a passionate developer dedicated to crafting innovative web applications, I focus on solving real-world
-          problems with{" "}
-          <LanguageHighlight
-            color="#8892BF"
-            onHoverStart={() => setHoveredLanguage("PHP")}
-            onHoverEnd={() => setHoveredLanguage(null)}
-          >
-            PHP
-          </LanguageHighlight>
-          ,{" "}
-          <LanguageHighlight
-            color="#F7DF1E"
-            onHoverStart={() => setHoveredLanguage("JavaScript")}
-            onHoverEnd={() => setHoveredLanguage(null)}
-          >
-            JavaScript
-          </LanguageHighlight>
-          , and{" "}
-          <LanguageHighlight
-            color="#3178C6"
-            onHoverStart={() => setHoveredLanguage("TypeScript")}
-            onHoverEnd={() => setHoveredLanguage(null)}
-          >
-            TypeScript
-          </LanguageHighlight>
-          .
+        <motion.p variants={textVariants} transition={{ delay: 0.7 }}>
+          Results-driven Software Engineer with{" "}
+          {showHighlights ? (
+            <Highlighter action="highlight" colorMode="custom" color="#61DAFB" intensity="subtle" isView={false}>
+              2+ years of experience
+            </Highlighter>
+          ) : (
+            <span>2+ years of experience</span>
+          )}
+          {" "}leading cross-functional teams and driving end-to-end project delivery. Adept at architecting and scaling high-performance systems using React, Vue.js, Laravel, and Node.js.
         </motion.p>
 
-        <motion.p variants={textVariants}>
-          With a year of experience, I prioritize delivering high-quality, maintainable solutions. Every project
-          reflects my commitment to efficiency—whether optimizing load times, improving performance by reducing bundle
-          sizes, or transforming complex requirements into seamless, elegant solutions.
+        <motion.p variants={textVariants} transition={{ delay: 0.8 }}>
+          Proven track record in optimizing workflows, enhancing system efficiency, and delivering production-ready applications ahead of schedule. Demonstrates{" "}
+          {showHighlights ? (
+            <Highlighter action="highlight" colorMode="custom" color="#10b981" intensity="subtle" isView={false}>
+              strong technical leadership
+            </Highlighter>
+          ) : (
+            <span>strong technical leadership</span>
+          )}
+          {" "}with a focus on fostering innovation, promoting clean, modular code, and delivering tangible business outcomes.
         </motion.p>
 
-        <AnimatePresence>
-          {hoveredLanguage === null && (
-            <motion.p variants={textVariants} initial="hidden" animate="visible" exit="hidden">
-              I ensure that every line of code I write meets the highest standards of quality and maintainability.
-            </motion.p>
+        <motion.p variants={textVariants} transition={{ delay: 0.9 }}>
+          Committed to ownership at every stage of the development lifecycle, from conceptualization to deployment. Proficient with{" "}
+          {showHighlights ? (
+            <Highlighter action="underline" colorMode="custom" color="#61DAFB" intensity="moderate" strokeWidth={2.5} isView={false}>
+              React, Vue.js, Laravel, and Node.js
+            </Highlighter>
+          ) : (
+            <span>React, Vue.js, Laravel, and Node.js</span>
           )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {hoveredLanguage && (
-            <motion.p
-              variants={glitchEffect}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              className="font-mono text-sm"
-            >
-              {hoveredLanguage === "PHP" && "<?php echo 'Hello, World!'; ?>"}
-              {hoveredLanguage === "JavaScript" && "console.log('Hello, World!');"}
-              {hoveredLanguage === "TypeScript" && "const greeting: string = 'Hello, World!';"}
-            </motion.p>
-          )}
-        </AnimatePresence>
+          . Ensuring alignment with organizational goals and customer success.
+        </motion.p>
       </motion.div>
     </motion.section>
   )
