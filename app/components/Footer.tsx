@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useAnimation } from "framer-motion"
+import { motion, useAnimation, Variants } from "framer-motion"
 import { Code2, Dot, ExternalLink, Github, Linkedin, Mail } from "lucide-react"
 import { Space_Mono } from "next/font/google"
 import Link from "next/link"
@@ -13,7 +13,7 @@ export default function Footer() {
   const currentYear = 2025
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -24,7 +24,7 @@ export default function Footer() {
     },
   }
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,

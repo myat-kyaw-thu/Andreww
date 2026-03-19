@@ -2,13 +2,13 @@
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 import { Code, Compass, FileText, Lightbulb, Palette, Shield } from "lucide-react"
 
 // Font imports would normally go here
 // For this example, we'll use CSS variables for font families
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -19,12 +19,12 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 }
 
-const skillIconVariants = {
+const skillIconVariants: Variants = {
   hover: { scale: 1.1, transition: { type: "spring", stiffness: 400, damping: 10 } },
   tap: { scale: 0.95 },
 }

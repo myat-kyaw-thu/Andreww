@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export default function ProjectsLoading() {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -14,7 +14,7 @@ export default function ProjectsLoading() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -47,7 +47,7 @@ export default function ProjectsLoading() {
           <motion.div variants={itemVariants} className="space-y-4">
             {/* Title skeleton */}
             <div className="h-12 bg-slate-200 dark:bg-slate-800 rounded-lg w-64 animate-pulse" />
-            
+
             {/* Description skeleton */}
             <div className="space-y-2">
               <div className="h-5 bg-slate-200 dark:bg-slate-800 rounded-lg w-full animate-pulse" />
@@ -66,7 +66,7 @@ export default function ProjectsLoading() {
           <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
             {/* Work Experiences tab */}
             <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded-lg w-40 animate-pulse" />
-            
+
             {/* Personal Projects tab */}
             <div className="h-10 bg-slate-200 dark:bg-slate-800 rounded-lg w-40 animate-pulse" />
           </div>
@@ -95,7 +95,7 @@ export default function ProjectsLoading() {
                 {/* Image Section */}
                 <div className="relative aspect-[4/3] w-full">
                   <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 rounded-lg animate-pulse" />
-                  
+
                   {/* Badge placeholders */}
                   <div className="absolute top-2 left-2 flex gap-1">
                     <div className="h-6 w-16 bg-slate-300 dark:bg-slate-700 rounded-full animate-pulse" />

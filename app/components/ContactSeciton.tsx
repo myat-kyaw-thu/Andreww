@@ -1,16 +1,16 @@
 "use client"
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { motion, Variants } from "framer-motion"
+import { AlertCircle, CheckCircle2, FileText, Mail, MessageSquare, User2, XCircle } from "lucide-react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { User2, Mail, MessageSquare, CheckCircle2, XCircle, AlertCircle, FileText } from "lucide-react"
+import { toast } from "sonner"
+import * as z from "zod"
 
-import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google"
 import { EnhancedSubmitButton } from "./submit-button"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
@@ -34,7 +34,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -45,7 +45,7 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,

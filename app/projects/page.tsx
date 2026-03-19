@@ -1,35 +1,50 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Space_Grotesk, Archivo } from "next/font/google";
-import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
+import Navbar from "@/app/components/Navbar";
 import { ProjectsGrid } from "@/app/components/projects-grid";
 import projectsData from "@/project-index.json";
+import { AnimatePresence, motion, Variants } from "framer-motion";
+import { Archivo, Space_Grotesk } from "next/font/google";
+import { useMemo, useState } from "react";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 type TabType = "work" | "personal";
 
+type ProjectData = {
+  id: string;
+  project_id: string;
+  project_title: string;
+  project_subtitle: string;
+  project_cover_img: string[];
+  project_tech_stacks: string[];
+  project_link?: string;
+  github_link?: string | null;
+  project_status: string;
+  personal: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState<TabType>("work");
 
   // Separate projects by type
   const workProjects = useMemo(
-    () => projectsData.filter((project: any) => !project.personal),
+    () => (projectsData as ProjectData[]).filter((project) => !project.personal),
     []
   );
 
   const personalProjects = useMemo(
-    () => projectsData.filter((project: any) => project.personal),
+    () => (projectsData as ProjectData[]).filter((project) => project.personal),
     []
   );
 
   const displayedProjects = activeTab === "work" ? workProjects : personalProjects;
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -40,7 +55,7 @@ export default function ProjectsPage() {
     },
   };
 
-  const tabVariants = {
+  const tabVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
@@ -135,7 +150,8 @@ export default function ProjectsPage() {
             transition={{ duration: 0.3 }}
           >
             {displayedProjects.length > 0 ? (
-              <ProjectsGrid projects={displayedProjects} />
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              <ProjectsGrid projects={displayedProjects as any} />
             ) : (
               <motion.div
                 initial={{ opacity: 0 }}

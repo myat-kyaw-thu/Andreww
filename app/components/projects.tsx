@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { useEffect, useState } from "react";
 import { ProjectCard } from './project-card';
@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -25,7 +25,7 @@ const containerVariants = {
   },
 };
 
-const titleVariants = {
+const titleVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
@@ -124,13 +124,13 @@ export default function ProjectsSection() {
               transition={{ duration: 0.5 }}
             >
               {/* Decorative divider */}
-              <motion.div 
+              <motion.div
                 className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-border to-transparent"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               />
-              
+
               <div className="relative">
                 <Button
                   onClick={loadMoreWorkProjects}
@@ -144,7 +144,7 @@ export default function ProjectsSection() {
                     </span>
                   </span>
                 </Button>
-                
+
                 {/* Glow effect */}
                 <motion.div
                   className="absolute inset-0 -z-10 bg-foreground/20 blur-xl rounded-lg"
@@ -205,13 +205,13 @@ export default function ProjectsSection() {
               transition={{ duration: 0.5 }}
             >
               {/* Decorative divider */}
-              <motion.div 
+              <motion.div
                 className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-border to-transparent"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               />
-              
+
               <div className="relative">
                 <Button
                   onClick={loadMorePersonalProjects}
@@ -225,7 +225,7 @@ export default function ProjectsSection() {
                     </span>
                   </span>
                 </Button>
-                
+
                 {/* Glow effect */}
                 <motion.div
                   className="absolute inset-0 -z-10 bg-foreground/20 blur-xl rounded-lg"

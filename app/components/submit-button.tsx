@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { motion, AnimatePresence } from "framer-motion"
-import { Loader2, Send, CheckCircle } from "lucide-react"
+import { AnimatePresence, motion, Variants } from "framer-motion"
+import { CheckCircle, Loader2, Send } from "lucide-react"
 
 interface SubmitButtonProps {
   isSubmitting: boolean
@@ -12,7 +12,7 @@ interface SubmitButtonProps {
 
 export function EnhancedSubmitButton({ isSubmitting, isSuccess = false, onSubmit, resetSuccess }: SubmitButtonProps) {
   // Animation variants
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -31,7 +31,7 @@ export function EnhancedSubmitButton({ isSubmitting, isSuccess = false, onSubmit
     },
   }
 
-  const childVariants = {
+  const childVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,

@@ -2,7 +2,7 @@
 "use client"
 
 import { Highlighter } from "@/components/ui/highlighter"
-import { motion } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 import { useEffect, useState } from "react"
 import { SparklesText } from "./SparkleText"
 
@@ -23,7 +23,7 @@ export default function AboutSection() {
     return () => clearTimeout(timer)
   }, [])
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -34,7 +34,7 @@ export default function AboutSection() {
     },
   }
 
-  const textVariants = {
+  const textVariants: Variants = {
     hidden: {
       opacity: 0,
       y: 20,
@@ -43,7 +43,7 @@ export default function AboutSection() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring" as const,
+        type: "spring",
         stiffness: 100,
         damping: 15,
       },

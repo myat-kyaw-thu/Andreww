@@ -1,38 +1,38 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
+import { motion, Variants } from "framer-motion"
 import { Code2, Database, PenToolIcon as Tool } from "lucide-react"
 import {
-  SiPhp,
-  SiJavascript,
-  SiTypescript,
-  SiReact,
-  SiNextdotjs,
-  SiVuedotjs,
-  SiJquery,
-  SiTailwindcss,
   SiBootstrap,
-  SiFramer,
-  SiHtml5,
-  SiCss3,
-  SiNodedotjs,
-  SiExpress,
-  SiLaravel,
   SiBun,
-  SiMysql,
-  SiPostgresql,
-  SiMongodb,
-  SiSqlite,
+  SiClickup,
+  SiCss3,
+  SiExpress,
   SiFirebase,
+  SiFramer,
   SiGit,
   SiGithub,
+  SiHtml5,
+  SiJavascript,
+  SiJquery,
+  SiLaravel,
+  SiMongodb,
+  SiMysql,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiPhp,
+  SiPostgresql,
   SiPostman,
-  SiClickup,
+  SiReact,
+  SiSqlite,
+  SiTailwindcss,
+  SiTypescript,
+  SiVuedotjs,
 } from "react-icons/si"
-import { cn } from "@/lib/utils"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-import { Space_Grotesk, Space_Mono, Archivo } from "next/font/google"
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
@@ -92,7 +92,7 @@ const skillsData = {
   },
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -103,7 +103,7 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
@@ -116,7 +116,7 @@ const itemVariants = {
   },
 }
 
-const skillIconVariants = {
+const skillIconVariants: Variants = {
   hidden: { scale: 0.95, opacity: 0 },
   show: {
     scale: 1,
@@ -158,7 +158,7 @@ export default function SkillsSection() {
             </span>
           </h2>
 
-             <motion.div 
+             <motion.div
                 className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -211,7 +211,7 @@ export default function SkillsSection() {
                               variants={skillIconVariants}
                               whileHover="hover"
                               whileTap="tap"
-                              className="p-2 rounded-lg bg-gray-50/80 dark:bg-gray-800/80 
+                              className="p-2 rounded-lg bg-gray-50/80 dark:bg-gray-800/80
                                        backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50
                                        transition-all duration-150 cursor-pointer
                                        hover:bg-gray-50 dark:hover:bg-gray-800
@@ -222,8 +222,8 @@ export default function SkillsSection() {
                           </TooltipTrigger>
                           <TooltipContent
                             side="top"
-                            className="bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-300 
-                                     backdrop-blur-md border border-gray-200/70 dark:border-gray-700/70 
+                            className="bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-300
+                                     backdrop-blur-md border border-gray-200/70 dark:border-gray-700/70
                                      shadow-sm px-2.5 py-1"
                           >
                             <p className="text-xs font-medium">{name}</p>

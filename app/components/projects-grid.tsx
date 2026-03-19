@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ProjectCard } from "./project-card";
+import { motion, Variants } from "framer-motion";
 import { Archivo } from "next/font/google";
+import { ProjectCard } from "./project-card";
 
 const archivo = Archivo({ subsets: ["latin"], display: "swap" });
 
@@ -22,11 +22,11 @@ interface Project {
 }
 
 interface ProjectsGridProps {
-  projects: any[];
+  projects: Project[];
 }
 
 export function ProjectsGrid({ projects }: ProjectsGridProps) {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -37,7 +37,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
