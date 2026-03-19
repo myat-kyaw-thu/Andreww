@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* View Transition Animation for Theme Toggler */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 ::selection {
   background-color: #374151;
   color: #ffffff;

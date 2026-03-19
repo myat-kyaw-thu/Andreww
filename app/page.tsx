@@ -8,15 +8,13 @@ import Footer from './components/Footer';
 import Hero from './components/Hero';
 import Navbar from './components/Navbar';
 import { PageLoader } from './components/PageLoader';
-import ProjectsSection from './components/projects';
 import SkillsSection from './components/Skills';
 
 export default function Home() {
 
   return (
     <div className="relative">
-
-      <PageLoader minDuration={4000}>
+        <PageLoader>
         <div id="top">
           <main className="min-h-screen bg-background font-sans max-w-2xl mx-auto py-12 sm:py-24 px-6 gap-y-9 pb-24">
             <BlurFade delay={0.25} inView direction="up">
@@ -25,9 +23,6 @@ export default function Home() {
 
             <BlurFade delay={0.45} inView direction="up">
               <AboutSection />
-            </BlurFade>
-            <BlurFade delay={0.65} inView direction="up">
-              <ProjectsSection />
             </BlurFade>
             <SkillsSection />
             <AchievementsSection achievements={sampleAchievements} />
