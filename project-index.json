@@ -118,27 +118,6 @@
         "updatedAt": "2025-03-13T07:31:09.772Z"
     },
     {
-        "id": "77684d19-6c48-475d-9c1e-d0dbca391438",
-        "project_id": "andrew-portfolio",
-        "project_title": "Andrew's Portfolio (Frontend)",
-        "project_subtitle": "A personal portfolio showcasing my skills in React, Next.js, TypeScript, and animation libraries like GSAP and Framer Motion. The project highlights interactive UI elements, clean design, and responsive layouts, reflecting my expertise in building modern, dynamic web applications.",
-        "project_cover_img": ["https://res.cloudinary.com/dd2rc2tzr/image/upload/v1741851026/project_covers/s8i4wzt7mlcqtvqqir2b.png"],
-        "project_tech_stacks": [
-            "Framer-Motion",
-            "Next.js",
-            "Typescript",
-            "Lucide-React",
-            "TailwindCSS",
-            "ZOD"
-        ],
-        "project_link": "",
-        "github_link": null,
-        "project_status": "Completed",
-        "personal": true,
-        "createdAt": "2025-03-09T08:17:44.935Z",
-        "updatedAt": "2025-03-13T13:38:18.392Z"
-    },
-    {
         "id": "0c353e58-6715-44c5-ad04-d34352b49c9c",
         "project_id": "zentry-clone",
         "project_title": "Zentry Landing Page ",
@@ -222,7 +201,7 @@
         "project_id": "yin-pwint-mel",
         "project_title": "Yin Pwint Mel - Blogging Platform",
         "project_subtitle": "Yin Pwint Mel is a modern blogging platform where voices matter and stories connect us. Built with Next.js 16 and powered by Supabase, it provides a rich text editing experience using editor. Whether you're sharing a personal journey, exploring new ideas, or simply expressing what's on your mind, this is your platform to be heard. Features include real-time content management, authentication, and a beautiful, responsive interface designed for writers and readers alike.",
-        "project_cover_img": ["/not-found.jpg"],
+        "project_cover_img": ["/projects/yin-pwint-mel.png"],
         "project_tech_stacks": [
             "Next.js",
             "React",
@@ -244,7 +223,7 @@
         "project_id": "mcp-connect",
         "project_title": "MCP Connect - NPM Package",
         "project_subtitle": "A lightweight, production-ready Model Context Protocol (MCP) server package for exposing Node.js functions to Claude Desktop and other AI agents via JSON-RPC 2.0 over STDIO. This NPM package simplifies the integration of custom tools and functions into AI workflows, enabling seamless communication between your Node.js applications and AI assistants. Perfect for developers building AI-powered tools, automation scripts, or extending Claude's capabilities with custom functionality.",
-        "project_cover_img": ["/not-found.jpg"],
+        "project_cover_img": ["/projects/mcp.png"],
         "project_tech_stacks": [
             "Node.js",
             "JavaScript",
