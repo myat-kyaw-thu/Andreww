@@ -144,7 +144,7 @@ function generateUserEmail(name: string, message: string, email: string): string
           
           <div class="card">
             <div class="content">
-              <p class="greeting">Hi ${name},</p>
+              <p class="greeting">Hi ${name}, ${email}</p>
               <p class="greeting">I received your message and appreciate you reaching out. I'll review your project details and get back to you as soon as possible.</p>
               
               <div class="message-section">

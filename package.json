@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npx @opennextjs/cloudflare",
-    "build:cloudflare": "next build && npx @opennextjs/cloudflare",
-    "start": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "build": "next build && npx @opennextjs/cloudflare build --skip-build",
+    "preview": "npx @opennextjs/cloudflare preview",
+    "deploy": "npx @opennextjs/cloudflare deploy",
     "lint": "next lint"
   },
   "dependencies": {
@@ -51,6 +50,7 @@
     "eslint-config-next": "15.5.14",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "4.76.0"
   }
 }
