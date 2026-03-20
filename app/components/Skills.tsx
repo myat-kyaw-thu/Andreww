@@ -8,7 +8,7 @@ import {
   SiBootstrap,
   SiBun,
   SiClickup,
-  SiCss3,
+  SiCss,
   SiExpress,
   SiFirebase,
   SiFramer,
@@ -59,7 +59,7 @@ const skillsData = {
       { name: "Bootstrap CSS", icon: SiBootstrap },
       { name: "Framer Motion", icon: SiFramer },
       { name: "HTML", icon: SiHtml5 },
-      { name: "CSS", icon: SiCss3 },
+      { name: "CSS", icon: SiCss },
     ],
   },
   "Backend Frameworks": {
