@@ -1,4 +1,5 @@
 {
   "kiroAgent.configureMCP": "Enabled",
-  "typescript.autoClosingTags": false
+  "typescript.autoClosingTags": false,
+  "kiroAgent.agentAutonomy": "Supervised"
 }

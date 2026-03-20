@@ -1,7 +1,16 @@
 {
   "name": "myatkyawthu",
-  "pages_build_output_dir": ".open-next",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-03-21",
+  "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "ENVIRONMENT": "production"
+  },
+  "env": {
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production"
+      }
+    }
   }
 }
