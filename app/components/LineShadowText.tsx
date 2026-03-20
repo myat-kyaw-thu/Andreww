@@ -29,7 +29,7 @@ export function LineShadowText({
       style={{ "--shadow-color": shadowColor } as React.CSSProperties}
       className={cn(
         "relative z-0 inline-block",
-        "after:absolute after:left-[0.06em] after:top-[0.06em] after:content-[attr(data-text)]",
+        "after:absolute after:left-[0.10em] after:top-[0.10em] after:content-[attr(data-text)]",
         "after:bg-[linear-gradient(45deg,transparent_45%,var(--shadow-color)_45%,var(--shadow-color)_55%,transparent_0)]",
         "after:-z-10 after:bg-[length:0.1em_0.1em] after:bg-clip-text after:text-transparent",
         "after:animate-line-shadow after:whitespace-pre",

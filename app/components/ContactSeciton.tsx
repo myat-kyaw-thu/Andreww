@@ -4,32 +4,22 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { motion, Variants } from "framer-motion"
-import { AlertCircle, CheckCircle2, FileText, Mail, MessageSquare, User2, XCircle } from "lucide-react"
+import { CheckCircle2, XCircle } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
-import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google"
+import { Space_Grotesk, Space_Mono } from "next/font/google"
 import { EnhancedSubmitButton } from "./submit-button"
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], display: "swap" })
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
-const archivo = Archivo({ subsets: ["latin"], display: "swap" })
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  subject: z.string().min(5, {
-    message: "Subject must be at least 5 characters.",
-  }),
-  message: z.string().min(10, {
-    message: "Message must be at least 10 characters.",
-  }),
+  name: z.string().min(2, "Name must be at least 2 characters."),
+  email: z.string().email("Please enter a valid email address."),
+  message: z.string().min(10, "Message must be at least 10 characters."),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -39,8 +29,8 @@ const containerVariants: Variants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1,
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
     },
   },
 }
@@ -51,9 +41,8 @@ const itemVariants: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
+      duration: 0.6,
+      ease: "easeOut",
     },
   },
 }
@@ -64,10 +53,10 @@ export default function ContactSection() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
-      subject: "",
       message: "",
     },
   })
@@ -86,7 +75,7 @@ export default function ContactSection() {
       const result = await response.json()
 
       if (result.success) {
-        setIsSuccess(true) // Set success state for button animation
+        setIsSuccess(true)
         toast.success("Message sent successfully!", {
           icon: <CheckCircle2 className="w-4 h-4" />,
         })
@@ -104,112 +93,110 @@ export default function ContactSection() {
     }
   }
 
-  // Reset success state after animation completes
   const resetSuccess = () => {
     setIsSuccess(false)
   }
 
   return (
-    <section className="w-full">
+    <section className="w-full py-20">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="max-w-3xl mx-auto space-y-8 my-10"
+        className="max-w-6xl mx-auto px-6"
       >
-        {/* Section Header */}
-        <motion.div variants={itemVariants} className="space-y-2 text-start mb-8">
-          <h2 className={`${spaceGrotesk.className} text-3xl font-bold relative inline-block mb-3`}>
-            <span className="bg-clip-text text-transparent bg-gray-700 dark:bg-gray-200">Get in Touch</span>
+        {/* Header */}
+        <motion.div variants={itemVariants} className="mb-16">
+          <h2 className={`${spaceGrotesk.className} text-2xl md:text-4xl font-bold mb-4`}>
+            Contact me
           </h2>
-
           <motion.div
-            className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.5, delay: 0.5 }}
-          />
+                className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 1.5, delay: 0.5 }}
+              />
         </motion.div>
 
-        {/* Contact Form */}
-        <motion.div variants={itemVariants}>
-          <div className="relative">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 rounded-xl opacity-5 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+        {/* Two Column Layout - 40/60 */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {/* Left Column - Contact Info (40%) */}
+          <motion.div variants={itemVariants} className="md:col-span-2 space-y-6">
+            <div>
+              <p className={`${spaceMono.className} text-xs text-gray-600 dark:text-gray-400 mb-1`}>
+                Location
+              </p>
+              <p className={`${spaceGrotesk.className} text-sm font-semibold`}>
+                Yangon, Myanmar
+              </p>
+            </div>
 
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className={`${archivo.className} relative space-y-4 p-6 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-200/60 dark:border-gray-800/60 shadow-sm`}
+            <div>
+              <p className={`${spaceMono.className} text-xs text-gray-600 dark:text-gray-400 mb-1`}>
+                Email
+              </p>
+              <a
+                href="mailto:myatkyawthu4002@gmail.com"
+                className={`${spaceGrotesk.className} text-sm font-semibold hover:opacity-70 transition-opacity break-all`}
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Name Field */}
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                          <User2 className="w-4 h-4" />
-                          <span>Name</span>
-                        </FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input placeholder="John Doe" className="pl-9 bg-white/60 dark:bg-gray-900/60" {...field} />
-                            <User2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                myatkyawthu4002@gmail.com
+              </a>
+            </div>
 
-                  {/* Email Field */}
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          <span>Email</span>
-                        </FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input
-                              placeholder="john@example.com"
-                              type="email"
-                              className="pl-9 bg-white/60 dark:bg-gray-900/60"
-                              {...field}
-                            />
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+            <div>
+              <p className={`${spaceMono.className} text-xs text-gray-600 dark:text-gray-400 mb-1`}>
+                Phone
+              </p>
+              <a
+                href="tel:+959262999350"
+                className={`${spaceGrotesk.className} text-sm font-semibold hover:opacity-70 transition-opacity`}
+              >
+                +959 262 999 350
+              </a>
+            </div>
+          </motion.div>
 
-                {/* Subject Field */}
+          {/* Right Column - Form */}
+          <motion.div variants={itemVariants} className="md:col-span-3">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {/* Name Field */}
                 <FormField
                   control={form.control}
-                  name="subject"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        <span>Subject</span>
+                      <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
+                        Name (required)
                       </FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder="What's this about?"
-                            className="pl-9 bg-white/60 dark:bg-gray-900/60"
-                            {...field}
-                          />
-                          <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        </div>
+                        <Input
+                          placeholder="First Name"
+                          className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Email Field */}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
+                        Email (required)
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="your@email.com"
+                          type="email"
+                          className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -222,19 +209,15 @@ export default function ContactSection() {
                   name="message"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                        <MessageSquare className="w-4 h-4" />
-                        <span>Message</span>
+                      <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
+                        Project description
                       </FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          <Textarea
-                            placeholder="Your message here..."
-                            className="min-h-[120px] pl-9 bg-white/60 dark:bg-gray-900/60 resize-none"
-                            {...field}
-                          />
-                          <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                        </div>
+                        <Textarea
+                          placeholder="Tell me about your project..."
+                          className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0 resize-none min-h-[100px]"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -242,24 +225,14 @@ export default function ContactSection() {
                 />
 
                 {/* Submit Button */}
-                <div className={`${spaceMono.className} flex justify-end`}>
+                <div className="pt-6">
                   <EnhancedSubmitButton isSubmitting={isSubmitting} isSuccess={isSuccess} resetSuccess={resetSuccess} />
                 </div>
               </form>
             </Form>
-          </div>
-        </motion.div>
-
-        {/* Additional Contact Info */}
-        <motion.div
-          variants={itemVariants}
-          className="flex justify-center items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-        >
-          <AlertCircle className={` w-4 h-4`} />
-          <span className={spaceMono.className}> I will get back to you as soon as possible</span>
-        </motion.div>
+          </motion.div>
+        </div>
       </motion.div>
     </section>
   )
 }
-
