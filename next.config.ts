@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     domains: ['res.cloudinary.com'],
     unoptimized: true,
   },
+  
+  // Performance optimizations
+  compress: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;
