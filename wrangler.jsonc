@@ -6,6 +6,17 @@
   "vars": {
     "ENVIRONMENT": "production"
   },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+    "run_worker_first": false
+  },
+  "routes": [
+    {
+      "pattern": "myatkyawthu.com",
+      "custom_domain": true
+    }
+  ],
   "env": {
     "production": {
       "vars": {
