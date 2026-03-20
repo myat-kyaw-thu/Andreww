@@ -1,6 +1,18 @@
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialize Resend to avoid errors during build
+let resend: Resend | null = null
+
+function getResend() {
+  if (!resend) {
+    const apiKey = process.env.RESEND_API_KEY
+    if (!apiKey) {
+      throw new Error("RESEND_API_KEY is not set")
+    }
+    resend = new Resend(apiKey)
+  }
+  return resend
+}
 
 // Simple in-memory rate limiting store
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
@@ -72,8 +84,11 @@ export async function POST(request: Request) {
       return Response.json({ success: true }) // Fool bots
     }
 
+    // Get Resend instance
+    const resendClient = getResend()
+
     // Send confirmation email to user
-    const userEmailResponse = await resend.emails.send({
+    const userEmailResponse = await resendClient.emails.send({
       from: "noreply@myatkyawthu.com",
       to: email,
       subject: "Thank you for reaching out",
@@ -89,7 +104,7 @@ export async function POST(request: Request) {
     }
 
     // Send notification email to admin
-    const adminEmailResponse = await resend.emails.send({
+    const adminEmailResponse = await resendClient.emails.send({
       from: "noreply@myatkyawthu.com",
       to: "myatkyawthu4002@gmail.com",
       subject: `New message from ${name}`,
