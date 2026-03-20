@@ -2,16 +2,74 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// Simple in-memory rate limiting store
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
+
+function getClientIP(request: Request): string {
+  return request.headers.get("x-forwarded-for")?.split(",")[0] || "unknown"
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const limit = rateLimitStore.get(ip)
+
+  if (!limit || now > limit.resetTime) {
+    // Reset or create new limit (5 requests per minute)
+    rateLimitStore.set(ip, { count: 1, resetTime: now + 60000 })
+    return true
+  }
+
+  if (limit.count >= 5) {
+    return false // Rate limit exceeded
+  }
+
+  limit.count++
+  return true
+}
+
 export async function POST(request: Request) {
   try {
-    const { name, email, message } = await request.json()
+    const { name, email, message, website } = await request.json()
 
-    // Validate input
+    // Validate required fields
     if (!name || !email || !message) {
       return Response.json(
         { success: false, error: "Missing required fields" },
         { status: 400 }
       )
+    }
+
+    // Honeypot check - if website field is filled, it's likely a bot
+    if (website && website.trim() !== "") {
+      console.log("Honeypot triggered - spam detected")
+      // Return success to fool bots, but don't send email
+      return Response.json({ success: true })
+    }
+
+    // Rate limiting check
+    const clientIP = getClientIP(request)
+    if (!checkRateLimit(clientIP)) {
+      return Response.json(
+        { success: false, error: "Too many requests. Please try again later." },
+        { status: 429 }
+      )
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return Response.json(
+        { success: false, error: "Invalid email address" },
+        { status: 400 }
+      )
+    }
+
+    // Check for spam keywords
+    const spamKeywords = ["viagra", "casino", "lottery", "click here", "buy now"]
+    const messageText = `${name} ${message}`.toLowerCase()
+    if (spamKeywords.some((keyword) => messageText.includes(keyword))) {
+      console.log("Spam keywords detected")
+      return Response.json({ success: true }) // Fool bots
     }
 
     // Send confirmation email to user

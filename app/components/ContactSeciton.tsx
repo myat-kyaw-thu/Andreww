@@ -20,6 +20,7 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
   email: z.string().email("Please enter a valid email address."),
   message: z.string().min(10, "Message must be at least 10 characters."),
+  website: z.string().optional(), // Honeypot field
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -58,6 +59,7 @@ export default function ContactSection() {
       name: "",
       email: "",
       message: "",
+      website: "",
     },
   })
 
@@ -223,6 +225,21 @@ export default function ContactSection() {
                     </FormItem>
                   )}
                 />
+
+                {/* Honeypot Field - Hidden from users */}
+                <div style={{ display: "none" }}>
+                  <FormField
+                    control={form.control}
+                    name="website"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <input type="text" placeholder="Website" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 {/* Submit Button */}
                 <div className="pt-6">
