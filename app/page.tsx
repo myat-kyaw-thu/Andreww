@@ -24,8 +24,8 @@ export default function Home() {
             <BlurFade delay={0.45} inView direction="up">
               <AboutSection />
             </BlurFade>
-            <SkillsSection />
             <AchievementsSection achievements={sampleAchievements} />
+            <SkillsSection />
             <ContactSection />
             <Footer />
           </main>

@@ -63,62 +63,89 @@ export const sampleAchievements = [
     category: "F.S.D",
     imageUrl: "/certificates/pro-web-dev.png",
   },
-  
+
 ];
 export function AchievementsSection({ achievements = sampleAchievements }: AchievementsSectionProps) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
   return (
-    <section className="py-24" id="achievements">
-      {/* Section Header */}
-      <motion.div
-        className="mb-20"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <h2 className={`${spaceGrotesk.className} text-4xl font-medium text-gray-900 dark:text-[hsl(0,0%,98%)] mb-8 tracking-tight`}>
-          Achievements
-        </h2>
-
+    <section className="py-10 md:py-16" id="achievements">
+      <div className="max-w-6xl mx-auto">
+        {/* Section Header */}
         <motion.div
-          className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent"
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{
-            scaleX: { duration: 1.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] },
-            opacity: { duration: 0.8, delay: 0.6 },
-          }}
-        />
-      </motion.div>
-
-      {/* Achievement Cards Grid - Fixed 2 columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        {achievements.map((achievement, index) => (
-          <motion.div
-            key={achievement.id}
-            initial={{ opacity: 0, y: 32, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{
-              duration: 0.7,
-              delay: index * 0.15,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-          >
-            <AchievementCard achievement={achievement} index={index} />
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Empty state */}
-      {achievements.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center py-24"
+          className="mb-16 md:mb-24"
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
         >
-          <p className={`${spaceGrotesk.className} text-xl text-gray-400 dark:text-[hsl(0,0%,63.9%)]`}>No achievements to display.</p>
+          <h2 className={`${spaceGrotesk.className} text-3xl md:text-5xl font-semibold mb-6 tracking-tight text-slate-900 dark:text-white`}>
+            Achievements
+          </h2>
+
+          <motion.div
+            className="h-px bg-gradient-to-r from-slate-300/40 via-slate-400/60 to-slate-300/40 dark:from-slate-700/40 dark:via-slate-600/60 dark:to-slate-700/40"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            viewport={{ once: true }}
+          />
         </motion.div>
-      )}
+
+        {/* Achievement Cards Grid */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+        >
+          {achievements.map((achievement, index) => (
+            <motion.div
+              key={achievement.id}
+              variants={itemVariants}
+              className="group"
+            >
+              <AchievementCard achievement={achievement} index={index} />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Empty state */}
+        {achievements.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center py-24"
+          >
+            <p className={`${spaceGrotesk.className} text-lg text-slate-500 dark:text-slate-400`}>
+              No achievements to display.
+            </p>
+          </motion.div>
+        )}
+      </div>
     </section>
   );
 }

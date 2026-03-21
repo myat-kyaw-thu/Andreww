@@ -30,20 +30,32 @@ const containerVariants: Variants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.08,
+      delayChildren: 0.15,
     },
   },
 }
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.5,
       ease: "easeOut",
+    },
+  },
+}
+
+const lineVariants: Variants = {
+  hidden: { scaleX: 0 },
+  show: {
+    scaleX: 1,
+    transition: {
+      duration: 0.8,
+      ease: "easeOut",
+      delay: 0.3,
     },
   },
 }
@@ -100,12 +112,12 @@ export default function ContactSection() {
   }
 
   return (
-    <section className="w-full py-20">
+    <section className="w-full py-10 md:py16">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="max-w-6xl mx-auto px-6"
+        className="max-w-6xl mx-auto"
       >
         {/* Header */}
         <motion.div variants={itemVariants} className="mb-16">
@@ -113,27 +125,25 @@ export default function ContactSection() {
             Contact me
           </h2>
           <motion.div
-                className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 1.5, delay: 0.5 }}
-              />
+            className="h-px bg-gradient-to-r from-slate-200 via-slate-400 to-slate-200 dark:from-slate-800 dark:via-slate-600 dark:to-slate-800"
+            variants={lineVariants}
+          />
         </motion.div>
 
         {/* Two Column Layout - 40/60 */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Left Column - Contact Info (40%) */}
           <motion.div variants={itemVariants} className="md:col-span-2 space-y-6">
-            <div>
+            <motion.div variants={itemVariants}>
               <p className={`${spaceMono.className} text-xs text-gray-600 dark:text-gray-400 mb-1`}>
                 Location
               </p>
               <p className={`${spaceGrotesk.className} text-sm font-semibold`}>
                 Yangon, Myanmar
               </p>
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={itemVariants}>
               <p className={`${spaceMono.className} text-xs text-gray-600 dark:text-gray-400 mb-1`}>
                 Email
               </p>
@@ -143,9 +153,9 @@ export default function ContactSection() {
               >
                 myatkyawthu4002@gmail.com
               </a>
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={itemVariants}>
               <p className={`${spaceMono.className} text-xs text-gray-600 dark:text-gray-400 mb-1`}>
                 Phone
               </p>
@@ -155,7 +165,7 @@ export default function ContactSection() {
               >
                 +959 262 999 350
               </a>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Right Column - Form */}
@@ -163,68 +173,74 @@ export default function ContactSection() {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 {/* Name Field */}
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
-                        Name (required)
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="First Name"
-                          className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <motion.div variants={itemVariants}>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
+                          Name (required)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="First Name"
+                            className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0 transition-colors duration-300"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
 
                 {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
-                        Email (required)
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="your@email.com"
-                          type="email"
-                          className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <motion.div variants={itemVariants}>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
+                          Email (required)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="your@email.com"
+                            type="email"
+                            className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0 transition-colors duration-300"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
 
                 {/* Message Field */}
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
-                        Project description
-                      </FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Tell me about your project..."
-                          className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0 resize-none min-h-[100px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <motion.div variants={itemVariants}>
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className={`${spaceMono.className} text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300`}>
+                          Project description
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Tell me about your project..."
+                            className="border-0 border-b border-gray-300 dark:border-gray-700 rounded-none px-0 py-2 bg-transparent focus:border-black dark:focus:border-white focus:ring-0 resize-none min-h-[100px] transition-colors duration-300"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </motion.div>
 
                 {/* Honeypot Field - Hidden from users */}
                 <div style={{ display: "none" }}>
@@ -242,9 +258,9 @@ export default function ContactSection() {
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-6">
+                <motion.div variants={itemVariants} className="pt-6">
                   <EnhancedSubmitButton isSubmitting={isSubmitting} isSuccess={isSuccess} resetSuccess={resetSuccess} />
-                </div>
+                </motion.div>
               </form>
             </Form>
           </motion.div>

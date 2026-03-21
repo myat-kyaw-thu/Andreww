@@ -31,7 +31,7 @@ export default function ProjectsLoading() {
     <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
       {/* Navbar placeholder */}
       <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none pb-6 px-4">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl shadow-lg h-16" />
         </div>
       </div>

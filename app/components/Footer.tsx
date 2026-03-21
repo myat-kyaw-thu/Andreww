@@ -1,8 +1,8 @@
 "use client"
 
 import { motion, Variants } from "framer-motion"
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
-import { Space_Mono, Space_Grotesk } from "next/font/google"
+import { ExternalLink, Github, Linkedin, Mail } from "lucide-react"
+import { Space_Grotesk, Space_Mono } from "next/font/google"
 import Link from "next/link"
 
 const spaceMono = Space_Mono({ weight: "400", subsets: ["latin"], display: "swap" })
@@ -60,7 +60,7 @@ export default function Footer() {
       viewport={{ once: true }}
       variants={containerVariants}
     >
-      <div className="max-w-6xl mx-auto px-6 py-16">
+      <div className="max-w-6xl mx-auto py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Left - Location & Hours */}
           <motion.div variants={itemVariants} className="space-y-4">
